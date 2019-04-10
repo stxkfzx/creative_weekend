@@ -28,4 +28,4 @@ HELP.md
 ### VS Code ###
 .vscode/
 
-/private/*
+/src/main/resources/private/*
