@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xin.stxkfzx.weekend.activity.mapper.ProxyTeamMapper">
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.activity.entity.ProxyTeam">
+    <!--@mbg.generated-->
+    <id column="tb_id" jdbcType="INTEGER" property="tbId" />
+    <result column="team_name" jdbcType="VARCHAR" property="teamName" />
+    <result column="team_information" jdbcType="VARCHAR" property="teamInformation" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    tb_id, team_name, team_information, logo, phone, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from proxy_team
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from proxy_team
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.activity.entity.ProxyTeam" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into proxy_team (team_name, team_information, logo, 
+      phone, create_time, update_time
+      )
+    values (#{teamName,jdbcType=VARCHAR}, #{teamInformation,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.activity.entity.ProxyTeam" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into proxy_team
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="teamName != null">
+        team_name,
+      </if>
+      <if test="teamInformation != null">
+        team_information,
+      </if>
+      <if test="logo != null">
+        logo,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="teamName != null">
+        #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="teamInformation != null">
+        #{teamInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.activity.entity.ProxyTeam">
+    <!--@mbg.generated-->
+    update proxy_team
+    <set>
+      <if test="teamName != null">
+        team_name = #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="teamInformation != null">
+        team_information = #{teamInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.activity.entity.ProxyTeam">
+    <!--@mbg.generated-->
+    update proxy_team
+    set team_name = #{teamName,jdbcType=VARCHAR},
+      team_information = #{teamInformation,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+</mapper>
