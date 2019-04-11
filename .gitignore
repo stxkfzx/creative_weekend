@@ -25,3 +25,9 @@
 /.nb-gradle/
 
 /private/*
+.gitignore
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml
+src/
