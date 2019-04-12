@@ -17,7 +17,7 @@ public class CommonExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ResultBean<?>> handleException(WeekendException e) {
 		ExceptionEnum exceptionEnum = e.getExceptionEnum();
-		return ResponseEntity.status(exceptionEnum.getCode()).body(new ResultBean<>(exceptionEnum.getMsg(),exceptionEnum.getCode()));
+		return ResponseEntity.status(exceptionEnum.getCode()).body(new ResultBean<>(exceptionEnum.getMsg(), exceptionEnum.getCode()));
 	}
 }
 

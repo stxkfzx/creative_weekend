@@ -3,7 +3,6 @@ package xin.stxkfzx.weekend.common.entity;
 import java.io.Serializable;
 
 /**
- *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/11
@@ -33,7 +32,7 @@ public class ResultBean<T> implements Serializable {
 
 	}
 
-	public ResultBean(String msg,Integer code,T data) {
+	public ResultBean(String msg, Integer code, T data) {
 
 		super();
 		this.data = data;
@@ -41,7 +40,7 @@ public class ResultBean<T> implements Serializable {
 		this.code = code;
 	}
 
-	public ResultBean(String msg,Integer code) {
+	public ResultBean(String msg, Integer code) {
 
 		super();
 		this.msg = msg;

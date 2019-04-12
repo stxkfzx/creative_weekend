@@ -1,6 +1,8 @@
 package xin.stxkfzx.weekend.common.enums;
 
 /**
+ * 这个类用于存放定义好的异常，尽量写好注释
+ *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/11
