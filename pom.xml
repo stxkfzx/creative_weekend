@@ -12,6 +12,8 @@
     <modules>
         <module>weekend-common</module>
         <module>weekend-activity</module>
+        <module>weekend-upload</module>
+        <module>weekend-user</module>
     </modules>
 
     <properties>
