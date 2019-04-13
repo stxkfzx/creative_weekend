@@ -1,5 +1,10 @@
 package xin.stxkfzx.weekend.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.Objects;
 
@@ -10,11 +15,10 @@ import java.util.Objects;
  */
 public class User {
 	private Integer tbId;
-
+	@NotBlank(message = "用户名不能为空")
 	private String nickName;
-
+	@Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",message = "手机号格式不正确")
 	private String phoneNum;
-
 	private String password;
 
 	private String fullname;
@@ -30,7 +34,7 @@ public class User {
 	private Date createTime;
 
 	private Date updateTime;
-
+	@NotNull(message = "状态不能为空")
 	private Short status;
 
 	public Integer getTbId() {
@@ -131,7 +135,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User{" +
+		return "UserDTO{" +
 				"tbId=" + tbId +
 				", nickName='" + nickName + '\'' +
 				", phoneNum='" + phoneNum + '\'' +
