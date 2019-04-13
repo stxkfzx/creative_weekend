@@ -1,95 +1,75 @@
 package xin.stxkfzx.weekend.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import xin.stxkfzx.weekend.common.enums.StatusEnum;
+
 import java.io.Serializable;
+import java.util.StringJoiner;
 
 /**
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/11
  */
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ResultBean<T> implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	public static final int NO_LOGIN = -1;
-
-	public static final int SUCCESS = 0;
-
-	public static final int FAIL = 1;
-
-	private String msg = "success";
-
-	private Integer code = SUCCESS;
-
-	private T data;
+    private T body;
+    private Integer code;
+    private String msg;
 
 	public ResultBean() {
 		super();
 	}
 
-	public ResultBean(T data) {
-		super();
-		this.data = data;
+    public ResultBean(StatusEnum status) {
+        this(status.getCode(), status.getMsg());
+    }
 
-	}
+    public ResultBean(Integer code, String msg) {
+        this(code, msg, null);
+    }
 
-	public ResultBean(String msg, Integer code, T data) {
+    public ResultBean(StatusEnum status, T body) {
+        this(status);
+        this.body = body;
+    }
 
-		super();
-		this.data = data;
-		this.msg = msg;
-		this.code = code;
-	}
+    public ResultBean(Integer code, String msg, T body) {
+        this.code = code;
+        this.msg = msg;
+        this.body = body;
+    }
 
-	public ResultBean(String msg, Integer code) {
+    public T getBody() {
+        return body;
+    }
 
-		super();
-		this.msg = msg;
-		this.code = code;
-	}
+    public void setBody(T body) {
+        this.body = body;
+    }
 
-	public ResultBean(Throwable e) {
-		super();
-		this.msg = e.toString();
-		this.code = FAIL;
-	}
+    public Integer getCode() {
+        return code;
+    }
 
-	public static long getSerialVersionUID() {
-		return serialVersionUID;
-	}
+    public void setCode(Integer code) {
+        this.code = code;
+    }
 
-	public static int getNoLogin() {
-		return NO_LOGIN;
-	}
+    public String getMsg() {
+        return msg;
+    }
 
-	public static int getSUCCESS() {
-		return SUCCESS;
-	}
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
-	public static int getFAIL() {
-		return FAIL;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public T getData() {
-		return data;
-	}
-
-	public void setData(T data) {
-		this.data = data;
-	}
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ResultBean.class.getSimpleName() + "[", "]")
+                .add("body=" + body)
+                .add("code=" + code)
+                .add("msg='" + msg + "'")
+                .toString();
+    }
 }
