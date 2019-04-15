@@ -26,4 +26,4 @@
 
 /private/*
 
-/.editorconfig
+/weekend-sms/src/main/resources/private/

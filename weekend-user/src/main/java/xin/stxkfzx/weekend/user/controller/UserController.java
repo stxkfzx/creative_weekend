@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import xin.stxkfzx.weekend.auth.config.UserLoginToken;
 import xin.stxkfzx.weekend.common.entity.ResultBean;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.common.enums.StatusEnum;
 import xin.stxkfzx.weekend.common.exception.WeekendException;
 import xin.stxkfzx.weekend.user.dto.UserDTO;
 import xin.stxkfzx.weekend.user.entity.User;
@@ -48,8 +49,8 @@ public class UserController {
     public ResponseEntity<ResultBean<UserDTO>> register(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.error(bindingResult.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining("|")));
-            throw new WeekendException(ExceptionEnum.USER_PARAM_ERROR);
+            throw new WeekendException(ExceptionEnum.USER_SAVE_ERROR);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResultBean<>(userService.addUser(user)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResultBean<>(StatusEnum.SUCCESS, userService.addUser(user)));
     }
 }
