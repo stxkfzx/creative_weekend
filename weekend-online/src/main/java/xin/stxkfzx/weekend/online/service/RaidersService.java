@@ -12,5 +12,5 @@ import xin.stxkfzx.weekend.online.entity.Raiders;
  */
 
 public interface RaidersService {
-    public Raiders addRaiders(Raiders raidersPar);
+    public Integer addRaiders(Raiders raidersPar);
 }

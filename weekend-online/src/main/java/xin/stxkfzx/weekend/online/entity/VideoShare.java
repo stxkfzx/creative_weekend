@@ -23,7 +23,34 @@ public class VideoShare {
 
     private Integer userId;
 
-    private Integer categoryId;
+    private ShareCategory shareCategory;
+
+    public VideoShare(String url, String title, Short status, Date createTime, Date updateTime, Integer userId, ShareCategory shareCategory) {
+        this.url = url;
+        this.title = title;
+        this.status = status;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.userId = userId;
+        this.shareCategory = shareCategory;
+    }
+
+    public VideoShare() {
+    }
+
+    @Override
+    public String toString() {
+        return "VideoShare{" +
+                "tbId=" + tbId +
+                ", url='" + url + '\'' +
+                ", title='" + title + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", userId=" + userId +
+                ", shareCategory=" + shareCategory +
+                '}';
+    }
 
     public Integer getTbId() {
         return tbId;
@@ -81,29 +108,11 @@ public class VideoShare {
         this.userId = userId;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public ShareCategory getShareCategory() {
+        return shareCategory;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", tbId=").append(tbId);
-        sb.append(", url=").append(url);
-        sb.append(", title=").append(title);
-        sb.append(", status=").append(status);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", userId=").append(userId);
-        sb.append(", categoryId=").append(categoryId);
-        sb.append("]");
-        return sb.toString();
+    public void setShareCategory(ShareCategory shareCategory) {
+        this.shareCategory = shareCategory;
     }
 }

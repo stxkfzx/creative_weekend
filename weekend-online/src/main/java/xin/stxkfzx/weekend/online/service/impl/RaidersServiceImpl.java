@@ -6,8 +6,10 @@ package xin.stxkfzx.weekend.online.service.impl;/***
  * @Author:krj@bjpowernode.com
  */
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xin.stxkfzx.weekend.online.entity.Raiders;
+import xin.stxkfzx.weekend.online.mapper.RaidersMapper;
 import xin.stxkfzx.weekend.online.service.RaidersService;
 
 /**
@@ -15,9 +17,13 @@ import xin.stxkfzx.weekend.online.service.RaidersService;
  */
 @Service
 public class RaidersServiceImpl implements RaidersService{
-    @Override
-    public Raiders addRaiders(Raiders raidersPar) {
 
-        return raidersPar;
+    @Autowired
+    RaidersMapper raidersMapper;
+
+    @Override
+    public Integer addRaiders(Raiders raidersPar) {
+        Integer raidersId = raidersMapper.insert(raidersPar);
+        return raidersId;
     }
 }

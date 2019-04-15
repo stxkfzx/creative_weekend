@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="xin.stxkfzx.weekend.common.mapper.RaidersContentMapper">
-  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.common.entity.RaidersContent">
+<mapper namespace="xin.stxkfzx.weekend.online.mapper.RaidersContentMapper">
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.online.entity.RaidersContent">
     <!--@mbg.generated-->
     <id column="tb_id" jdbcType="INTEGER" property="tbId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
@@ -22,12 +22,12 @@
     delete from raiders_content
     where tb_id = #{tbId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.online.entity.RaidersContent" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into raiders_content (content)
     values (#{content,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.online.entity.RaidersContent" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into raiders_content
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -41,7 +41,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent">
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.online.entity.RaidersContent">
     <!--@mbg.generated-->
     update raiders_content
     <set>
@@ -51,7 +51,7 @@
     </set>
     where tb_id = #{tbId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent">
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.online.entity.RaidersContent">
     <!--@mbg.generated-->
     update raiders_content
     set content = #{content,jdbcType=VARCHAR}

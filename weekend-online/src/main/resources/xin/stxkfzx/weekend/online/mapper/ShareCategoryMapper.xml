@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="xin.stxkfzx.weekend.common.mapper.ShareCategoryMapper">
-  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.common.entity.ShareCategory">
+<mapper namespace="xin.stxkfzx.weekend.online.mapper.ShareCategoryMapper">
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.online.entity.ShareCategory">
     <!--@mbg.generated-->
     <id column="tb_id" jdbcType="INTEGER" property="tbId" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
@@ -25,14 +25,14 @@
     delete from share_category
     where tb_id = #{tbId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.common.entity.ShareCategory" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.online.entity.ShareCategory" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into share_category (parent_id, category_name, create_time, 
       update_time)
     values (#{parentId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.common.entity.ShareCategory" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.online.entity.ShareCategory" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into share_category
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.common.entity.ShareCategory">
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.online.entity.ShareCategory">
     <!--@mbg.generated-->
     update share_category
     <set>
@@ -83,7 +83,7 @@
     </set>
     where tb_id = #{tbId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.common.entity.ShareCategory">
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.online.entity.ShareCategory">
     <!--@mbg.generated-->
     update share_category
     set parent_id = #{parentId,jdbcType=INTEGER},

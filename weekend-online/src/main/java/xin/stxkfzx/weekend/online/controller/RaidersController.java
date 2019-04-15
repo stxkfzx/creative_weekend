@@ -7,6 +7,8 @@ package xin.stxkfzx.weekend.online.controller;/***
  */
 
 import org.slf4j.Logger;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xin.stxkfzx.weekend.online.entity.Raiders;
 import xin.stxkfzx.weekend.online.service.RaidersService;
@@ -26,8 +28,19 @@ public class RaidersController {
         this.raidersService = raidersService;
     }
 
-    public Raiders addRaiders(Raiders raidersPar){
-        Raiders raiders = raidersService.addRaiders(raidersPar);
-        return raiders;
-    }
+   /** 
+    * 发布攻略
+    * @param raidersPar	 
+    * @ return
+    * @ author
+    * @ date 2019-04-15
+    */
+   @PostMapping("add/raiders")
+   public Integer addRaiders(Raiders raidersPar){
+        Integer raidersId = raidersService.addRaiders(raidersPar);
+        return raidersId;
+   }
+
+   @GetMapping("sel/allRaiders")
+   public List<>
 }
