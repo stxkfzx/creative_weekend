@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xin.stxkfzx.weekend.common.mapper.RaidersContentMapper">
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.common.entity.RaidersContent">
+    <!--@mbg.generated-->
+    <id column="tb_id" jdbcType="INTEGER" property="tbId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    tb_id, content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from raiders_content
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from raiders_content
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into raiders_content (content)
+    values (#{content,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into raiders_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent">
+    <!--@mbg.generated-->
+    update raiders_content
+    <set>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.common.entity.RaidersContent">
+    <!--@mbg.generated-->
+    update raiders_content
+    set content = #{content,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+</mapper>

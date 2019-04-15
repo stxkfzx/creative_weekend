@@ -1,5 +1,7 @@
 package xin.stxkfzx.weekend.common.exception;
 
+import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+
 /**
  * @author VicterTian
  * @version V1.0
@@ -24,5 +26,9 @@ public class WeekendException extends RuntimeException {
 
 	public WeekendException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public WeekendException(ExceptionEnum exceptionEnum) {
+		super(exceptionEnum.getMsg());
 	}
 }
