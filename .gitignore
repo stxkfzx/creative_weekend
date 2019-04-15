@@ -24,6 +24,4 @@
 /nbdist/
 /.nb-gradle/
 
-/private/*
-
-/weekend-sms/src/main/resources/private/
+private/*
