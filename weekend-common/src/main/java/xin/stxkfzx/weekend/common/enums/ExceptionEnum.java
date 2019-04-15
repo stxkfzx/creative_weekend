@@ -8,35 +8,45 @@ package xin.stxkfzx.weekend.common.enums;
  * @date 2019/4/11
  */
 public enum ExceptionEnum {
-	/**
-	 * 测试异常
-	 */
-	TEST(400, "这是一个测试异常"),
-	/**
-	 * 新增用户异常
-	 */
-	USER_SAVE_ERROR(500,"新增用户失败"),
-	/**
-	 * User对象参数异常
-	 */
-	USER_PARAM_ERROR(400,"用户参数异常"),
-	;
-	private Integer code;
-	private String msg;
+    /**
+     * 测试异常
+     */
+    TEST(400, "这是一个测试异常"),
+    /**
+     * 新增用户异常
+     */
+    USER_SAVE_ERROR(500, "新增用户失败"),
 
-	ExceptionEnum(Integer code, String msg) {
-		this.code = code;
-		this.msg = msg;
-	}
+    /**
+     * 未登录状态
+     */
+    UN_LOGIN(-100, "user.not.login"),
 
-	ExceptionEnum() {
-	}
+    /**
+     * 校验失败状态
+     */
+    CHECK_FAIL(-200, "field.invalid"),
 
-	public Integer getCode() {
-		return code;
-	}
+    /**
+     * 未知错误状态
+     */
+    UNKNOWN_FAIL(0, "unknown.error");
+    private Integer code;
+    private String msg;
 
-	public String getMsg() {
-		return msg;
-	}
+    ExceptionEnum(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
+    ExceptionEnum() {
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
 }

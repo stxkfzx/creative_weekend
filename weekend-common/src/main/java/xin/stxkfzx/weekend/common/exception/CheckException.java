@@ -1,12 +1,14 @@
 package xin.stxkfzx.weekend.common.exception;
 
+import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+
 /**
  * 检查异常
  *
  * @author fmy
  * @date 2019-04-10 20:29
  */
-public class CheckException extends RuntimeException {
+public class CheckException extends WeekendException {
 
     public CheckException() {
         super();
@@ -22,5 +24,9 @@ public class CheckException extends RuntimeException {
 
     public CheckException(Throwable cause) {
         super(cause);
+    }
+
+    public CheckException(ExceptionEnum exceptionEnum) {
+        super(exceptionEnum);
     }
 }
