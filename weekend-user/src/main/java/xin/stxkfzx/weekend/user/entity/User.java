@@ -1,7 +1,5 @@
 package xin.stxkfzx.weekend.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -13,11 +11,12 @@ import java.util.Objects;
  * @version V1.0
  * @date 2019/4/12
  */
+@SuppressWarnings("all")
 public class User {
 	private Integer tbId;
 	@NotBlank(message = "用户名不能为空")
 	private String nickName;
-	@Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",message = "手机号格式不正确")
+	@Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$", message = "手机号格式不正确")
 	private String phoneNum;
 	private String password;
 
@@ -32,10 +31,27 @@ public class User {
 	private String urgentPhone;
 
 	private Date createTime;
-
 	private Date updateTime;
 	@NotNull(message = "状态不能为空")
 	private Short status;
+
+	public User() {
+	}
+
+	public User(Integer tbId, @NotBlank(message = "用户名不能为空") String nickName, @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$", message = "手机号格式不正确") String phoneNum, String password, String fullname, String idCard, String address, String urgentContact, String urgentPhone, Date createTime, Date updateTime, @NotNull(message = "状态不能为空") Short status) {
+		this.tbId = tbId;
+		this.nickName = nickName;
+		this.phoneNum = phoneNum;
+		this.password = password;
+		this.fullname = fullname;
+		this.idCard = idCard;
+		this.address = address;
+		this.urgentContact = urgentContact;
+		this.urgentPhone = urgentPhone;
+		this.createTime = createTime;
+		this.updateTime = updateTime;
+		this.status = status;
+	}
 
 	public Integer getTbId() {
 		return tbId;
@@ -136,19 +152,19 @@ public class User {
 	@Override
 	public String toString() {
 		return "UserDTO{" +
-				"tbId=" + tbId +
-				", nickName='" + nickName + '\'' +
-				", phoneNum='" + phoneNum + '\'' +
-				", password='" + password + '\'' +
-				", fullname='" + fullname + '\'' +
-				", idCard='" + idCard + '\'' +
-				", address='" + address + '\'' +
-				", urgentContact='" + urgentContact + '\'' +
-				", urgentPhone='" + urgentPhone + '\'' +
-				", createTime=" + createTime +
-				", updateTime=" + updateTime +
-				", status=" + status +
-				'}';
+			"tbId=" + tbId +
+			", nickName='" + nickName + '\'' +
+			", phoneNum='" + phoneNum + '\'' +
+			", password='" + password + '\'' +
+			", fullname='" + fullname + '\'' +
+			", idCard='" + idCard + '\'' +
+			", address='" + address + '\'' +
+			", urgentContact='" + urgentContact + '\'' +
+			", urgentPhone='" + urgentPhone + '\'' +
+			", createTime=" + createTime +
+			", updateTime=" + updateTime +
+			", status=" + status +
+			'}';
 	}
 
 	@Override
@@ -161,17 +177,17 @@ public class User {
 		}
 		User user = (User) o;
 		return Objects.equals(getTbId(), user.getTbId()) &&
-				Objects.equals(getNickName(), user.getNickName()) &&
-				Objects.equals(getPhoneNum(), user.getPhoneNum()) &&
-				Objects.equals(getPassword(), user.getPassword()) &&
-				Objects.equals(getFullname(), user.getFullname()) &&
-				Objects.equals(getIdCard(), user.getIdCard()) &&
-				Objects.equals(getAddress(), user.getAddress()) &&
-				Objects.equals(getUrgentContact(), user.getUrgentContact()) &&
-				Objects.equals(getUrgentPhone(), user.getUrgentPhone()) &&
-				Objects.equals(getCreateTime(), user.getCreateTime()) &&
-				Objects.equals(getUpdateTime(), user.getUpdateTime()) &&
-				Objects.equals(getStatus(), user.getStatus());
+			Objects.equals(getNickName(), user.getNickName()) &&
+			Objects.equals(getPhoneNum(), user.getPhoneNum()) &&
+			Objects.equals(getPassword(), user.getPassword()) &&
+			Objects.equals(getFullname(), user.getFullname()) &&
+			Objects.equals(getIdCard(), user.getIdCard()) &&
+			Objects.equals(getAddress(), user.getAddress()) &&
+			Objects.equals(getUrgentContact(), user.getUrgentContact()) &&
+			Objects.equals(getUrgentPhone(), user.getUrgentPhone()) &&
+			Objects.equals(getCreateTime(), user.getCreateTime()) &&
+			Objects.equals(getUpdateTime(), user.getUpdateTime()) &&
+			Objects.equals(getStatus(), user.getStatus());
 	}
 
 	@Override

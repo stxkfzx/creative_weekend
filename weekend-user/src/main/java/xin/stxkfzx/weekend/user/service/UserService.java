@@ -14,6 +14,8 @@ public interface UserService {
      *
      * @param user User对象
      * @return UserDTO
+     * @author ViterTian
+     * @date 2019-04-14
      */
     UserDTO addUser(User user);
 }

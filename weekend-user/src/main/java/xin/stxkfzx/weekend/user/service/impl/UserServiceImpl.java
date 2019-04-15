@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
             throw new WeekendException(ExceptionEnum.USER_SAVE_ERROR);
         }
         UserDTO userDTO = new UserDTO();
+
         BeanUtils.copyProperties(user,userDTO);
         return userDTO;
     }

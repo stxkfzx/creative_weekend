@@ -7,6 +7,7 @@ import java.util.Objects;
  * @version V1.0
  * @date 2019/4/12
  */
+@SuppressWarnings("all")
 public class UserDTO {
     private Integer tbId;
 

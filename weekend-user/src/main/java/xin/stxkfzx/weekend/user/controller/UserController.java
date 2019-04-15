@@ -9,12 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import xin.stxkfzx.weekend.auth.config.UserLoginToken;
 import xin.stxkfzx.weekend.common.entity.ResultBean;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.common.exception.WeekendException;
 import xin.stxkfzx.weekend.user.dto.UserDTO;
 import xin.stxkfzx.weekend.user.entity.User;
 import xin.stxkfzx.weekend.user.service.UserService;
+import xin.stxkfzx.weekend.auth.config.PassToken;
 
 import javax.validation.Valid;
 import java.util.stream.Collectors;
@@ -41,6 +43,7 @@ public class UserController {
      * @author VicterTian
      * @date 2019-04-13
      */
+    @PassToken
     @PostMapping("/register")
     public ResponseEntity<ResultBean<UserDTO>> register(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
