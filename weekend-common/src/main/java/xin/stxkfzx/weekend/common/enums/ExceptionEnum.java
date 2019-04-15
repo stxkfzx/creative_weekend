@@ -11,7 +11,16 @@ public enum ExceptionEnum {
 	/**
 	 * 测试异常
 	 */
-	TEST(400, "这是一个测试异常");
+	TEST(400, "这是一个测试异常"),
+	/**
+	 * 新增用户异常
+	 */
+	USER_SAVE_ERROR(500,"新增用户失败"),
+	/**
+	 * User对象参数异常
+	 */
+	USER_PARAM_ERROR(400,"用户参数异常"),
+	;
 	private Integer code;
 	private String msg;
 
