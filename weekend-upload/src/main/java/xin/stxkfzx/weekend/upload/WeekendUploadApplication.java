@@ -9,9 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2019/4/11
  */
 @SpringBootApplication
-public class UploadApplication {
+public class WeekendUploadApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(UploadApplication.class, args);
+		SpringApplication.run(WeekendUploadApplication.class, args);
 	}
 
 }
