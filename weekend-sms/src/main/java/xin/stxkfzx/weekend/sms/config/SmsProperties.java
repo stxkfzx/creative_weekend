@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 
 /**
  * 读取配置信息
+ *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/13
