@@ -25,3 +25,5 @@
 /.nb-gradle/
 
 private/*
+/weekend-sms/src/main/resources/private/
+weekend-auth/src/main/resources/private/
