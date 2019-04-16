@@ -1,4 +1,4 @@
-package xin.stxkfzx.weekend.user.dto;
+package xin.stxkfzx.weekend.user.vo;
 
 import java.util.Objects;
 
@@ -8,7 +8,7 @@ import java.util.Objects;
  * @date 2019/4/12
  */
 @SuppressWarnings("all")
-public class UserDTO {
+public class UserVO {
     private Integer tbId;
 
     private String nickName;
@@ -21,10 +21,10 @@ public class UserDTO {
 
     private Short status;
 
-    public UserDTO() {
+    public UserVO() {
     }
 
-    public UserDTO(Integer tbId, String nickName, String phoneNum, String fullname, String address, Short status) {
+    public UserVO(Integer tbId, String nickName, String phoneNum, String fullname, String address, Short status) {
         this.tbId = tbId;
         this.nickName = nickName;
         this.phoneNum = phoneNum;
@@ -83,7 +83,7 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" +
+        return "UserVO{" +
                 "tbId=" + tbId +
                 ", nickName='" + nickName + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
@@ -98,16 +98,16 @@ public class UserDTO {
         if (this == o){
             return true;
         }
-        if (!(o instanceof UserDTO)) {
+        if (!(o instanceof UserVO)) {
             return false;
         }
-        UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(getTbId(), userDTO.getTbId()) &&
-                Objects.equals(getNickName(), userDTO.getNickName()) &&
-                Objects.equals(getPhoneNum(), userDTO.getPhoneNum()) &&
-                Objects.equals(getFullname(), userDTO.getFullname()) &&
-                Objects.equals(getAddress(), userDTO.getAddress()) &&
-                Objects.equals(getStatus(), userDTO.getStatus());
+        UserVO userVO = (UserVO) o;
+        return Objects.equals(getTbId(), userVO.getTbId()) &&
+                Objects.equals(getNickName(), userVO.getNickName()) &&
+                Objects.equals(getPhoneNum(), userVO.getPhoneNum()) &&
+                Objects.equals(getFullname(), userVO.getFullname()) &&
+                Objects.equals(getAddress(), userVO.getAddress()) &&
+                Objects.equals(getStatus(), userVO.getStatus());
     }
 
     @Override

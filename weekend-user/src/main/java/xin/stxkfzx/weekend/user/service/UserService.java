@@ -1,6 +1,6 @@
 package xin.stxkfzx.weekend.user.service;
 
-import xin.stxkfzx.weekend.user.dto.UserDTO;
+import xin.stxkfzx.weekend.user.vo.UserVO;
 import xin.stxkfzx.weekend.user.entity.User;
 
 /**
@@ -13,9 +13,9 @@ public interface UserService {
      * 添加用户
      *
      * @param user User对象
-     * @return UserDTO
+     * @return UserVO
      * @author ViterTian
      * @date 2019-04-14
      */
-    UserDTO addUser(User user);
+    UserVO addUser(User user);
 }

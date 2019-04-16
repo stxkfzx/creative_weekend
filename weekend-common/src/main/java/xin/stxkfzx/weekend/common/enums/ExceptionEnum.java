@@ -20,6 +20,14 @@ public enum ExceptionEnum {
 	 * User对象参数异常
 	 */
 	USER_PARAM_ERROR(400,"用户参数异常"),
+	/**
+	 * User对象参数异常
+	 */
+	INVALID_VERIFY_CODE(400,"无效验证码"),
+	/**
+	 * User对象参数异常
+	 */
+	INVALID_USER(400, "用户名或密码错误"),
 	;
 	private Integer code;
 	private String msg;
