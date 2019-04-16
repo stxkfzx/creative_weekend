@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import xin.stxkfzx.weekend.auth.entity.UserBase;
 import xin.stxkfzx.weekend.auth.mapper.UserBaseMapper;
 import xin.stxkfzx.weekend.auth.properties.JwtProperties;
+import xin.stxkfzx.weekend.auth.utils.CodecUtils;
 import xin.stxkfzx.weekend.auth.utils.JwtUtils;
+import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.common.exception.WeekendException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
@@ -40,9 +43,12 @@ public class AuthService {
     public void login(String username, String password, HttpServletResponse response) {
         try {
             UserBase user = userBaseMapper.selectByNickName(username);
-            if (!user.getPassword().equals(password)) {
-                return;
+            // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
+            String md5Password = CodecUtils.md5Hex(password, CodecUtils.generateSalt(user.getCreateTime()));
+            if (!user.getPassword().equals(md5Password)) {
+                throw new WeekendException(ExceptionEnum.INVALID_USER);
             }
+
             UserBase userBase = new UserBase(user.getId(), user.getNickName(), user.getStatus());
             // 生成Token
             String token = JwtUtils.generateToken(userBase, jwtProperties.getPrivateKey(), jwtProperties.getExpire());

@@ -5,11 +5,12 @@
         <id column="tb_id" property="id" jdbcType="INTEGER"/>
         <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="status" property="status" jdbcType="SMALLINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-    tb_id, nick_name,password, status
+    tb_id, nick_name,password, create_time, status
   </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
