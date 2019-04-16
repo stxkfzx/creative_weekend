@@ -13,6 +13,7 @@ import xin.stxkfzx.weekend.auth.properties.JwtProperties;
 import xin.stxkfzx.weekend.auth.utils.CodecUtils;
 import xin.stxkfzx.weekend.auth.utils.JwtUtils;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.common.exception.CheckException;
 import xin.stxkfzx.weekend.common.exception.WeekendException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,29 +42,24 @@ public class AuthService {
 
     @SuppressWarnings("unchecked")
     public void login(String username, String password, HttpServletResponse response) {
-        try {
-            UserBase user = userBaseMapper.selectByNickName(username);
-            // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
-            String md5Password = CodecUtils.md5Hex(password, CodecUtils.generateSalt(user.getCreateTime()));
-            if (!user.getPassword().equals(md5Password)) {
-                throw new WeekendException(ExceptionEnum.INVALID_USER);
-            }
 
-            UserBase userBase = new UserBase(user.getId(), user.getNickName(), user.getStatus());
-            // 生成Token
-            String token = JwtUtils.generateToken(userBase, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
-            if (StringUtils.isBlank(token)) {
-                // TODO: 2019/4/13 抛出异常
-                logger.error("【授权中心】token为空");
-            }
-            logger.info("【授权中心】生成token为：{}", token);
-            response.setHeader("Authorization", token);
-            redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("【授权中心】用户名或密码错误，用户名：{}", username, e);
-            // TODO: 2019/4/14 异常封装
+        UserBase user = userBaseMapper.selectByNickName(username);
+        // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
+        String md5Password = CodecUtils.md5Hex(password, CodecUtils.generateSalt(user.getNickName()));
+        if (!user.getPassword().equals(md5Password)) {
+            logger.error("【授权中心】用户名或密码错误，用户名：{}", username);
+            throw new CheckException(ExceptionEnum.INVALID_USER);
         }
+        UserBase userBase = new UserBase(user.getId(), user.getNickName(), user.getStatus());
+        // 生成Token
+        String token = JwtUtils.generateToken(userBase, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
+        if (StringUtils.isBlank(token)) {
+            logger.error("【授权中心】token为空");
+            throw new WeekendException(ExceptionEnum.INVALID_USER);
+        }
+        logger.info("【授权中心】生成token为：{}", token);
+        response.setHeader("Authorization", token);
+        redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
     }
 
     @SuppressWarnings("unchecked")
