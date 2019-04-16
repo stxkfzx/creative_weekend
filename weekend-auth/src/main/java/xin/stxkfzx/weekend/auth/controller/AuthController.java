@@ -62,13 +62,13 @@ public class AuthController {
      * @date 2019-04-13
      */
     @GetMapping("verify")
-    public ResponseEntity<UserBase> verifyUser(@RequestHeader("WK_TOKEN") String token, HttpServletResponse response) {
+    public ResponseEntity<UserBase> verifyUser(@RequestHeader("Authorization") String token, HttpServletResponse response) {
         try {
             return authService.verifyUser(token, response);
         } catch (Exception e) {
             // Token无效
             logger.error("【授权中心】Token:{}无效", token);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

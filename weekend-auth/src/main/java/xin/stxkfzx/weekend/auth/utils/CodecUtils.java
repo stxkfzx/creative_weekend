@@ -2,6 +2,8 @@ package xin.stxkfzx.weekend.auth.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -11,7 +13,7 @@ import java.util.Date;
  * @date 2019/4/15
  */
 public class CodecUtils {
-
+    private static final Logger logger = LoggerFactory.getLogger(CodecUtils.class);
 
     public static String md5Hex(String data, String salt) {
         if (StringUtils.isBlank(salt)) {
@@ -33,6 +35,9 @@ public class CodecUtils {
      * @return 生成的盐值
      */
     public static String generateSalt(Date date) {
-        return StringUtils.replace(date.toString(), "-", "");
+
+        String salt = StringUtils.replace(date.toString(), "-", "");
+        logger.info("生成盐：{}", salt);
+        return salt;
     }
 }
