@@ -14,21 +14,21 @@ public class User {
     private Integer tbId;
     @NotBlank(message = "用户名不能为空")
     private String nickName;
+    @NotNull
     @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$", message = "手机号格式不正确")
     private String phoneNum;
+    @NotNull
     @Pattern(regexp = "^[\\w_-]{6,16}$", message = "请输入长度为6~16位密码，可包含数字字母下划线")
     private String password;
-
+    @Pattern(regexp = "^[\u4e00-\u9fa5]$", message = "姓名不符合要求")
     private String fullname;
-
+    @Pattern(regexp = "^(\\d{6})(\\d{4})(\\d{2})(\\d{2})(\\d{3})([0-9]|X)$", message = "身份证不符合要求")
     private String idCard;
-
     private String address;
-
+    @Pattern(regexp = "^[\u4e00-\u9fa5]$", message = "紧急联系人姓名不符合要求")
     private String urgentContact;
-
+    @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$", message = "紧急联系人手机号格式不正确")
     private String urgentPhone;
-
     private Date createTime;
     private Date updateTime;
     @Min(value = -1, message = "状态不合法")
