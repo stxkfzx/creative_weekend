@@ -20,6 +20,11 @@ public enum ExceptionEnum {
     USER_SAVE_ERROR(500, "新增用户失败"),
 
     /**
+     * 用户实名认证异常
+     */
+    AUTH_USER_SAVE_ERROR(500, "用户实名认证异常"),
+
+    /**
      * 登录异常
      */
     INVALID_USER(400, "用户名或密码错误"),
