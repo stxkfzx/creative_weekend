@@ -34,9 +34,9 @@ public class CodecUtils {
      *
      * @return 生成的盐值
      */
-    public static String generateSalt(Date date) {
+    public static String generateSalt(String data) {
 
-        String salt = StringUtils.replace(date.toString(), "-", "");
+        String salt = StringUtils.reverse(data);
         logger.info("生成盐：{}", salt);
         return salt;
     }

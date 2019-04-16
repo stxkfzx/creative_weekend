@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setUpdateTime(new Date());
 
         // 生成一段盐值
-        String salt = CodecUtils.generateSalt(user.getCreateTime());
+        String salt = CodecUtils.generateSalt(user.getNickName());
 
         // 对密码进行加密
         user.setPassword(CodecUtils.md5Hex(user.getPassword(), salt));

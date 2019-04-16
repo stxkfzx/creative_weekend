@@ -45,7 +45,7 @@ public class AuthService {
 
         UserBase user = userBaseMapper.selectByNickName(username);
         // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
-        String md5Password = CodecUtils.md5Hex(password, CodecUtils.generateSalt(user.getCreateTime()));
+        String md5Password = CodecUtils.md5Hex(password, CodecUtils.generateSalt(user.getNickName()));
         if (!user.getPassword().equals(md5Password)) {
             logger.error("【授权中心】用户名或密码错误，用户名：{}", username);
             throw new CheckException(ExceptionEnum.INVALID_USER);
