@@ -17,7 +17,7 @@ public class EncryptionUtilTest extends WeekendCommonApplicationTests {
 
     @Test
     public void propertiesEncrypt() {
-        String message = "jdbc:mysql://119.23.208.165:3306/creative_weekend?useSSL=false&useUnicode=true&characterEncoding=utf8";
+        String message = "";
         String pd = EncryptionUtil.propertiesEncrypt(message);
         CheckUtils.notEmpty(pd);
         System.out.println(pd);
