@@ -17,7 +17,6 @@ import xin.stxkfzx.weekend.sms.utils.SmsUtils;
  */
 @RestController
 public class SmsController {
-    private static final Logger logger = LoggerFactory.getLogger(SmsController.class);
     private final SmsUtils smsUtils;
 
     @Autowired
@@ -28,14 +27,13 @@ public class SmsController {
     /**
      * 发送验证码，有效期为十分钟
      *
-     * @param phone 发送短信验证码手机号
+     * @param phone 接收短信验证码手机号
      * @return Void
      * @author ViterTian
      * @date 2019-04-15
      */
     @GetMapping("/code")
-    public void test(@RequestParam("phone") String phone) {
+    public void sendCode(@RequestParam("phone") String phone) {
         smsUtils.sendCode(phone);
-        logger.info("【短信服务】发送短信成功。手机号码：{}", phone);
     }
 }

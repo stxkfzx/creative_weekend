@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 发送短信工具类
+ *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/13
@@ -45,18 +46,20 @@ public class SmsUtils {
         this.redisTemplate = redisTemplate;
     }
 
-
     /**
      * 根据相应的手机号发送验证码
+     *
+     * @param telephone 接收验证码手机号
+     * @return respCode 正常为00000 非正常需要去秒滴云查看对应错误
+     * @author ViterTian
+     * @date 2019-04-17
      */
     public String sendCode(String telephone) {
         try {
             String key = smsProperties.getKeyPerfix() + telephone;
-            System.out.println("key = " + key);
             String signName = smsProperties.getSignName();
             // 通过redis进行短信限流
             String lastTime = redisTemplate.opsForValue().get(key);
-            System.out.println("lastTime = " + lastTime);
             if (StringUtils.isNotBlank(lastTime)) {
                 Long last = Long.valueOf(lastTime);
                 if (System.currentTimeMillis() - last < SMS_MIN_INTERVAL_IN_MILLIS) {
@@ -69,8 +72,7 @@ public class SmsUtils {
             String timestamp = getTimestamp();
             String sig = getMD5(smsProperties.getAccountSid(), smsProperties.getAuthToken(), timestamp);
             int time = 5;
-            System.out.println(signName);
-            //这里一定要与新建模板中的短信内容一致，一个空格都不能多，否者短信打死都发不过去
+            // 这里一定要与新建模板中的短信内容一致，一个空格都不能多，否者短信打死都发不过去
             String tamp = signName + "您的验证码为" + rod + "，请于" + time + "分钟内正确输入，如非本人操作，请忽略此短信。";
             OutputStreamWriter out;
             BufferedReader br;
@@ -79,21 +81,21 @@ public class SmsUtils {
                 URL url = new URL(smsProperties.getQueryPath());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                //设置是否允许数据写入
+                // 设置是否允许数据写入
                 connection.setDoInput(true);
-                //设置是否允许参数数据输出
+                // 设置是否允许参数数据输出
                 connection.setDoOutput(true);
-                //设置链接响应时间
+                // 设置链接响应时间
                 connection.setConnectTimeout(5000);
-                //设置参数读取时间
+                // 设置参数读取时间
                 connection.setReadTimeout(10000);
                 connection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-                //提交请求
+                // 提交请求
                 out = new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8);
                 String args = getQueryArgs(smsProperties.getAccountSid(), tamp, telephone, timestamp, sig);
                 out.write(args);
                 out.flush();
-                //读取返回参数
+                // 读取返回参数
                 br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
                 String temp;
                 while ((temp = br.readLine()) != null) {
@@ -107,14 +109,13 @@ public class SmsUtils {
             try {
                 json = new JSONObject(result.toString());
                 respCode = json.getString("respCode");
-                System.out.println("respCode = " + respCode);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             String defaultRespCode = "00000";
             if (defaultRespCode.equals(respCode)) {
-                //发送短信成功后,写入redis，指定生存时间为一分钟
+                // 发送短信成功后,写入redis，指定生存时间为一分钟
                 redisTemplate.opsForValue().set(key, String.valueOf(System.currentTimeMillis()), 5, TimeUnit.MINUTES);
                 logger.info("【短信服务】发送短信成功。手机号码：{},验证码为：{}", telephone, rod);
                 return rod;
@@ -148,10 +149,10 @@ public class SmsUtils {
 
         StringBuilder result = new StringBuilder();
         String source = sid + token + timestamp;
-        //获取某个类的实例
+        // 获取某个类的实例
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
-            //要进行加密的东西
+            // 要进行加密的东西
             byte[] bytes = digest.digest(source.getBytes());
             for (byte b : bytes) {
                 String hex = Integer.toHexString(b & 0xff);
