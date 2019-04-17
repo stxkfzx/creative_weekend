@@ -88,7 +88,7 @@ public class JwtUtils {
         Jws<Claims> claimsJws = parseToken(publicKey, token);
         Claims body = claimsJws.getBody();
         return new UserBase(
-                ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_ID)),
+                ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_ID)),
                 ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME)),
                 ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_USER_STAT))
         );
@@ -106,7 +106,7 @@ public class JwtUtils {
         Jws<Claims> claimsJws = parseToken(publicKey, token);
         Claims body = claimsJws.getBody();
         return new UserBase(
-                ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_ID)),
+                ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_ID)),
                 ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME)),
                 ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_USER_STAT))
         );
@@ -124,7 +124,7 @@ public class JwtUtils {
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
         return new UserBase(
-                ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_ID)),
+                ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_ID)),
                 ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME))
         );
     }
@@ -141,7 +141,7 @@ public class JwtUtils {
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
         return new UserBase(
-                ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_ID)),
+                ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_ID)),
                 ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME))
         );
     }

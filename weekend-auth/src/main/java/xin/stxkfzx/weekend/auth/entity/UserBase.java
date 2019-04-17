@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @SuppressWarnings("all")
 public class UserBase implements Serializable {
-    private String id;
+    private Integer id;
     private String nickName;
     private String password;
     private Date createTime;
@@ -21,22 +21,22 @@ public class UserBase implements Serializable {
     public UserBase() {
     }
 
-    public UserBase(String id, String nickName) {
+    public UserBase(Integer id, String nickName) {
         this.id = id;
         this.nickName = nickName;
     }
 
-    public UserBase(String id, String nickName, Integer status) {
+    public UserBase(Integer id, String nickName, Integer status) {
         this.id = id;
         this.nickName = nickName;
         this.status = status;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

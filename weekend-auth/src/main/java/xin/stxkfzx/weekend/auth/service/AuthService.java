@@ -90,7 +90,7 @@ public class AuthService {
      * @author ViterTian
      * @date 2019-04-14
      */
-    public UserBase findUserById(String userId) {
-        return userBaseMapper.selectByPrimaryKey(Integer.valueOf(userId));
+    public UserBase findUserById(Integer userId) {
+        return userBaseMapper.selectByPrimaryKey(userId);
     }
 }
