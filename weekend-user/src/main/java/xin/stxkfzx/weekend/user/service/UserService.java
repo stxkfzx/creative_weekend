@@ -1,5 +1,6 @@
 package xin.stxkfzx.weekend.user.service;
 
+import xin.stxkfzx.weekend.auth.config.CheckUserIsExist;
 import xin.stxkfzx.weekend.user.entity.User;
 import xin.stxkfzx.weekend.user.vo.UserVO;
 
@@ -38,4 +39,14 @@ public interface UserService {
      * @date 2019-04-16
      */
     Integer authUser(User user);
+
+    /**
+     * 检查用户名是否重复
+     *
+     * @param nickname 用户名
+     * @return 是否可用     true - 可用(不存在）     false - 不可用（存在）
+     * @author ViterTian
+     * @date 2019-04-16
+     */
+    Boolean checkNickName(String nickname);
 }

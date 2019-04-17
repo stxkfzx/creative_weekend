@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @MapperScan("xin.stxkfzx.weekend.user.mapper")
-@ComponentScan("xin.stxkfzx.weekend")
+@ComponentScan("xin.stxkfzx.weekend.*")
 public class WeekendUserApplication {
     public static void main(String[] args) {
         SpringApplication.run(WeekendUserApplication.class, args);

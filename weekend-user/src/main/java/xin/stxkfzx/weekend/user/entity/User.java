@@ -151,7 +151,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "UserVO{" +
+        return "User{" +
                 "tbId=" + tbId +
                 ", nickName='" + nickName + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +

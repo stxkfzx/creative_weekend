@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import xin.stxkfzx.weekend.auth.config.CheckUserIsExist;
 import xin.stxkfzx.weekend.auth.utils.CodecUtils;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.common.exception.CheckException;
 import xin.stxkfzx.weekend.common.exception.WeekendException;
 import xin.stxkfzx.weekend.sms.config.SmsProperties;
 import xin.stxkfzx.weekend.user.entity.User;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO addUser(User user) {
+        logger.info("用户{}开始注册", user);
         String key = smsProperties.getKeyPerfix() + user.getPhoneNum();
         // 从redis中取出验证码
         String cacheCode = redisTemplate.opsForValue().get(key);
@@ -46,6 +49,11 @@ public class UserServiceImpl implements UserService {
         }*/
         // 防止用户自定义id
         user.setTbId(null);
+        // 防止用户名重复
+        if (checkNickName(user.getNickName())) {
+            throw new WeekendException(ExceptionEnum.DUPLICATE_USER_NAME);
+        }
+
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
 
@@ -60,9 +68,10 @@ public class UserServiceImpl implements UserService {
             throw new WeekendException(ExceptionEnum.USER_SAVE_ERROR);
         }
         redisTemplate.delete(key);
-        UserVO userVO = new UserVO();
 
+        UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
+        logger.info("用户{}注册成功", user);
         return userVO;
     }
 
@@ -80,23 +89,31 @@ public class UserServiceImpl implements UserService {
                 Object val = field.get(user);
                 // 如果有一项属性为空，则需要返回false，并让用户进行实名认证
                 if (val == null) {
+                    logger.warn("用户{}的{}属性为空", user.getNickName(), field.toString());
                     flag = false;
                     break;
                 }
             } catch (IllegalAccessException e) {
                 logger.error(e.getLocalizedMessage());
-                e.printStackTrace();
+                throw new CheckException(e.getMessage());
             }
         }
         return flag;
     }
 
     @Override
+    @CheckUserIsExist
     public Integer authUser(User user) {
         int i = userMapper.updateByPrimaryKeySelective(user);
-        if (i!=1){
+        logger.info("执行完善用户信息SQL语句受影响的条数为：{}", i);
+        if (i != 1) {
             throw new WeekendException(ExceptionEnum.AUTH_USER_SAVE_ERROR);
         }
         return user.getTbId();
+    }
+
+    @Override
+    public Boolean checkNickName(String nickname) {
+        return userMapper.selectByNickName(nickname) != null;
     }
 }

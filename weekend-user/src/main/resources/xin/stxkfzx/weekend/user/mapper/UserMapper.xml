@@ -174,4 +174,13 @@
       status = #{status,jdbcType=SMALLINT}
     where tb_id = #{tbId,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByNickName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from user
+    where nick_name = #{nickname,jdbcType=VARCHAR}
+  </select>
+
+
 </mapper>

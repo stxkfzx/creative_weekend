@@ -69,4 +69,17 @@ public class UserController {
         // TODO: 2019/4/16 发布时记得去掉上面注释
         return ResponseEntity.ok(userService.authUser(user));
     }
+
+    /**
+     * 检查用户名是否重复
+     *
+     * @param nickname 用户名
+     * @return 是否可用     true - 可用     false - 不可用
+     * @author ViterTian
+     * @date 2019-04-16
+     */
+    @GetMapping("/nickname")
+    public ResponseEntity<Boolean> checkNickName(@RequestParam("nickname") String nickname) {
+        return ResponseEntity.ok(userService.checkNickName(nickname));
+    }
 }
