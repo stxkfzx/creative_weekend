@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import xin.stxkfzx.weekend.common.entity.ResultBean;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
-import xin.stxkfzx.weekend.common.enums.SuccessStatusEnum;
+import xin.stxkfzx.weekend.common.enums.StatusEnum;
 import xin.stxkfzx.weekend.common.exception.CheckException;
 import xin.stxkfzx.weekend.common.exception.UnLoginException;
 import xin.stxkfzx.weekend.common.exception.WeekendException;
@@ -50,7 +50,7 @@ public class CommonExceptionHandler {
         } else {
             // 业务逻辑异常属于正常状态，HTTP状态为200
             log.warn(e.getLocalizedMessage());
-            return ResponseEntity.ok(new ResultBean(SuccessStatusEnum.SUCCESS.getCode(), e.getLocalizedMessage()));
+            return ResponseEntity.ok(new ResultBean(StatusEnum.SUCCESS.getCode(), e.getLocalizedMessage()));
         }
     }
 

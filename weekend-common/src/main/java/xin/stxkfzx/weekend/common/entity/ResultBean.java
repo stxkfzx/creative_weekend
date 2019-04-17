@@ -2,7 +2,7 @@ package xin.stxkfzx.weekend.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
-import xin.stxkfzx.weekend.common.enums.SuccessStatusEnum;
+import xin.stxkfzx.weekend.common.enums.StatusEnum;
 
 import java.io.Serializable;
 import java.util.StringJoiner;
@@ -22,7 +22,7 @@ public class ResultBean<T> implements Serializable {
 		super();
 	}
 
-    public ResultBean(SuccessStatusEnum status) {
+    public ResultBean(StatusEnum status) {
         this(status.getCode(), status.getMsg());
     }
 
@@ -34,7 +34,7 @@ public class ResultBean<T> implements Serializable {
         this(code, msg, null);
     }
 
-    public ResultBean(SuccessStatusEnum status, T body) {
+    public ResultBean(StatusEnum status, T body) {
         this(status);
         this.body = body;
     }

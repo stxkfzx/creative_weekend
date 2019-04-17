@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import xin.stxkfzx.weekend.common.entity.ResultBean;
-import xin.stxkfzx.weekend.common.enums.SuccessStatusEnum;
+import xin.stxkfzx.weekend.common.enums.StatusEnum;
 
 /**
  * 增强对ResponseEntity处理
@@ -33,7 +33,7 @@ public class ResponseEntityAOP {
         Object body = entity.getBody();
         if (!(body instanceof ResultBean)) {
             log.debug("Encapsulate {} body with ResultBean,  which status is SUCCESS", point.getSignature());
-            entity = updateField(entity, new ResultBean<>(SuccessStatusEnum.SUCCESS, body));
+            entity = updateField(entity, new ResultBean<>(StatusEnum.SUCCESS, body));
         }
         return entity;
     }

@@ -13,12 +13,27 @@ import java.util.StringJoiner;
  * @version V1.0
  * @date 2019/4/11
  */
-public enum SuccessStatusEnum {
+public enum StatusEnum {
 
     /**
      * 成功状态
      */
-    SUCCESS(100, "success");
+    SUCCESS(100, "success"),
+
+    /**
+     * 被删除数据状态
+     */
+    DELETE(-1, "delete status"),
+
+    /**
+     * 审核状态，不可用作数据展示
+     */
+    REVIEW(0, "review status"),
+
+    /**
+     * 正常状态，可用作数据展示
+     */
+    NORMAL(1, "normal status");
 
     /**
      * 业务逻辑码
@@ -27,7 +42,7 @@ public enum SuccessStatusEnum {
     private String msg;
 
 
-    SuccessStatusEnum(Integer code, String msg) {
+    StatusEnum(Integer code, String msg) {
         this.code = code;
         this.msg = getI18nMessage(msg);
     }
@@ -47,7 +62,7 @@ public enum SuccessStatusEnum {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", SuccessStatusEnum.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", StatusEnum.class.getSimpleName() + "[", "]")
                 .add("code=" + code)
                 .add("msg='" + msg + "'")
                 .toString();
