@@ -1,7 +1,7 @@
 package xin.stxkfzx.weekend.common.aop;
 
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
@@ -26,9 +26,10 @@ public class ResponseEntityAOP {
     public void pointcut() {
     }
 
-    @AfterReturning(value = "pointcut()", returning = "entity")
-    public ResponseEntity<?> processValue(JoinPoint point, ResponseEntity<?> entity) {
+    @Around("pointcut()")
+    public ResponseEntity<?> processValue(ProceedingJoinPoint point) throws Throwable {
         log.info("Using {}", point.getSignature());
+        ResponseEntity<?> entity = (ResponseEntity<?>) point.proceed();
         Object body = entity.getBody();
         if (!(body instanceof ResultBean)) {
             log.debug("Encapsulate {} body with ResultBean,  which status is SUCCESS", point.getSignature());
