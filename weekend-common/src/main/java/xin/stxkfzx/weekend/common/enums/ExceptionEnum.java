@@ -32,7 +32,17 @@ public enum ExceptionEnum {
     /**
      * 未登录状态
      */
+    DUPLICATE_USER_NAME(500, "用户名重复"),
+    /**
+     * 用户不存在
+     */
+    USER_NOT_EXIST(500, "用户不存在"),
+
+    /**
+     * 未登录状态
+     */
     UN_LOGIN(-100, "user.not.login"),
+
 
     /**
      * 校验失败状态
