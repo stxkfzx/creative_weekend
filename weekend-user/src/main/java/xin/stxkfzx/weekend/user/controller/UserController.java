@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xin.stxkfzx.weekend.auth.config.PassToken;
 import xin.stxkfzx.weekend.common.entity.ResultBean;
-import xin.stxkfzx.weekend.common.enums.SuccessStatusEnum;
+import xin.stxkfzx.weekend.common.enums.StatusEnum;
 import xin.stxkfzx.weekend.user.entity.User;
 import xin.stxkfzx.weekend.user.service.UserService;
 import xin.stxkfzx.weekend.user.vo.UserVO;
@@ -40,7 +40,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<ResultBean<UserVO>> register(@Valid @RequestBody User user) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResultBean<>(SuccessStatusEnum.SUCCESS, userService.addUser(user)));
+                .body(new ResultBean<>(StatusEnum.SUCCESS, userService.addUser(user)));
     }
 
     /**
