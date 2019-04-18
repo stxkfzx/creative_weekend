@@ -44,12 +44,7 @@ public enum StatusEnum {
 
     StatusEnum(Integer code, String msg) {
         this.code = code;
-        this.msg = getI18nMessage(msg);
-    }
-
-    private String getI18nMessage(String msgKey) {
-        return ApplicationContextUtil.getBean(MessageSource.class)
-                .getMessage(msgKey, null, UserUtils.getLocale());
+        this.msg = msg;
     }
 
     public Integer getCode() {
