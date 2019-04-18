@@ -63,7 +63,7 @@ public class AuthService {
     }
 
     @SuppressWarnings("unchecked")
-    public ResponseEntity<UserBase> verifyUser(String token, HttpServletResponse response) {
+    public UserBase verifyUser(String token, HttpServletResponse response) {
         // 先从redis中获取用户信息
         UserBase userBase = (UserBase) redisTemplate.opsForValue().get(token);
         // 如果缓存中没有，对token进行解析
@@ -76,10 +76,11 @@ public class AuthService {
                 String newToken = JwtUtils.generateToken(userBase, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
                 // 将新的Token信息设置在Header的Authorization里,并保存在Redis中
                 response.setHeader("Authorization", newToken);
+                logger.warn("【授权中心】重新生成token:{}",token);
                 redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
             }
         }
-        return ResponseEntity.ok(userBase);
+        return userBase;
     }
 
     /**

@@ -22,7 +22,7 @@ public enum ExceptionEnum {
     /**
      * 用户实名认证异常
      */
-    AUTH_USER_SAVE_ERROR(500, "用户实名认证异常"),
+    USER_REAL_AUTH_ERROR(500, "用户实名认证异常"),
 
     /**
      * 登录异常
@@ -30,7 +30,7 @@ public enum ExceptionEnum {
     INVALID_USER(400, "用户名或密码错误"),
 
     /**
-     * 未登录状态
+     * 用户名重复
      */
     DUPLICATE_USER_NAME(500, "用户名重复"),
     /**
@@ -39,10 +39,21 @@ public enum ExceptionEnum {
     USER_NOT_EXIST(500, "用户不存在"),
 
     /**
+     * 用户认证失败
+     */
+    USER_AUTH_ERROR(500, "认证用户失败"),
+    /**
+     * 无效文件类型
+     */
+    INVALID_FILE_TYPE(400, "无效文件类型"),
+    /**
+     * 文件上传失败
+     */
+    UPLOAD_FILE_ERROR(500, "文件上传失败"),
+    /**
      * 未登录状态
      */
     UN_LOGIN(-100, "user.not.login"),
-
 
     /**
      * 校验失败状态

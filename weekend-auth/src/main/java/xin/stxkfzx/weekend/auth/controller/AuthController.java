@@ -65,9 +65,10 @@ public class AuthController {
     @GetMapping("verify")
     public ResponseEntity<UserBase> verifyUser(@RequestHeader("Authorization") String token, HttpServletResponse response) {
         try {
-            return authService.verifyUser(token, response);
+            return ResponseEntity.status(HttpStatus.OK).body(authService.verifyUser(token,response));
         } catch (Exception e) {
             // Token无效
+            e.printStackTrace();
             logger.error("【授权中心】Token:{}无效", token);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

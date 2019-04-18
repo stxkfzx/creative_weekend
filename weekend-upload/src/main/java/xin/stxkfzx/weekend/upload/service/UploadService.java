@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.common.exception.CheckException;
 import xin.stxkfzx.weekend.upload.config.UploadProperties;
 
 import javax.imageio.ImageIO;
@@ -45,15 +47,15 @@ public class UploadService {
 
 		// 判断文件是否是可支持上传类型
 		if (!uploadProperties.getAllowTypes().contains(contentType)) {
-			// TODO: 2019/4/11 需要修改此异常信息
-			throw new RuntimeException("文件类型不符合");
+		    logger.error("上传文件类型错误");
+			throw new CheckException(ExceptionEnum.INVALID_FILE_TYPE);
 		}
 
 		try {
 			BufferedImage read = ImageIO.read(file.getInputStream());
 			if (read == null) {
-				// TODO: 2019/4/11 需要修改此异常信息
-				throw new RuntimeException("不是图片");
+                logger.error("上传文件类型错误");
+                throw new CheckException(ExceptionEnum.INVALID_FILE_TYPE);
 			}
 			String extension = StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
 			// 将文件上传至FastDFS服务器
@@ -65,7 +67,7 @@ public class UploadService {
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.error("文件上传失败", e);
-			throw new RuntimeException("文件上传失败");
+            throw new CheckException(ExceptionEnum.UPLOAD_FILE_ERROR);
 		}
 	}
 }

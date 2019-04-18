@@ -65,12 +65,10 @@ public class JwtProperties {
             // 公钥私钥都存在
             this.publicKey = RsaUtils.getPublicKey(pubKeyPath);
             this.privateKey = RsaUtils.getPrivateKey(priKeyPath);
-
+            logger.info("公钥、私钥都存在");
         } catch (Exception e) {
             logger.error("创建公钥、私钥失败：{}", e.toString());
             e.printStackTrace();
-            // TODO: 2019/4/13
-            throw new RuntimeException();
         }
     }
 

@@ -1,6 +1,5 @@
 package xin.stxkfzx.weekend.auth.handle;
 
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,8 @@ import xin.stxkfzx.weekend.auth.config.UserLoginToken;
 import xin.stxkfzx.weekend.auth.entity.UserBase;
 import xin.stxkfzx.weekend.auth.properties.JwtProperties;
 import xin.stxkfzx.weekend.auth.service.AuthService;
-import xin.stxkfzx.weekend.auth.utils.JwtUtils;
+import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.common.exception.CheckException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,28 +51,28 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        // 检查有没有需要用户权限的注解
+        // 检查是否有@UserLoginToken注解，有则进行用户验证
         if (method.isAnnotationPresent(UserLoginToken.class)) {
             UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
             if (userLoginToken.required()) {
                 // 执行认证
                 if (token == null) {
-                    // TODO: 2019/4/13 封装
-                    throw new RuntimeException("无token，请重新登录");
+                    logger.error("token为null，用户认证失败");
+                    throw new CheckException(ExceptionEnum.USER_AUTH_ERROR);
                 }
                 // 获取 token 中的 auth id
                 UserBase userBase;
                 try {
                     logger.info("获取到PublicKey()");
-                    userBase = JwtUtils.getUserBase(jwtProperties.getPublicKey(), token);
-                } catch (JWTDecodeException j) {
-                    // TODO: 2019/4/13 封装
-                    throw new RuntimeException("401");
+                    userBase = authService.verifyUser(token,httpServletResponse);
+                } catch (Exception e) {
+                    logger.error("用户认证过期");
+                    throw new CheckException(ExceptionEnum.USER_AUTH_ERROR);
                 }
                 UserBase user = authService.findUserById(userBase.getId());
                 if (user == null) {
-                    // TODO: 2019/4/13 封装
-                    throw new RuntimeException("用户不存在，请重新登录");
+                    logger.error("用户不存在");
+                    throw new CheckException(ExceptionEnum.USER_NOT_EXIST);
                 }
                 return true;
             }

@@ -14,6 +14,8 @@ import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.common.exception.CheckException;
 import xin.stxkfzx.weekend.user.entity.User;
 
+import java.lang.reflect.Field;
+
 /**
  * @author VicterTian
  * @version V1.0
@@ -44,6 +46,12 @@ public class CheckInterceptor {
                 logger.info("检测到此方法有User对象的实例,判断此用户是否存在");
                 if (authService.findUserById(((User) arg).getTbId()) == null) {
                     throw new CheckException(ExceptionEnum.USER_NOT_EXIST);
+                }
+            }else{
+                Field[] declaredFields = arg.getClass().getDeclaredFields();
+                for (Field field : declaredFields) {
+                    System.out.println("field.getGenericType() = " + field.getGenericType());
+
                 }
             }
         }

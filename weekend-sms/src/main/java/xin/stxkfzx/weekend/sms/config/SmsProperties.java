@@ -15,7 +15,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Component
 @Configuration
-@PropertySource("classpath:/private/sms.properties")
+@PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "weekend.sms")
 @Validated
 public class SmsProperties {

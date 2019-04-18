@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
         int i = userMapper.updateByPrimaryKeySelective(user);
         logger.info("执行完善用户信息SQL语句受影响的条数为：{}", i);
         if (i != 1) {
-            throw new WeekendException(ExceptionEnum.AUTH_USER_SAVE_ERROR);
+            throw new WeekendException(ExceptionEnum.USER_REAL_AUTH_ERROR);
         }
         return user.getTbId();
     }

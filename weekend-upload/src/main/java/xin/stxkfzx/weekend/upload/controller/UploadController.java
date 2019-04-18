@@ -29,7 +29,6 @@ public class UploadController {
 	 */
 	@PostMapping("image")
 	public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file){
-		// TODO: 2019/4/11 修改返回类型
 		return ResponseEntity.ok(uploadService.uploadImage(file));
 	}
 }
