@@ -63,7 +63,14 @@ public enum ExceptionEnum {
     /**
      * 未知错误状态
      */
-    UNKNOWN_FAIL(0, "unknown.error");
+    UNKNOWN_FAIL(0, "unknown.error"),
+
+    /**
+     * 活动不存在
+     */
+    ACTIVATE_NOT_EXIST(600, "活动不存在");
+
+
     private Integer code;
     private String msg;
 

@@ -17,6 +17,7 @@ import xin.stxkfzx.weekend.common.exception.WeekendException;
 
 import javax.validation.ValidationException;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -31,26 +32,26 @@ public class CommonExceptionHandler {
     /**
      * 业务异常处理
      *
-     * @param e Exception
+     * @param e WeekendException
      * @return ResponseEntity
      * @author fmy
      * @date 2019-04-12 17:20
      */
     @ExceptionHandler(WeekendException.class)
-    public ResponseEntity<?> weekendExceptionHandle(Exception e) {
-
-        if (e instanceof CheckException || e instanceof IllegalAccessException) {
-            // 校验失败异常
-            log.warn(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ResultBean(ExceptionEnum.CHECK_FAIL.getCode(), e.getLocalizedMessage()));
-        } else if (e instanceof UnLoginException) {
+    public ResponseEntity<?> weekendExceptionHandle(WeekendException e) {
+        if (e instanceof UnLoginException) {
             // 用户未登录异常
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionEnum.UN_LOGIN);
+        } else if (e instanceof CheckException) {
+            // 校验失败异常
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResultBean(Optional.ofNullable(e.getExceptionEnum())
+                            .map(ExceptionEnum::getCode).orElse(ExceptionEnum.CHECK_FAIL.getCode()),
+                            e.getLocalizedMessage()));
         } else {
             // 业务逻辑异常属于正常状态，HTTP状态为200
-            log.warn(e.getLocalizedMessage());
-            return ResponseEntity.ok(new ResultBean(StatusEnum.SUCCESS.getCode(), e.getLocalizedMessage()));
+            return ResponseEntity.ok(new ResultBean(Optional.ofNullable(e.getExceptionEnum())
+                    .map(ExceptionEnum::getCode).orElse(ExceptionEnum.UNKNOWN_FAIL.getCode()), e.getLocalizedMessage()));
         }
     }
 

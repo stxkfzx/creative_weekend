@@ -8,6 +8,7 @@ import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
  * @date 2019/4/11
  */
 public class WeekendException extends RuntimeException {
+	private ExceptionEnum exceptionEnum;
 
 	public WeekendException() {
 	}
@@ -30,5 +31,10 @@ public class WeekendException extends RuntimeException {
 
 	public WeekendException(ExceptionEnum exceptionEnum) {
 		super(exceptionEnum.getMsg());
+		this.exceptionEnum = exceptionEnum;
+	}
+
+	public ExceptionEnum getExceptionEnum() {
+		return exceptionEnum;
 	}
 }
