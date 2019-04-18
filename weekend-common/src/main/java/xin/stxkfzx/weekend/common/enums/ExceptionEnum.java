@@ -42,6 +42,12 @@ public enum ExceptionEnum {
      * 用户认证失败
      */
     USER_AUTH_ERROR(500, "认证用户失败"),
+
+    /**
+     * 没有权限进行操作
+     */
+    NO_PERMISSION(501, "没有权限操作"),
+
     /**
      * 无效文件类型
      */
@@ -68,7 +74,13 @@ public enum ExceptionEnum {
     /**
      * 活动不存在
      */
-    ACTIVATE_NOT_EXIST(600, "活动不存在");
+    ACTIVATE_NOT_EXIST(600, "活动不存在"),
+
+    /**
+     * 活动正在审核
+     */
+    ACTIVITY_IS_REVIEW(601, "活动正在审核中");
+
 
 
     private Integer code;

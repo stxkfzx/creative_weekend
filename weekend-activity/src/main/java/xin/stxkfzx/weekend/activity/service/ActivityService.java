@@ -67,4 +67,15 @@ public interface ActivityService {
      * @date 2019-04-16 19:57
      */
     ActivityExpand listActivityWithPage(Activity condition, int page, int pageSize);
+
+    /**
+     * 删除活动
+     *
+     * @param user
+     * @param activity
+     * @return
+     * @author fmy
+     * @date 2019-04-18 19:32
+     */
+    ActivityExpand deleteActivity(User user, Activity activity);
 }

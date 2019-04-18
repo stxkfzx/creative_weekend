@@ -79,7 +79,8 @@ public class ActivityServiceImpl implements ActivityService {
         // 活动是否存在
         Activity findActivity = activityMapper.selectByPrimaryKey(activity.getTbId());
         CheckUtils.notNull(findActivity, "id.error", activity.getTbId());
-        CheckUtils.check(findActivity.getStatus() != StatusEnum.NORMAL.getCode().shortValue(), ExceptionEnum.ACTIVATE_NOT_EXIST);
+        CheckUtils.check(findActivity.getStatus() != StatusEnum.DELETE.getCode().shortValue(), ExceptionEnum.ACTIVATE_NOT_EXIST);
+        CheckUtils.check(findActivity.getStatus() != StatusEnum.REVIEW.getCode().shortValue(), ExceptionEnum.ACTIVITY_IS_REVIEW);
     }
 
     private UserJoinActivity insertJoinRecord(User user, Activity activity) {
@@ -141,4 +142,14 @@ public class ActivityServiceImpl implements ActivityService {
         return null;
     }
 
+    @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
+    @CheckUserIsExist
+    @Override
+    public ActivityExpand deleteActivity(User user, Activity activity) {
+        Activity select = activityMapper.selectByPrimaryKey(activity.getTbId());
+
+        CheckUtils.check(select.getUserId().equals(user.getTbId()), ExceptionEnum.NO_PERMISSION);
+
+        return null;
+    }
 }
