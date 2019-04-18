@@ -45,13 +45,8 @@ public class CheckInterceptor {
             if (arg instanceof User) {
                 logger.info("检测到此方法有User对象的实例,判断此用户是否存在");
                 if (authService.findUserById(((User) arg).getTbId()) == null) {
+                    logger.error("用户{}不存在",arg);
                     throw new CheckException(ExceptionEnum.USER_NOT_EXIST);
-                }
-            }else{
-                Field[] declaredFields = arg.getClass().getDeclaredFields();
-                for (Field field : declaredFields) {
-                    System.out.println("field.getGenericType() = " + field.getGenericType());
-
                 }
             }
         }
