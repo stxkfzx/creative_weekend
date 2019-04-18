@@ -1,4 +1,5 @@
 package xin.stxkfzx.weekend.activity.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import xin.stxkfzx.weekend.activity.entity.UserJoinActivity;
 
@@ -54,4 +55,17 @@ public interface UserJoinActivityMapper {
      * @return update count
      */
     int updateByPrimaryKey(UserJoinActivity record);
+
+    /**
+     * 通过用户Id和活动Id查找用户加入活动记录
+     *
+     * @param userId
+     * @param activityId
+     * @return
+     * @author fmy
+     * @date 2019-04-18 8:46
+     */
+    UserJoinActivity selectOneByUserIdAndActivityId(@Param("userId")Integer userId,@Param("activityId")Integer activityId);
+
+
 }

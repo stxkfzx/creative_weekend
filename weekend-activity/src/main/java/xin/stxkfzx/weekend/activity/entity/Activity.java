@@ -1,5 +1,7 @@
 package xin.stxkfzx.weekend.activity.entity;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -11,14 +13,22 @@ import java.util.Date;
 public class Activity {
     private Integer tbId;
 
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String description;
 
+    @NotNull
     private Short range;
 
+    /**
+     * 坐标
+     */
+    @NotBlank
     private String coordinate;
 
+    @NotNull
     private Integer maxCount;
 
     private Date createTime;
@@ -29,8 +39,10 @@ public class Activity {
 
     private Integer money;
 
+    @NotNull
     private Date startTime;
 
+    @NotNull
     private Integer userId;
 
     private Integer proxyId;

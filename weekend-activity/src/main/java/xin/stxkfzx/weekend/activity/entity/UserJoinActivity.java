@@ -9,6 +9,12 @@ import java.util.Date;
  * @date 2019-04-10 22:09 
  */
 public class UserJoinActivity {
+    public static final Short JOIN = 1;
+    public static final Short EXIT = 0;
+
+    public static final Short PAY_SUCCESS = 2;
+    public static final Short PAY_FAIL = -1;
+
     private Integer tbId;
 
     private Date createTime;
