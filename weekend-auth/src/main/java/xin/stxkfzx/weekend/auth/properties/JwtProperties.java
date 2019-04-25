@@ -36,9 +36,9 @@ public class JwtProperties {
      */
     private final String secret = "weekend@Login(Auth}*^31)&kfzx%";
 
-    private final String pubKeyPath = "G:\\rsa.pub";
+    private final String pubKeyPath = System.getProperty("user.dir")+"\\rsa.pub";
 
-    private final String priKeyPath = "G:\\rsa.pri";
+    private final String priKeyPath = System.getProperty("user.dir")+"\\rsa.pri";
 
     private Integer expire;
 

@@ -11,6 +11,7 @@ public class WeekendUserApplicationTests {
 
 	@Test
 	public void contextLoads() {
+
 	}
 
 }

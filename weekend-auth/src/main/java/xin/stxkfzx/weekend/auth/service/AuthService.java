@@ -41,7 +41,7 @@ public class AuthService {
     }
 
     @SuppressWarnings("unchecked")
-    public void login(String username, String password, HttpServletResponse response) {
+    public UserBase login(String username, String password, HttpServletResponse response) {
 
         UserBase user = userBaseMapper.selectByNickName(username);
         // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
@@ -60,6 +60,7 @@ public class AuthService {
         logger.info("【授权中心】生成token为：{}", token);
         response.setHeader("Authorization", token);
         redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
+        return userBase;
     }
 
     @SuppressWarnings("unchecked")

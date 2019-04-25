@@ -44,13 +44,12 @@ public class AuthController {
      * @date 2019-04-13
      */
     @PostMapping("accredit")
-    public ResponseEntity<Void> login(
+    public ResponseEntity<UserBase> login(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             HttpServletResponse response
     ) {
-        authService.login(username, password, response);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(authService.login(username, password, response));
     }
 
     /**
