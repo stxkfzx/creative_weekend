@@ -1,4 +1,4 @@
-package xin.stxkfzx.weekend.activity.annotation;
+package xin.stxkfzx.weekend.activity.enums;
 
 /**
  * 检查参数类型

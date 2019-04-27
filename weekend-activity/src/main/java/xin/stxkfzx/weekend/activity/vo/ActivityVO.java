@@ -39,9 +39,6 @@ public class ActivityVO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
-    @NotNull
-    private Integer userId;
-
     @Override
     public String toString() {
         return new StringJoiner(", ", ActivityVO.class.getSimpleName() + "[", "]")
@@ -52,16 +49,7 @@ public class ActivityVO {
                 .add("maxCount=" + maxCount)
                 .add("money=" + money)
                 .add("startTime=" + startTime)
-                .add("userId=" + userId)
                 .toString();
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public ActivityVO() {

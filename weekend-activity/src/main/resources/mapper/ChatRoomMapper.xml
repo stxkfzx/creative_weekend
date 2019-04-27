@@ -27,7 +27,7 @@
   </delete>
   <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.activity.entity.ChatRoom" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into chat_room (activate_id, user_id, create_time, 
+    insert into chat_room (activate_id, user_id, create_time,
       update_time)
     values (#{activateId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})

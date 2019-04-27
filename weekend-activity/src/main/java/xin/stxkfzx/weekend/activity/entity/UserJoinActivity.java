@@ -1,5 +1,7 @@
 package xin.stxkfzx.weekend.activity.entity;
 
+import xin.stxkfzx.weekend.common.enums.StatusEnum;
+
 import java.util.Date;
 
 /**
@@ -69,6 +71,10 @@ public class UserJoinActivity {
 
     public void setStatus(Short status) {
         this.status = status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status.getCode().shortValue();
     }
 
     public Integer getActivityId() {

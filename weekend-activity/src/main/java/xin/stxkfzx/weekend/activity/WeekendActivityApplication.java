@@ -3,14 +3,9 @@ package xin.stxkfzx.weekend.activity;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-
-import java.lang.annotation.Annotation;
 
 @MapperScan("xin.stxkfzx.weekend.activity.mapper")
-@ComponentScan(value = {"xin.stxkfzx.weekend.common", "xin.stxkfzx.weekend.activity"})
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "xin.stxkfzx.weekend")
 public class WeekendActivityApplication {
 
     public static void main(String[] args) {

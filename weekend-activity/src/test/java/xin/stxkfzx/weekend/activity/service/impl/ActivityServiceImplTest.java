@@ -7,12 +7,12 @@ import xin.stxkfzx.weekend.activity.entity.Activity;
 import xin.stxkfzx.weekend.activity.expand.ActivityExpand;
 import xin.stxkfzx.weekend.activity.service.ActivityService;
 import xin.stxkfzx.weekend.common.exception.CheckException;
+import xin.stxkfzx.weekend.common.exception.SqlException;
 import xin.stxkfzx.weekend.user.entity.User;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertNotNull;
 /**
  * @author fmy
  * @date 2019-04-15 11:05
@@ -35,6 +35,7 @@ public class ActivityServiceImplTest extends ActivityBaseTest {
         service.createActivity(activity);
         assertNotNull(activity.getTbId());
 
+        // 测试check AOP
         exception.expect(CheckException.class);
         service.createActivity(null);
     }
@@ -54,5 +55,38 @@ public class ActivityServiceImplTest extends ActivityBaseTest {
         activity.setTbId(1);
         expand = service.joinActivity(user, activity);
         assertNotNull(expand.getJoinRecord());
+    }
+
+    @Test
+    public void exitActivity() {
+    }
+
+    @Test
+    public void getActivity() {
+    }
+
+    @Test
+    public void listActivityWithPage() {
+    }
+
+    @Test
+    public void deleteActivity() {
+        User user = new User();
+        user.setTbId(1);
+
+        Activity activity = new Activity();
+        activity.setTbId(1);
+        activity.setUserId(1);
+
+        exception.expect(SqlException.class);
+        service.deleteActivity(user, activity);
+    }
+
+    @Test
+    public void deleteJoinRecord() {
+    }
+
+    @Test
+    public void listJoinRecord() {
     }
 }

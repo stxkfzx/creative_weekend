@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xin.stxkfzx.weekend.activity.annotation.CheckTypeEnum;
+import xin.stxkfzx.weekend.activity.annotation.LinkStatus;
+import xin.stxkfzx.weekend.activity.enums.CheckTypeEnum;
 import xin.stxkfzx.weekend.activity.annotation.ParamCheck;
 import xin.stxkfzx.weekend.activity.entity.Activity;
 import xin.stxkfzx.weekend.activity.entity.UserJoinActivity;
+import xin.stxkfzx.weekend.activity.enums.LinkTypeEnum;
 import xin.stxkfzx.weekend.activity.expand.ActivityExpand;
 import xin.stxkfzx.weekend.activity.mapper.ActivityMapper;
 import xin.stxkfzx.weekend.activity.mapper.UserJoinActivityMapper;
@@ -16,6 +18,8 @@ import xin.stxkfzx.weekend.activity.service.ActivityService;
 import xin.stxkfzx.weekend.auth.config.CheckUserIsExist;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.common.enums.StatusEnum;
+import xin.stxkfzx.weekend.common.exception.NoPermissionException;
+import xin.stxkfzx.weekend.common.exception.SqlException;
 import xin.stxkfzx.weekend.common.exception.WeekendException;
 import xin.stxkfzx.weekend.common.util.CheckUtils;
 import xin.stxkfzx.weekend.user.entity.User;
@@ -39,9 +43,10 @@ public class ActivityServiceImpl implements ActivityService {
         this.joinActivityMapper = joinActivityMapper;
     }
 
+    @LinkStatus(type = LinkTypeEnum.ADD)
     @ParamCheck(checkType = CheckTypeEnum.BEAN_VALIDATION)
     @CheckUserIsExist
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = SqlException.class)
     @Override
     public ActivityExpand createActivity(Activity activity) throws WeekendException {
         // 初始化活动
@@ -56,7 +61,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
     @CheckUserIsExist
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = SqlException.class)
     @Override
     public ActivityExpand joinActivity(User user, Activity activity) {
         // 创建者不能加入
@@ -110,6 +115,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
 
+    @Transactional(rollbackFor = SqlException.class)
     @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
     @CheckUserIsExist
     @Override
@@ -130,8 +136,13 @@ public class ActivityServiceImpl implements ActivityService {
     public ActivityExpand getActivity(Integer activityId, StatusEnum status) {
         CheckUtils.notNull(activityId, "value.is.null");
         Activity activity = activityMapper.selectByPrimaryKey(activityId);
-        CheckUtils.check(activity.getStatus() >= status.getCode().shortValue(), ExceptionEnum.ACTIVATE_NOT_EXIST);
+        checkActivityNotDelete(activity);
         return new ActivityExpand().setActivity(activity);
+    }
+
+    private void checkActivityNotDelete(Activity activity) {
+        CheckUtils.check(activity.getStatus() >= StatusEnum.DELETE.getCode().shortValue(),
+                ExceptionEnum.ACTIVATE_NOT_EXIST);
     }
 
     @Override
@@ -142,14 +153,52 @@ public class ActivityServiceImpl implements ActivityService {
         return null;
     }
 
+    @Transactional(rollbackFor = SqlException.class)
     @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
     @CheckUserIsExist
     @Override
     public ActivityExpand deleteActivity(User user, Activity activity) {
         Activity select = activityMapper.selectByPrimaryKey(activity.getTbId());
 
-        CheckUtils.check(select.getUserId().equals(user.getTbId()), ExceptionEnum.NO_PERMISSION);
+        // 删除人必须是活动创建者
+        if (!activity.getUserId().equals(user.getTbId())) {
+            throw new NoPermissionException(ExceptionEnum.NO_PERMISSION);
+        }
 
+        select.setStatus(StatusEnum.DELETE.getCode().shortValue());
+        select.setUpdateTime(new Date());
+        activityMapper.updateByPrimaryKeySelective(select);
+
+        return new ActivityExpand().setActivity(select);
+    }
+
+    @Transactional(rollbackFor = SqlException.class)
+    @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
+    @CheckUserIsExist
+    @Override
+    public ActivityExpand deleteJoinRecord(User user, Activity activity) {
+        Activity select = activityMapper.selectByPrimaryKey(activity.getTbId());
+        checkActivityNotDelete(select);
+
+        UserJoinActivity record = new UserJoinActivity();
+        record.setUpdateTime(new Date());
+        record.setStatus(StatusEnum.DELETE);
+        record.setActivityId(select.getTbId());
+
+        int updateCount;
+        if (activity.getUserId().equals(user.getTbId())) {
+            // 删除全部记录
+           updateCount  = joinActivityMapper.updateByActivityId(record);
+        } else {
+            record.setUserId(user.getTbId());
+            updateCount = joinActivityMapper.updateByActivityIdAndUserId(record);
+        }
+
+        return new ActivityExpand().setUpdateCount(updateCount);
+    }
+
+    @Override
+    public ActivityExpand listJoinRecord(Integer activityId, int page, int pageSize) {
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package xin.stxkfzx.weekend.activity.mapper;
-import org.apache.ibatis.annotations.Param;
 
+
+import org.apache.ibatis.annotations.Param;
 import xin.stxkfzx.weekend.activity.entity.UserJoinActivity;
 
 /**
@@ -65,7 +66,26 @@ public interface UserJoinActivityMapper {
      * @author fmy
      * @date 2019-04-18 8:46
      */
-    UserJoinActivity selectOneByUserIdAndActivityId(@Param("userId")Integer userId,@Param("activityId")Integer activityId);
+    UserJoinActivity selectOneByUserIdAndActivityId(@Param("userId") Integer userId, @Param("activityId") Integer activityId);
 
+    /**
+     * 根据活动Id更新记录
+     *
+     * @param updated
+     * @return
+     * @author fmy
+     * @date 2019-04-19 10:11
+     */
+    int updateByActivityId(@Param("updated") UserJoinActivity updated);
+
+    /**
+     * 更新参加活动人的记录
+     *
+     * @param updated
+     * @return
+     * @author fmy
+     * @date 2019-04-19 10:47
+     */
+    int updateByActivityIdAndUserId(@Param("updated") UserJoinActivity updated);
 
 }

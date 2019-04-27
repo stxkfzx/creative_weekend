@@ -78,4 +78,27 @@ public interface ActivityService {
      * @date 2019-04-18 19:32
      */
     ActivityExpand deleteActivity(User user, Activity activity);
+
+    /**
+     * 删除活动记录，如果user是活动创建者，将删除整个活动记录
+     *
+     * @param user
+     * @param activity
+     * @return
+     * @author fmy
+     * @date 2019-04-19 9:27
+     */
+    ActivityExpand deleteJoinRecord(User user, Activity activity);
+
+    /**
+     * 获取活动加入记录
+     *
+     * @param activityId
+     * @param page
+     * @param pageSize
+     * @return
+     * @author fmy
+     * @date 2019-04-19 9:32
+     */
+    ActivityExpand listJoinRecord(Integer activityId, int page, int pageSize);
 }

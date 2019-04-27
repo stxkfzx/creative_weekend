@@ -1,6 +1,6 @@
 package xin.stxkfzx.weekend.activity.annotation;
 
-import xin.stxkfzx.weekend.activity.enums.CheckTypeEnum;
+import xin.stxkfzx.weekend.activity.enums.LinkTypeEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,14 +8,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 检查参数注解
+ * 关联状态，用于标记需要服务之间关联的状态。
  *
  * @author fmy
- * @date 2019-04-17 19:39
+ * @date 2019-04-26 23:00
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ParamCheck {
-    CheckTypeEnum checkType();
-
+public @interface LinkStatus {
+    LinkTypeEnum type();
 }

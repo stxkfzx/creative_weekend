@@ -168,7 +168,7 @@
         proxy_id = #{proxyId,jdbcType=INTEGER},
       </if>
     </set>
-    where tb_id = #{tbId,jdbcType=INTEGER}
+    where tb_id = #{tbId,jdbcType=INTEGER},
   </update>
   <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.activity.entity.Activity">
     <!--@mbg.generated-->

@@ -12,6 +12,7 @@ import xin.stxkfzx.weekend.activity.entity.UserJoinActivity;
 public class ActivityExpand {
     private Activity activity;
     private UserJoinActivity joinRecord;
+    private int updateCount;
 
     public Activity getActivity() {
         return activity;
@@ -29,5 +30,14 @@ public class ActivityExpand {
 
     public UserJoinActivity getJoinRecord() {
         return joinRecord;
+    }
+
+    public ActivityExpand setUpdateCount(int updateCount) {
+        this.updateCount = updateCount;
+        return this;
+    }
+
+    public int getUpdateCount() {
+        return updateCount;
     }
 }
