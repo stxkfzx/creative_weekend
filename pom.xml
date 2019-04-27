@@ -15,6 +15,7 @@
         <module>weekend-upload</module>
         <module>weekend-user</module>
         <module>weekend-auth</module>
+        <module>weekend-sms</module>
     </modules>
 
     <properties>
