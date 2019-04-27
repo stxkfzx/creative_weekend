@@ -1,17 +1,17 @@
 package xin.stxkfzx.weekend.sms.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import xin.stxkfzx.weekend.sms.config.SmsProperties;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -104,12 +104,11 @@ public class SmsUtils {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            JSONObject json;
             String respCode = null;
             try {
-                json = new JSONObject(result.toString());
-                respCode = json.getString("respCode");
-            } catch (JSONException e) {
+                ObjectMapper mapper = new ObjectMapper();
+                respCode = mapper.readTree(result.toString()).get("respCode").asText();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
