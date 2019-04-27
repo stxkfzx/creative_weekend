@@ -12,6 +12,7 @@ import xin.stxkfzx.weekend.common.entity.ResultBean;
 import xin.stxkfzx.weekend.common.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.common.enums.StatusEnum;
 import xin.stxkfzx.weekend.common.exception.CheckException;
+import xin.stxkfzx.weekend.common.exception.NoPermissionException;
 import xin.stxkfzx.weekend.common.exception.UnLoginException;
 import xin.stxkfzx.weekend.common.exception.WeekendException;
 
@@ -48,6 +49,8 @@ public class CommonExceptionHandler {
                     .body(new ResultBean(Optional.ofNullable(e.getExceptionEnum())
                             .map(ExceptionEnum::getCode).orElse(ExceptionEnum.CHECK_FAIL.getCode()),
                             e.getLocalizedMessage()));
+        } else if (e instanceof NoPermissionException) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionEnum.NO_PERMISSION);
         } else {
             // 业务逻辑异常属于正常状态，HTTP状态为200
             return ResponseEntity.ok(new ResultBean(Optional.ofNullable(e.getExceptionEnum())
