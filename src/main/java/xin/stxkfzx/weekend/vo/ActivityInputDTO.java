@@ -8,12 +8,12 @@ import java.util.Date;
 import java.util.StringJoiner;
 
 /**
- * 活动VO
+ * 创建活动
  *
  * @author fmy
  * @date 2019-04-18 14:16
  */
-public class ActivityVO {
+public class ActivityInputDTO {
 
     @NotBlank
     private String title;
@@ -41,7 +41,7 @@ public class ActivityVO {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ActivityVO.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", ActivityInputDTO.class.getSimpleName() + "[", "]")
                 .add("title='" + title + "'")
                 .add("description='" + description + "'")
                 .add("range=" + range)
@@ -52,7 +52,7 @@ public class ActivityVO {
                 .toString();
     }
 
-    public ActivityVO() {
+    public ActivityInputDTO() {
     }
 
     public String getTitle() {

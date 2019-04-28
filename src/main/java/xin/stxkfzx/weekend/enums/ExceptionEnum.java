@@ -79,7 +79,12 @@ public enum ExceptionEnum {
     /**
      * 活动正在审核
      */
-    ACTIVITY_IS_REVIEW(601, "活动正在审核中");
+    ACTIVITY_IS_REVIEW(601, "活动正在审核中"),
+
+    /**
+     * 活动创建失败
+     */
+    ACTIVATE_CREATE_FAIL(602, "活动创建失败");
 
 
 

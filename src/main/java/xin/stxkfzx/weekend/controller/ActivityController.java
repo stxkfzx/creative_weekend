@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import xin.stxkfzx.weekend.entity.Activity;
 import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.service.ActivityService;
-import xin.stxkfzx.weekend.vo.ActivityVO;
+import xin.stxkfzx.weekend.vo.ActivityInputDTO;
 import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.util.UserUtils;
 import xin.stxkfzx.weekend.entity.User;
@@ -56,10 +56,10 @@ public class ActivityController {
      * @date 2019-04-18 15:40
      */
     @PostMapping
-    public ResponseEntity<?> addActivity(@RequestBody @Valid ActivityVO vo) {
+    public ResponseEntity<?> addActivity(@RequestBody @Valid ActivityInputDTO vo) {
         Activity activity = new Activity();
         BeanUtils.copyProperties(vo, activity);
-        setUserId(UserUtils.getUserId());
+        activity.setUserId(UserUtils.getUserId());
 
         ActivityExpand expand = activityService.createActivity(activity);
 
@@ -113,7 +113,7 @@ public class ActivityController {
 
     private Activity getActivityByParameter(@PathVariable @Min(1) Integer activityId) {
         Activity activity = new Activity();
-        setTbId(activityId);
+        activity.setTbId(activityId);
         return activity;
     }
 
