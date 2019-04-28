@@ -15,7 +15,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Component
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource(value = "classpath:application.properties", encoding = "UTF-8")
 @ConfigurationProperties(prefix = "weekend.sms")
 @Validated
 public class SmsProperties {
@@ -23,7 +23,7 @@ public class SmsProperties {
     private String accountSid;
     private String authToken;
     private String signName;
-    private String keyPerfix;
+    private String keyPrefix;
 
     public String getQueryPath() {
         return queryPath;
@@ -57,12 +57,12 @@ public class SmsProperties {
         this.signName = signName;
     }
 
-    public String getKeyPerfix() {
-        return keyPerfix;
+    public String getKeyPrefix() {
+        return keyPrefix;
     }
 
-    public void setKeyPerfix(String keyPerfix) {
-        this.keyPerfix = keyPerfix;
+    public void setKeyPrefix(String keyPrefix) {
+        this.keyPrefix = keyPrefix;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class SmsProperties {
                 ", accountSid='" + accountSid + '\'' +
                 ", authToken='" + authToken + '\'' +
                 ", signName='" + signName + '\'' +
-                ", keyPerfix='" + keyPerfix + '\'' +
+                ", keyPrefix='" + keyPrefix + '\'' +
                 '}';
     }
 }

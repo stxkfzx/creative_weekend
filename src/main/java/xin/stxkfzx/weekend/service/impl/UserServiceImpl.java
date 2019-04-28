@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVO addUser(User user) {
         logger.info("用户{}开始注册", user);
-        String key = smsProperties.getKeyPerfix() + user.getPhoneNum();
+        String key = smsProperties.getKeyPrefix() + user.getPhoneNum();
         // 从redis中取出验证码
         String cacheCode = redisTemplate.opsForValue().get(key);
         // TODO: 2019/4/16 节约成本，先注释了

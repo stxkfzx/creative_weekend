@@ -50,13 +50,12 @@ public class SmsUtils {
      * 根据相应的手机号发送验证码
      *
      * @param telephone 接收验证码手机号
-     * @return respCode 正常为00000 非正常需要去秒滴云查看对应错误
      * @author ViterTian
      * @date 2019-04-17
      */
-    public String sendCode(String telephone) {
+    public void sendCode(String telephone) {
         try {
-            String key = smsProperties.getKeyPerfix() + telephone;
+            String key = smsProperties.getKeyPrefix() + telephone;
             String signName = smsProperties.getSignName();
             // 通过redis进行短信限流
             String lastTime = redisTemplate.opsForValue().get(key);
@@ -64,7 +63,7 @@ public class SmsUtils {
                 Long last = Long.valueOf(lastTime);
                 if (System.currentTimeMillis() - last < SMS_MIN_INTERVAL_IN_MILLIS) {
                     logger.error("【短信服务】发送短信频率过高,被阻止。手机号码：{}", telephone);
-                    return null;
+                    return;
                 }
             }
 
@@ -106,25 +105,26 @@ public class SmsUtils {
             }
             JSONObject json;
             String respCode = null;
+            String defaultRespCode = "00000";
             try {
                 json = new JSONObject(result.toString());
                 respCode = json.getString("respCode");
+                if (!defaultRespCode.equals(respCode)) {
+                    logger.error("发送短信失败：{}", json.getString("respDesc"));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            String defaultRespCode = "00000";
             if (defaultRespCode.equals(respCode)) {
                 // 发送短信成功后,写入redis，指定生存时间为一分钟
                 redisTemplate.opsForValue().set(key, String.valueOf(System.currentTimeMillis()), 5, TimeUnit.MINUTES);
                 logger.info("【短信服务】发送短信成功。手机号码：{},验证码为：{}", telephone, rod);
-                return rod;
             } else {
-                return respCode;
+                logger.error("【短信服务】发送短信失败。");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
     }
 
@@ -165,8 +165,6 @@ public class SmsUtils {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
-
         return result.toString();
     }
 
