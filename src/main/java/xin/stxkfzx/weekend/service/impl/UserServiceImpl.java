@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
         }*/
         // 防止用户自定义id
         user.setTbId(null);
+        user.setStatus((short) 1);
         // 防止用户名重复
         if (checkNickName(user.getNickName())) {
             throw new WeekendException(ExceptionEnum.DUPLICATE_USER_NAME);

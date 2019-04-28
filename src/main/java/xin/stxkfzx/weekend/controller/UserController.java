@@ -20,6 +20,7 @@ import javax.validation.Valid;
  * @date 2019/4/12
  */
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;

@@ -1,24 +1,19 @@
 package xin.stxkfzx.weekend.service.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.entity.UserBase;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.CheckException;
-import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.mapper.UserBaseMapper;
 import xin.stxkfzx.weekend.service.AuthService;
 import xin.stxkfzx.weekend.util.CodecUtils;
 import xin.stxkfzx.weekend.util.JwtUtils;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.TimeUnit;
+import xin.stxkfzx.weekend.util.UserUtils;
 
 /**
  * 授权中心的一些方法
@@ -42,8 +37,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void login(String username, String password, HttpServletResponse response) {
+    public UserBase login(String username, String password) {
 
         UserBase user = userBaseMapper.selectByNickName(username);
         // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
@@ -52,21 +46,12 @@ public class AuthServiceImpl implements AuthService {
             logger.error("【授权中心】用户名或密码错误，用户名：{}", username);
             throw new CheckException(ExceptionEnum.INVALID_USER);
         }
-        UserBase userBase = new UserBase(user.getId(), user.getNickName(), user.getStatus());
-        // 生成Token
-        String token = JwtUtils.generateToken(userBase, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
-        if (StringUtils.isBlank(token)) {
-            logger.error("【授权中心】token为空");
-            throw new WeekendException(ExceptionEnum.INVALID_USER);
-        }
-        logger.info("【授权中心】生成token为：{}", token);
-        response.setHeader("Authorization", token);
-        redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
+        UserUtils.setUserInfo(user.getId());
+        return new UserBase(user.getId(), user.getNickName(), user.getStatus());
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public ResponseEntity<UserBase> verifyUser(String token, HttpServletResponse response) {
+    public UserBase verifyUser(String token) {
         // 先从redis中获取用户信息
         UserBase userBase = (UserBase) redisTemplate.opsForValue().get(token);
         // 如果缓存中没有，对token进行解析
@@ -75,14 +60,9 @@ public class AuthServiceImpl implements AuthService {
                 // 从Token中获取用户信息
                 userBase = JwtUtils.getUserBase(jwtProperties.getPublicKey(), token);
                 logger.warn("【授权中心】用户{}未从redis中获取信息", userBase);
-                // 成功，刷新Token
-                String newToken = JwtUtils.generateToken(userBase, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
-                // 将新的Token信息设置在Header的Authorization里,并保存在Redis中
-                response.setHeader("Authorization", newToken);
-                redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
             }
         }
-        return ResponseEntity.ok(userBase);
+        return userBase;
     }
 
     @Override

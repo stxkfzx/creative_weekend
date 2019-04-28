@@ -1,9 +1,6 @@
 package xin.stxkfzx.weekend.service;
 
-import org.springframework.http.ResponseEntity;
 import xin.stxkfzx.weekend.entity.UserBase;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author VicterTian
@@ -12,19 +9,26 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface AuthService {
     /**
+     * 登录授权
+     * 将token加在cookie中，并设置过期时间
      *
-     * @param username
-     * @param password
-     * @param response
+     * @param username 用户名
+     * @param password 密码
+     * @return Void
+     * @author ViterTian
+     * @date 2019-04-13
      */
-    void login(String username, String password, HttpServletResponse response);
+    UserBase login(String username, String password);
+
     /**
+     * 验证用户信息
      *
-     * @param token
-     * @param response
-     * @return
+     * @param token 浏览器传过来的token流
+     * @return UserBase
+     * @author ViterTian
+     * @date 2019-04-13
      */
-    ResponseEntity<UserBase> verifyUser(String token, HttpServletResponse response);
+    UserBase verifyUser(String token);
 
     /**
      * 通过id查找
