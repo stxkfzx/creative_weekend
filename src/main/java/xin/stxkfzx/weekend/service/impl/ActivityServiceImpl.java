@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xin.stxkfzx.weekend.annotation.LinkStatus;
+import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
+import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.enums.CheckTypeEnum;
 import xin.stxkfzx.weekend.annotation.ParamCheck;
 import xin.stxkfzx.weekend.entity.Activity;
@@ -15,14 +17,12 @@ import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.mapper.ActivityMapper;
 import xin.stxkfzx.weekend.mapper.UserJoinActivityMapper;
 import xin.stxkfzx.weekend.service.ActivityService;
-import xin.stxkfzx.weekend.auth.config.CheckUserIsExist;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.exception.NoPermissionException;
 import xin.stxkfzx.weekend.exception.SqlException;
 import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.util.CheckUtils;
-import xin.stxkfzx.weekend.user.entity.User;
 
 import java.util.Date;
 

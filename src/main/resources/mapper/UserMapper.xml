@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xin.stxkfzx.weekend.user.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.user.entity.User" >
+    <id column="tb_id" property="tbId" jdbcType="INTEGER" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="fullname" property="fullname" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="urgent_contact" property="urgentContact" jdbcType="VARCHAR" />
+    <result column="urgent_phone" property="urgentPhone" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tb_id, nick_name, phone_num, password, fullname, id_card, address, urgent_contact, 
+    urgent_phone, create_time, update_time, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+    insert into user (tb_id, nick_name, phone_num, 
+      password, fullname, id_card, 
+      address, urgent_contact, urgent_phone, 
+      create_time, update_time, status
+      )
+    values (#{tbId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{fullname,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{urgentContact,jdbcType=VARCHAR}, #{urgentPhone,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+    insert into `user`
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tbId != null" >
+        tb_id,
+      </if>
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="phoneNum != null" >
+        phone_num,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="fullname != null" >
+        fullname,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="urgentContact != null" >
+        urgent_contact,
+      </if>
+      <if test="urgentPhone != null" >
+        urgent_phone,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tbId != null" >
+        #{tbId,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null" >
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="fullname != null" >
+        #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="urgentContact != null" >
+        #{urgentContact,jdbcType=VARCHAR},
+      </if>
+      <if test="urgentPhone != null" >
+        #{urgentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+    update user
+    <set >
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null" >
+        phone_num = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="fullname != null" >
+        fullname = #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="urgentContact != null" >
+        urgent_contact = #{urgentContact,jdbcType=VARCHAR},
+      </if>
+      <if test="urgentPhone != null" >
+        urgent_phone = #{urgentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+    update user
+    set nick_name = #{nickName,jdbcType=VARCHAR},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      fullname = #{fullname,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      urgent_contact = #{urgentContact,jdbcType=VARCHAR},
+      urgent_phone = #{urgentPhone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=SMALLINT}
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByNickName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from user
+    where nick_name = #{nickname,jdbcType=VARCHAR}
+  </select>
+
+
+</mapper>
