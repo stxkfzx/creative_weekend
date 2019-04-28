@@ -7,10 +7,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import xin.stxkfzx.weekend.auth.config.CheckUserIsExist;
-import xin.stxkfzx.weekend.auth.entity.UserBase;
-import xin.stxkfzx.weekend.auth.properties.JwtProperties;
-import xin.stxkfzx.weekend.auth.service.AuthService;
+import xin.stxkfzx.weekend.config.JwtProperties;
+import xin.stxkfzx.weekend.entity.UserBase;
+import xin.stxkfzx.weekend.service.impl.AuthServiceImpl;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,11 +24,11 @@ import javax.servlet.http.HttpServletResponse;
 @EnableConfigurationProperties(JwtProperties.class)
 public class AuthController {
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
 
     @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(AuthServiceImpl authServiceImpl) {
+        this.authServiceImpl = authServiceImpl;
     }
 
 
@@ -50,7 +49,7 @@ public class AuthController {
             @RequestParam("password") String password,
             HttpServletResponse response
     ) {
-        authService.login(username, password, response);
+        authServiceImpl.login(username, password, response);
         return ResponseEntity.ok().build();
     }
 
@@ -65,7 +64,7 @@ public class AuthController {
     @GetMapping("verify")
     public ResponseEntity<UserBase> verifyUser(@RequestHeader("Authorization") String token, HttpServletResponse response) {
         try {
-            return authService.verifyUser(token, response);
+            return authServiceImpl.verifyUser(token, response);
         } catch (Exception e) {
             // Token无效
             logger.error("【授权中心】Token:{}无效", token);

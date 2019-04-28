@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import xin.stxkfzx.weekend.upload.config.UploadProperties;
+import xin.stxkfzx.weekend.config.UploadProperties;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

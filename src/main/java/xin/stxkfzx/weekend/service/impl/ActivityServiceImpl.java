@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xin.stxkfzx.weekend.annotation.LinkStatus;
-import xin.stxkfzx.weekend.config.CheckUserIsExist;
+import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
 import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.enums.CheckTypeEnum;
 import xin.stxkfzx.weekend.annotation.ParamCheck;

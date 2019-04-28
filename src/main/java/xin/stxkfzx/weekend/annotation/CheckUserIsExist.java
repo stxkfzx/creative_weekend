@@ -1,4 +1,4 @@
-package xin.stxkfzx.weekend.config;
+package xin.stxkfzx.weekend.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import xin.stxkfzx.weekend.config.PassToken;
+import xin.stxkfzx.weekend.annotation.PassToken;
 import xin.stxkfzx.weekend.entity.ResultBean;
 import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.enums.StatusEnum;

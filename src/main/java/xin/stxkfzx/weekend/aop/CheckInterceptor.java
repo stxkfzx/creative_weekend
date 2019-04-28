@@ -12,7 +12,7 @@ import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.CheckException;
 import xin.stxkfzx.weekend.handle.AuthenticationInterceptor;
-import xin.stxkfzx.weekend.service.impl.AuthService;
+import xin.stxkfzx.weekend.service.impl.AuthServiceImpl;
 
 /**
  * @author VicterTian
@@ -25,13 +25,13 @@ import xin.stxkfzx.weekend.service.impl.AuthService;
 public class CheckInterceptor {
 
     private final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
-    private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
 
-    public CheckInterceptor(AuthService authService) {
-        this.authService = authService;
+    public CheckInterceptor(AuthServiceImpl authServiceImpl) {
+        this.authServiceImpl = authServiceImpl;
     }
 
-    @Pointcut("@annotation(xin.stxkfzx.weekend.config.CheckUserIsExist)")
+    @Pointcut("@annotation(xin.stxkfzx.weekend.annotation.CheckUserIsExist)")
     public void checkUser() {
     }
 
@@ -42,7 +42,7 @@ public class CheckInterceptor {
         for (Object arg : args) {
             if (arg instanceof User) {
                 logger.info("检测到此方法有User对象的实例,判断此用户是否存在");
-                if (authService.findUserById(((User) arg).getTbId()) == null) {
+                if (authServiceImpl.findUserById(((User) arg).getTbId()) == null) {
                     throw new CheckException(ExceptionEnum.USER_NOT_EXIST);
                 }
             }

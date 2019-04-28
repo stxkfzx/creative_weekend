@@ -13,6 +13,7 @@ import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.CheckException;
 import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.mapper.UserBaseMapper;
+import xin.stxkfzx.weekend.service.AuthService;
 import xin.stxkfzx.weekend.util.CodecUtils;
 import xin.stxkfzx.weekend.util.JwtUtils;
 
@@ -27,19 +28,20 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/4/13
  */
 @Service
-public class AuthService {
-    private final Logger logger = LoggerFactory.getLogger(AuthService.class);
+public class AuthServiceImpl implements AuthService {
+    private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final UserBaseMapper userBaseMapper;
     private final JwtProperties jwtProperties;
     private final RedisTemplate redisTemplate;
 
     @Autowired
-    public AuthService(JwtProperties jwtProperties, UserBaseMapper userBaseMapper, RedisTemplate redisTemplate) {
+    public AuthServiceImpl(JwtProperties jwtProperties, UserBaseMapper userBaseMapper, RedisTemplate redisTemplate) {
         this.jwtProperties = jwtProperties;
         this.redisTemplate = redisTemplate;
         this.userBaseMapper = userBaseMapper;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void login(String username, String password, HttpServletResponse response) {
 
@@ -62,13 +64,14 @@ public class AuthService {
         redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public ResponseEntity<UserBase> verifyUser(String token, HttpServletResponse response) {
         // 先从redis中获取用户信息
         UserBase userBase = (UserBase) redisTemplate.opsForValue().get(token);
         // 如果缓存中没有，对token进行解析
         if (userBase == null) {
-            synchronized (AuthService.class) {
+            synchronized (AuthServiceImpl.class) {
                 // 从Token中获取用户信息
                 userBase = JwtUtils.getUserBase(jwtProperties.getPublicKey(), token);
                 logger.warn("【授权中心】用户{}未从redis中获取信息", userBase);
@@ -82,14 +85,7 @@ public class AuthService {
         return ResponseEntity.ok(userBase);
     }
 
-    /**
-     * 通过id查找
-     *
-     * @param userId id
-     * @return UserBase
-     * @author ViterTian
-     * @date 2019-04-14
-     */
+    @Override
     public UserBase findUserById(Integer userId) {
         return userBaseMapper.selectByPrimaryKey(userId);
     }

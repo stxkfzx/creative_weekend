@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import xin.stxkfzx.weekend.config.CheckUserIsExist;
+import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
 import xin.stxkfzx.weekend.config.SmsProperties;
 import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
