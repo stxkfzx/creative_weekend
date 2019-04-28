@@ -33,10 +33,13 @@ public class ServiceImplTest extends BaseTest {
         activity.setDescription("创建活动测试内容");
 
         ActivityExpand expand = service.createActivity(activity);
-        assertNotNull(expand.getActivity().getTbId());
+        assertNotNull(expand.getActivity());
 
-        // 测试AOP关联创建聊天室
+        // 测试关联创建聊天室
         assertNotNull(expand.getChatRoom());
+
+        // 测试关联加入聊天室
+        assertNotNull(expand.getRecord());
 
         // 测试check AOP
         exception.expect(CheckException.class);

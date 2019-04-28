@@ -5,15 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xin.stxkfzx.weekend.annotation.LinkStatus;
 import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
-import xin.stxkfzx.weekend.entity.User;
+import xin.stxkfzx.weekend.entity.*;
 import xin.stxkfzx.weekend.enums.CheckTypeEnum;
 import xin.stxkfzx.weekend.annotation.ParamCheck;
-import xin.stxkfzx.weekend.entity.Activity;
-import xin.stxkfzx.weekend.entity.UserJoinActivity;
-import xin.stxkfzx.weekend.enums.LinkTypeEnum;
 import xin.stxkfzx.weekend.expand.ActivityExpand;
+import xin.stxkfzx.weekend.manager.ActivityManager;
+import xin.stxkfzx.weekend.manager.ChatManager;
 import xin.stxkfzx.weekend.mapper.ActivityMapper;
 import xin.stxkfzx.weekend.mapper.UserJoinActivityMapper;
 import xin.stxkfzx.weekend.service.ActivityService;
@@ -36,27 +34,35 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityMapper activityMapper;
     private final UserJoinActivityMapper joinActivityMapper;
+    private final ActivityManager activityManager;
+    private final ChatManager chatManager;
 
     @Autowired
-    public ActivityServiceImpl(ActivityMapper activityMapper, UserJoinActivityMapper joinActivityMapper) {
+    public ActivityServiceImpl(ActivityMapper activityMapper, UserJoinActivityMapper joinActivityMapper, ActivityManager activityManager, ChatManager chatManager) {
         this.activityMapper = activityMapper;
         this.joinActivityMapper = joinActivityMapper;
+        this.activityManager = activityManager;
+        this.chatManager = chatManager;
     }
 
-    @LinkStatus(type = LinkTypeEnum.ADD)
     @ParamCheck(checkType = CheckTypeEnum.BEAN_VALIDATION)
     @CheckUserIsExist
     @Transactional(rollbackFor = SqlException.class)
     @Override
     public ActivityExpand createActivity(Activity activity) throws WeekendException {
-        // 初始化活动
-        activity.setStatus(StatusEnum.REVIEW.getCode().shortValue());
-        activity.setCreateTime(new Date());
-        activity.setUpdateTime(new Date());
+        // 创建活动
+        Activity create = activityManager.addActivity(activity);
 
-        activityMapper.insert(activity);
+        // 关联创建聊天室
+        User creator = new User();
+        creator.setTbId(create.getUserId());
+        ChatRoom chatRoom = chatManager.addChatRoom(activity, creator);
 
-        return new ActivityExpand().setActivity(activity);
+        // 关联加入聊天室
+        UserJoinChatRoom record = chatManager.addJoinRecord(creator, chatRoom);
+
+        log.info("成功创建活动: {}", create.getTbId());
+        return new ActivityExpand().setActivity(activity).setChatRoom(chatRoom).setRecord(record);
     }
 
     @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
@@ -188,7 +194,7 @@ public class ActivityServiceImpl implements ActivityService {
         int updateCount;
         if (activity.getUserId().equals(user.getTbId())) {
             // 删除全部记录
-           updateCount  = joinActivityMapper.updateByActivityId(record);
+            updateCount = joinActivityMapper.updateByActivityId(record);
         } else {
             record.setUserId(user.getTbId());
             updateCount = joinActivityMapper.updateByActivityIdAndUserId(record);

@@ -1,12 +1,17 @@
 package xin.stxkfzx.weekend.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.CheckException;
+import xin.stxkfzx.weekend.exception.WeekendException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 /**
@@ -16,6 +21,9 @@ import java.util.Set;
  * @date 2019-04-10 20:24
  */
 public class CheckUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(CheckUtils.class);
+
     private CheckUtils() {
     }
 
@@ -45,6 +53,21 @@ public class CheckUtils {
     public static void check(boolean condition, ExceptionEnum errEnum) {
         if (!condition) {
             fail(errEnum);
+        }
+    }
+
+    /**
+     * 校验条件
+     *
+     * @param condition     条件
+     * @param errEnum       ExceptionEnum
+     * @param exceptionType 抛出异常类型
+     * @author fmy
+     * @date 2019-04-28 16:19
+     */
+    public static void check(boolean condition, ExceptionEnum errEnum, Class<? extends WeekendException> exceptionType) {
+        if (!condition) {
+            fail(errEnum, exceptionType);
         }
     }
 
@@ -147,7 +170,16 @@ public class CheckUtils {
     }
 
     private static void fail(ExceptionEnum errEnum) {
-        throw new CheckException(errEnum);
+        fail(errEnum, CheckException.class);
     }
 
+    private static void fail(ExceptionEnum errEnum, Class<? extends WeekendException> exceptionType) {
+        try {
+            Constructor<? extends WeekendException> constructor = exceptionType.getConstructor(ExceptionEnum.class);
+            throw constructor.newInstance(errEnum);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            log.error(e.getMessage());
+            throw new WeekendException(ExceptionEnum.UNKNOWN_FAIL);
+        }
+    }
 }

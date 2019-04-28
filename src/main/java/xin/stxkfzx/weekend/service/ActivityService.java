@@ -16,8 +16,8 @@ public interface ActivityService {
     /**
      * 创建活动
      *
-     * @param activity
-     * @return
+     * @param activity 创建活动参数
+     * @return 包含创建的活动、聊天室和加入聊天室记录
      * @author fmy
      * @date 2019-04-16 19:54
      */
