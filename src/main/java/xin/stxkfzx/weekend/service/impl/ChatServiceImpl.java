@@ -9,7 +9,6 @@ import xin.stxkfzx.weekend.annotation.ParamCheck;
 import xin.stxkfzx.weekend.config.CheckUserIsExist;
 import xin.stxkfzx.weekend.entity.Activity;
 import xin.stxkfzx.weekend.entity.ChatRoom;
-import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.entity.UserJoinChatRoom;
 import xin.stxkfzx.weekend.enums.CheckTypeEnum;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;

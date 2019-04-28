@@ -3,7 +3,7 @@ package xin.stxkfzx.weekend.service;
 import xin.stxkfzx.weekend.entity.Activity;
 import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.enums.StatusEnum;
-import xin.stxkfzx.weekend.user.entity.User;
+import xin.stxkfzx.weekend.entity.User;
 
 /**
  * 线下活动服务

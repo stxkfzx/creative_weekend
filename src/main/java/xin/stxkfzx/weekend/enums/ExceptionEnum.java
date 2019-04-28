@@ -22,7 +22,7 @@ public enum ExceptionEnum {
     /**
      * 用户实名认证异常
      */
-    USER_REAL_AUTH_ERROR(500, "用户实名认证异常"),
+    AUTH_USER_SAVE_ERROR(500, "用户实名认证异常"),
 
     /**
      * 登录异常
