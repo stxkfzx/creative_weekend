@@ -9,7 +9,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import xin.stxkfzx.weekend.sms.config.SmsProperties;
+import xin.stxkfzx.weekend.config.SmsProperties;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

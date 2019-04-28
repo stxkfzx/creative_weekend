@@ -20,7 +20,7 @@ import xin.stxkfzx.weekend.service.impl.AuthServiceImpl;
  * @date 2019/4/17
  */
 @Aspect
-@Order(100)
+@Order(-100)
 @Component
 public class CheckInterceptor {
 
