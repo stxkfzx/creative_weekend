@@ -9,6 +9,7 @@ import xin.stxkfzx.weekend.entity.ChatRoom;
  * @author fmy
  * @date 2019-04-10 22:09 
  */
+@Mapper
 public interface ChatRoomMapper {
     /**
      * delete by primary key

@@ -1,5 +1,6 @@
 package xin.stxkfzx.weekend.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import xin.stxkfzx.weekend.entity.ProxyTeam;
 
 /**
@@ -8,6 +9,7 @@ import xin.stxkfzx.weekend.entity.ProxyTeam;
  * @author fmy
  * @date 2019-04-10 22:09 
  */
+@Mapper
 public interface ProxyTeamMapper {
     /**
      * delete by primary key

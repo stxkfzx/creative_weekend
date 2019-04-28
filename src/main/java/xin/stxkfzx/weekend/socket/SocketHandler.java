@@ -3,10 +3,9 @@ package xin.stxkfzx.weekend.socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.*;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
+import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
 // import org.apache.commons.lang3.StringUtils;
 
@@ -17,7 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
  * @date 2019-04-18 16:27
  */
 @Component
-public class SocketHandler implements WebSocketHandler {
+public class SocketHandler extends AbstractWebSocketHandler {
     private static final Logger log = LogManager.getLogger(SocketHandler.class);
 
     @Override
@@ -44,7 +43,18 @@ public class SocketHandler implements WebSocketHandler {
     public boolean supportsPartialMessages() {
         return false;
     }
-/*
+
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        super.handleTextMessage(session, message);
+    }
+
+    @Override
+    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
+        super.handleBinaryMessage(session, message);
+    }
+
+    /*
     private final PostService postService;
     private static final PostSocketInfoBO socketInfo;
     private final UserService userService;

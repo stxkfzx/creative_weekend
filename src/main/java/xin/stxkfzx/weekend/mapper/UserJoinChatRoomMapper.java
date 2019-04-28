@@ -1,4 +1,5 @@
 package xin.stxkfzx.weekend.mapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import xin.stxkfzx.weekend.entity.UserJoinChatRoom;
@@ -9,6 +10,7 @@ import xin.stxkfzx.weekend.entity.UserJoinChatRoom;
  * @author fmy
  * @date 2019-04-27 0:43 
  */
+@Mapper
 public interface UserJoinChatRoomMapper {
     /**
      * delete by primary key

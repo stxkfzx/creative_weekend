@@ -1,6 +1,7 @@
 package xin.stxkfzx.weekend.mapper;
 
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import xin.stxkfzx.weekend.entity.UserJoinActivity;
 
@@ -8,6 +9,7 @@ import xin.stxkfzx.weekend.entity.UserJoinActivity;
  * @author fmy
  * @date 2019-04-10 22:09
  */
+@Mapper
 public interface UserJoinActivityMapper {
     /**
      * delete by primary key

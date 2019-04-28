@@ -50,9 +50,9 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ActivityExpand createActivity(Activity activity) throws WeekendException {
         // 初始化活动
-        setStatus(StatusEnum.REVIEW.getCode().shortValue());
-        setCreateTime(new Date());
-        setUpdateTime(new Date());
+        activity.setStatus(StatusEnum.REVIEW.getCode().shortValue());
+        activity.setCreateTime(new Date());
+        activity.setUpdateTime(new Date());
 
         activityMapper.insert(activity);
 
@@ -67,7 +67,7 @@ public class ActivityServiceImpl implements ActivityService {
         // 创建者不能加入
         joinAndExitActivityCondition(user, activity);
 
-        UserJoinActivity record = joinActivityMapper.selectOneByUserIdAndActivityId(user.getTbId(), getTbId());
+        UserJoinActivity record = joinActivityMapper.selectOneByUserIdAndActivityId(user.getTbId(), activity.getTbId());
 
         if (record != null) {
             updateJoinRecord(record);
@@ -80,10 +80,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     private void joinAndExitActivityCondition(User user, Activity activity) {
         // 活动创建者不能加入或退出活动
-        CheckUtils.check(!user.getTbId().equals(getUserId()), "field.invalid", user.getTbId());
+        CheckUtils.check(!user.getTbId().equals(activity.getUserId()), "field.invalid", user.getTbId());
         // 活动是否存在
-        Activity findActivity = activityMapper.selectByPrimaryKey(getTbId());
-        CheckUtils.notNull(findActivity, "id.error", getTbId());
+        Activity findActivity = activityMapper.selectByPrimaryKey(activity.getTbId());
+        CheckUtils.notNull(findActivity, "id.error", activity.getTbId());
         CheckUtils.check(findActivity.getStatus() != StatusEnum.DELETE.getCode().shortValue(), ExceptionEnum.ACTIVATE_NOT_EXIST);
         CheckUtils.check(findActivity.getStatus() != StatusEnum.REVIEW.getCode().shortValue(), ExceptionEnum.ACTIVITY_IS_REVIEW);
     }
@@ -95,11 +95,11 @@ public class ActivityServiceImpl implements ActivityService {
         record.setJoinTime(new Date());
         record.setStatus(UserJoinActivity.JOIN);
         record.setCreateTime(new Date());
-        record.setActivityId(getTbId());
+        record.setActivityId(activity.getTbId());
         record.setUserId(user.getTbId());
         // TODO: 2019/4/18 付款状态应该通过支付成功的回调通知获取，这里简单处理下
         record.setPaymentStatus(UserJoinActivity.PAY_SUCCESS);
-        log.debug("insert join activity:{} status", getTbId());
+        log.debug("insert join activity:{} status", activity.getTbId());
 
         joinActivityMapper.insert(record);
         return record;
@@ -122,7 +122,7 @@ public class ActivityServiceImpl implements ActivityService {
     public ActivityExpand exitActivity(User user, Activity activity) {
         joinAndExitActivityCondition(user, activity);
 
-        UserJoinActivity record = joinActivityMapper.selectOneByUserIdAndActivityId(user.getTbId(), getTbId());
+        UserJoinActivity record = joinActivityMapper.selectOneByUserIdAndActivityId(user.getTbId(), activity.getTbId());
         CheckUtils.notNull(record, "value.is.null");
 
         record.setStatus(UserJoinActivity.EXIT);
@@ -141,7 +141,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     private void checkActivityNotDelete(Activity activity) {
-        CheckUtils.check(getStatus() >= StatusEnum.DELETE.getCode().shortValue(),
+        CheckUtils.check(activity.getStatus() >= StatusEnum.DELETE.getCode().shortValue(),
                 ExceptionEnum.ACTIVATE_NOT_EXIST);
     }
 
@@ -158,10 +158,10 @@ public class ActivityServiceImpl implements ActivityService {
     @CheckUserIsExist
     @Override
     public ActivityExpand deleteActivity(User user, Activity activity) {
-        Activity select = activityMapper.selectByPrimaryKey(getTbId());
+        Activity select = activityMapper.selectByPrimaryKey(activity.getTbId());
 
         // 删除人必须是活动创建者
-        if (!getUserId().equals(user.getTbId())) {
+        if (!activity.getUserId().equals(user.getTbId())) {
             throw new NoPermissionException(ExceptionEnum.NO_PERMISSION);
         }
 
@@ -177,7 +177,7 @@ public class ActivityServiceImpl implements ActivityService {
     @CheckUserIsExist
     @Override
     public ActivityExpand deleteJoinRecord(User user, Activity activity) {
-        Activity select = activityMapper.selectByPrimaryKey(getTbId());
+        Activity select = activityMapper.selectByPrimaryKey(activity.getTbId());
         checkActivityNotDelete(select);
 
         UserJoinActivity record = new UserJoinActivity();
@@ -186,7 +186,7 @@ public class ActivityServiceImpl implements ActivityService {
         record.setActivityId(select.getTbId());
 
         int updateCount;
-        if (getUserId().equals(user.getTbId())) {
+        if (activity.getUserId().equals(user.getTbId())) {
             // 删除全部记录
            updateCount  = joinActivityMapper.updateByActivityId(record);
         } else {

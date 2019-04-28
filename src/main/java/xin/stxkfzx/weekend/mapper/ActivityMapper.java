@@ -1,5 +1,6 @@
 package xin.stxkfzx.weekend.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import xin.stxkfzx.weekend.entity.Activity;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @author fmy
  * @date 2019-04-10 22:09
  */
+@Mapper
 public interface ActivityMapper {
     /**
      * delete by primary key
