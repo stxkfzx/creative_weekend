@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="xin.stxkfzx.weekend.user.mapper.UserMapper" >
-  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.user.entity.User" >
+<mapper namespace="xin.stxkfzx.weekend.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.entity.User" >
     <id column="tb_id" property="tbId" jdbcType="INTEGER" />
     <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
     <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
@@ -29,7 +29,7 @@
     delete from user
     where tb_id = #{tbId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+  <insert id="insert" parameterType="xin.stxkfzx.weekend.entity.User" >
     insert into user (tb_id, nick_name, phone_num, 
       password, fullname, id_card, 
       address, urgent_contact, urgent_phone, 
@@ -41,7 +41,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+  <insert id="insertSelective" parameterType="xin.stxkfzx.weekend.entity.User" >
     insert into `user`
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="tbId != null" >
@@ -120,7 +120,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.User" >
     update user
     <set >
       <if test="nickName != null" >
@@ -159,7 +159,7 @@
     </set>
     where tb_id = #{tbId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.user.entity.User" >
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.entity.User" >
     update user
     set nick_name = #{nickName,jdbcType=VARCHAR},
       phone_num = #{phoneNum,jdbcType=VARCHAR},

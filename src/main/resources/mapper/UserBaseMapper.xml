@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="xin.stxkfzx.weekend.auth.mapper.UserBaseMapper">
-    <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.auth.entity.UserBase">
+<mapper namespace="xin.stxkfzx.weekend.mapper.UserBaseMapper">
+    <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.entity.UserBase">
         <id column="tb_id" property="id" jdbcType="INTEGER"/>
         <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
