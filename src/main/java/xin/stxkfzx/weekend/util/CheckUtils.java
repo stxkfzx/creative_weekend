@@ -46,7 +46,7 @@ public class CheckUtils {
      * 校验条件
      *
      * @param condition 条件
-     * @param errEnum   ExceptionEnum
+     * @param errEnum   错误信息说明
      * @author fmy
      * @date 2019-04-18 12:01
      */
@@ -60,7 +60,7 @@ public class CheckUtils {
      * 校验条件
      *
      * @param condition     条件
-     * @param errEnum       ExceptionEnum
+     * @param errEnum       错误信息说明
      * @param exceptionType 抛出异常类型
      * @author fmy
      * @date 2019-04-28 16:19
@@ -89,8 +89,23 @@ public class CheckUtils {
     /**
      * 校验不为空
      *
+     * @param obj           校验对象
+     * @param errEnum       错误信息说明
+     * @param exceptionType 抛出异常类型
+     * @author fmy
+     * @date 2019-04-29 11:11
+     */
+    public static void notNull(Object obj, ExceptionEnum errEnum, Class<? extends WeekendException> exceptionType) {
+        if (obj == null) {
+            fail(errEnum, exceptionType);
+        }
+    }
+
+    /**
+     * 校验不为空
+     *
      * @param obj     校验对象
-     * @param errEnum ExceptionEnum
+     * @param errEnum 错误信息说明
      * @author fmy
      * @date 2019-04-18 12:02
      */
@@ -130,13 +145,28 @@ public class CheckUtils {
      * 校验字符串不为空
      *
      * @param str     需要校验字符串
-     * @param errEnum ExceptionEnum
+     * @param errEnum 错误信息说明
      * @author fmy
      * @date 2019-04-18 12:03
      */
     public static void notEmpty(String str, ExceptionEnum errEnum) {
         if (str == null || str.trim().isEmpty()) {
             fail(errEnum);
+        }
+    }
+
+    /**
+     * 校验字符串不为空
+     *
+     * @param str           需要校验字符串
+     * @param errEnum       错误信息说明
+     * @param exceptionType 抛出异常类型
+     * @author fmy
+     * @date 2019-04-29 11:13
+     */
+    public static void notEmpty(String str, ExceptionEnum errEnum, Class<? extends WeekendException> exceptionType) {
+        if (str == null || str.trim().isEmpty()) {
+            fail(errEnum, exceptionType);
         }
     }
 

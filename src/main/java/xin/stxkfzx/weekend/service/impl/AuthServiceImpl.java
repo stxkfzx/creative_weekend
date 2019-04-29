@@ -13,7 +13,6 @@ import xin.stxkfzx.weekend.mapper.UserBaseMapper;
 import xin.stxkfzx.weekend.service.AuthService;
 import xin.stxkfzx.weekend.util.CodecUtils;
 import xin.stxkfzx.weekend.util.JwtUtils;
-import xin.stxkfzx.weekend.util.UserUtils;
 
 /**
  * 授权中心的一些方法
@@ -46,7 +45,6 @@ public class AuthServiceImpl implements AuthService {
             logger.error("【授权中心】用户名或密码错误，用户名：{}", username);
             throw new CheckException(ExceptionEnum.INVALID_USER);
         }
-        UserUtils.setUserInfo(user.getId());
         return new UserBase(user.getId(), user.getNickName(), user.getStatus());
     }
 

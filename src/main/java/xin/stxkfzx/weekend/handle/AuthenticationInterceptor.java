@@ -8,13 +8,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.annotation.PassToken;
 import xin.stxkfzx.weekend.annotation.UserLoginToken;
+import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.entity.UserBase;
 import xin.stxkfzx.weekend.service.impl.AuthServiceImpl;
 import xin.stxkfzx.weekend.util.JwtUtils;
-
+import xin.stxkfzx.weekend.util.UserUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,11 +75,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     // TODO: 2019/4/13 封装
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
+                UserUtils.setUserInfo(user.getId());
                 return true;
             }
         }
         return true;
     }
+
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest,
@@ -92,5 +94,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest,
                                 HttpServletResponse httpServletResponse,
                                 Object o, Exception e) {
+        UserUtils.clearUserInfo();
     }
 }
