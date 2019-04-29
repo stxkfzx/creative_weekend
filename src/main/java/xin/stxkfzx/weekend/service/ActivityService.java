@@ -5,6 +5,8 @@ import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.entity.User;
 
+import java.util.List;
+
 /**
  * 线下活动服务
  *
@@ -17,11 +19,12 @@ public interface ActivityService {
      * 创建活动
      *
      * @param activity 创建活动参数
+     * @param imageUrlList 背景图片列表
      * @return 包含创建的活动、聊天室和加入聊天室记录
      * @author fmy
      * @date 2019-04-16 19:54
      */
-    ActivityExpand createActivity(Activity activity);
+    ActivityExpand createActivity(Activity activity, List<String> imageUrlList);
 
     /**
      * 加入活动

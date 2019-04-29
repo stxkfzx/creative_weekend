@@ -12,6 +12,7 @@ import xin.stxkfzx.weekend.annotation.ParamCheck;
 import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.manager.ActivityManager;
 import xin.stxkfzx.weekend.manager.ChatManager;
+import xin.stxkfzx.weekend.mapper.ActivityBgImageMapper;
 import xin.stxkfzx.weekend.mapper.ActivityMapper;
 import xin.stxkfzx.weekend.mapper.UserJoinActivityMapper;
 import xin.stxkfzx.weekend.service.ActivityService;
@@ -19,10 +20,11 @@ import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.exception.NoPermissionException;
 import xin.stxkfzx.weekend.exception.SqlException;
-import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.util.CheckUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author fmy
@@ -34,24 +36,34 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityMapper activityMapper;
     private final UserJoinActivityMapper joinActivityMapper;
+    private final ActivityBgImageMapper activityBgImageMapper;
+
     private final ActivityManager activityManager;
     private final ChatManager chatManager;
 
     @Autowired
-    public ActivityServiceImpl(ActivityMapper activityMapper, UserJoinActivityMapper joinActivityMapper, ActivityManager activityManager, ChatManager chatManager) {
+    public ActivityServiceImpl(ActivityMapper activityMapper, UserJoinActivityMapper joinActivityMapper, ActivityBgImageMapper activityBgImageMapper, ActivityManager activityManager, ChatManager chatManager) {
         this.activityMapper = activityMapper;
         this.joinActivityMapper = joinActivityMapper;
+        this.activityBgImageMapper = activityBgImageMapper;
         this.activityManager = activityManager;
         this.chatManager = chatManager;
     }
 
-    @ParamCheck(checkType = CheckTypeEnum.BEAN_VALIDATION)
     @CheckUserIsExist
     @Transactional(rollbackFor = SqlException.class)
     @Override
-    public ActivityExpand createActivity(Activity activity) throws WeekendException {
+    public ActivityExpand createActivity(Activity activity, List<String> imageUrlList) {
+        CheckUtils.checkBean(activity);
         // 创建活动
         Activity create = activityManager.addActivity(activity);
+
+        if (imageUrlList != null) {
+            // 插入背景图
+            List<ActivityBgImage> bgImageList = convertImage(imageUrlList, create);
+            int count = activityBgImageMapper.insertList(bgImageList);
+            log.debug("插入背景图片数量：{}", count);
+        }
 
         // 关联创建聊天室
         User creator = new User();
@@ -61,8 +73,24 @@ public class ActivityServiceImpl implements ActivityService {
         // 关联加入聊天室
         UserJoinChatRoom record = chatManager.addJoinRecord(creator, chatRoom);
 
-        log.info("成功创建活动: {}", create.getTbId());
+        log.info("成功创建活动");
         return new ActivityExpand().setActivity(activity).setChatRoom(chatRoom).setRecord(record);
+    }
+
+    private List<ActivityBgImage> convertImage(List<String> imageUrlList, Activity create) {
+        List<ActivityBgImage> bgImageList = new ArrayList<>(imageUrlList.size());
+        ActivityBgImage img;
+        for (String url :
+                imageUrlList) {
+            img = new ActivityBgImage();
+            img.setActivityId(create.getTbId());
+            img.setCreateTime(new Date());
+            img.setStatus(StatusEnum.NORMAL);
+            img.setUpdateTime(new Date());
+            img.setUrl(url);
+            bgImageList.add(img);
+        }
+        return bgImageList;
     }
 
     @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)

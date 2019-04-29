@@ -61,7 +61,7 @@ public class ActivityController {
     @UserLoginToken
     public ResponseEntity<?> createActivity(@RequestBody @Valid ActivityInputVO vo) {
         Activity activity = convertQueryParam(vo);
-        ActivityExpand expand = activityService.createActivity(activity);
+        ActivityExpand expand = activityService.createActivity(activity, vo.getImageList());
         ActivityOutputVO out = convertOutputVO(expand);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(out);
