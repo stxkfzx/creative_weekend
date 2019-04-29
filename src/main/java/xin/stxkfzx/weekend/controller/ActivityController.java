@@ -6,13 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import xin.stxkfzx.weekend.annotation.UserLoginToken;
 import xin.stxkfzx.weekend.entity.Activity;
 import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.service.ActivityService;
-import xin.stxkfzx.weekend.vo.ActivityInputDTO;
+import xin.stxkfzx.weekend.vo.ActivityInputVO;
 import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.util.UserUtils;
 import xin.stxkfzx.weekend.entity.User;
+import xin.stxkfzx.weekend.vo.ActivityOutputVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -56,14 +58,27 @@ public class ActivityController {
      * @date 2019-04-18 15:40
      */
     @PostMapping
-    public ResponseEntity<?> addActivity(@RequestBody @Valid ActivityInputDTO vo) {
+    @UserLoginToken
+    public ResponseEntity<?> createActivity(@RequestBody @Valid ActivityInputVO vo) {
+        Activity activity = convertQueryParam(vo);
+        ActivityExpand expand = activityService.createActivity(activity);
+        ActivityOutputVO out = convertOutputVO(expand);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(out);
+    }
+
+    private Activity convertQueryParam(ActivityInputVO vo) {
         Activity activity = new Activity();
         BeanUtils.copyProperties(vo, activity);
         activity.setUserId(UserUtils.getUserId());
+        return activity;
+    }
 
-        ActivityExpand expand = activityService.createActivity(activity);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(expand.getActivity());
+    private ActivityOutputVO convertOutputVO(ActivityExpand expand) {
+        ActivityOutputVO out = new ActivityOutputVO();
+        BeanUtils.copyProperties(expand.getActivity(), out);
+        out.setChatRoomId(expand.getChatRoom().getTbId());
+        return out;
     }
 
     /**

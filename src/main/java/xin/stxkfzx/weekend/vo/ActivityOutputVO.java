@@ -1,58 +1,41 @@
 package xin.stxkfzx.weekend.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.StringJoiner;
 
 /**
- * 创建活动
+ * 活动返回值封装
  *
  * @author fmy
- * @date 2019-04-18 14:16
+ * @date 2019-04-29 11:21
  */
-public class ActivityInputDTO {
+public class ActivityOutputVO {
 
-    @NotBlank
+    private Integer tbId;
+
     private String title;
 
-    @NotBlank
     private String description;
 
-    @NotNull
     private Short range;
 
-    /**
-     * 坐标
-     */
-    @NotBlank
     private String coordinate;
 
-    @NotNull
     private Integer maxCount;
+
+    private Date createTime;
 
     private Integer money;
 
-    @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", ActivityInputDTO.class.getSimpleName() + "[", "]")
-                .add("title='" + title + "'")
-                .add("description='" + description + "'")
-                .add("range=" + range)
-                .add("coordinate='" + coordinate + "'")
-                .add("maxCount=" + maxCount)
-                .add("money=" + money)
-                .add("startTime=" + startTime)
-                .toString();
+    private Integer chatRoomId;
+
+    public Integer getTbId() {
+        return tbId;
     }
 
-    public ActivityInputDTO() {
+    public void setTbId(Integer tbId) {
+        this.tbId = tbId;
     }
 
     public String getTitle() {
@@ -95,6 +78,14 @@ public class ActivityInputDTO {
         this.maxCount = maxCount;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
     public Integer getMoney() {
         return money;
     }
@@ -111,4 +102,11 @@ public class ActivityInputDTO {
         this.startTime = startTime;
     }
 
+    public Integer getChatRoomId() {
+        return chatRoomId;
+    }
+
+    public void setChatRoomId(Integer chatRoomId) {
+        this.chatRoomId = chatRoomId;
+    }
 }
