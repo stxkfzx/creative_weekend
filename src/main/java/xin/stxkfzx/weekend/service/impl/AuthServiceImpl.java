@@ -9,10 +9,12 @@ import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.entity.UserBase;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.CheckException;
+import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.mapper.UserBaseMapper;
 import xin.stxkfzx.weekend.service.AuthService;
 import xin.stxkfzx.weekend.util.CodecUtils;
 import xin.stxkfzx.weekend.util.JwtUtils;
+import xin.stxkfzx.weekend.util.UserUtils;
 
 /**
  * 授权中心的一些方法
@@ -39,12 +41,16 @@ public class AuthServiceImpl implements AuthService {
     public UserBase login(String username, String password) {
 
         UserBase user = userBaseMapper.selectByNickName(username);
+        if (user == null) {
+            throw new WeekendException(ExceptionEnum.INVALID_USER);
+        }
         // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
         String md5Password = CodecUtils.md5Hex(password, CodecUtils.generateSalt(user.getNickName()));
         if (!user.getPassword().equals(md5Password)) {
             logger.error("【授权中心】用户名或密码错误，用户名：{}", username);
             throw new CheckException(ExceptionEnum.INVALID_USER);
         }
+        UserUtils.setUserInfo(user.getId());
         return new UserBase(user.getId(), user.getNickName(), user.getStatus());
     }
 

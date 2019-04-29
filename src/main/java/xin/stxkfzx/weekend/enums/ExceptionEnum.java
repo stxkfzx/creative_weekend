@@ -84,8 +84,14 @@ public enum ExceptionEnum {
     /**
      * 活动创建失败
      */
-    ACTIVATE_CREATE_FAIL(602, "活动创建失败");
+    ACTIVATE_CREATE_FAIL(602, "活动创建失败"),
 
+    /**
+     * 文件类型错误
+     */
+    FILE_TYPE_ERROR(500,"文件类型错误")
+
+    ;
 
 
     private Integer code;
