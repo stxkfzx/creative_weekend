@@ -1,8 +1,8 @@
 package xin.stxkfzx.weekend.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import xin.stxkfzx.weekend.entity.ActivityBgImage;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -39,6 +39,7 @@ public class ActivityInputVO {
 
     private List<String> imageList;
 
+    @Future
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
