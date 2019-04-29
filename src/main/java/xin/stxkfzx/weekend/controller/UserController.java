@@ -78,6 +78,7 @@ public class UserController {
      * @author ViterTian
      * @date 2019-04-16
      */
+    @PassToken
     @GetMapping("/nickname")
     public ResponseEntity<Boolean> checkNickName(@RequestParam("nickname") String nickname) {
         return ResponseEntity.ok(userService.checkNickName(nickname));

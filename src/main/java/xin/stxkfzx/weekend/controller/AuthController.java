@@ -83,6 +83,7 @@ public class AuthController {
      * @author ViterTian
      * @date 2019-04-13
      */
+    @PassToken
     @GetMapping("verify")
     public ResponseEntity<UserBase> verifyUser(@RequestHeader("Authorization") String token, HttpServletResponse response) {
         try {
