@@ -3,7 +3,7 @@ package xin.stxkfzx.weekend.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
@@ -28,11 +28,11 @@ import java.util.Date;
 @Service
 public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private final UserMapper userMapper;
     private final SmsProperties smsProperties;
 
-    public UserServiceImpl(UserMapper userMapper, SmsProperties smsProperties, RedisTemplate<String, String> redisTemplate) {
+    public UserServiceImpl(UserMapper userMapper, SmsProperties smsProperties, StringRedisTemplate redisTemplate) {
         this.userMapper = userMapper;
         this.smsProperties = smsProperties;
         this.redisTemplate = redisTemplate;
@@ -118,5 +118,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean checkNickName(String nickname) {
         return userMapper.selectByNickName(nickname) != null;
+    }
+
+    @Override
+    public Boolean checkUserId(Integer userId) {
+        return userMapper.selectByPrimaryKey(userId) != null;
     }
 }
