@@ -128,4 +128,10 @@
     where tb_id = #{tbId,jdbcType=INTEGER}
   </update>
 
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from video_share
+    order by tb_id desc
+  </select>
 </mapper>

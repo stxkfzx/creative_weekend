@@ -2,10 +2,9 @@ package xin.stxkfzx.weekend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import xin.stxkfzx.weekend.annotation.PassToken;
+import xin.stxkfzx.weekend.entity.PageResult;
 import xin.stxkfzx.weekend.entity.ResultBean;
 import xin.stxkfzx.weekend.entity.VideoShare;
 import xin.stxkfzx.weekend.enums.StatusEnum;
@@ -27,8 +26,9 @@ public class VideoShareController {
 
     /**
      * 新增分享视频
+     *
      * @param videoShare 分享的视频信息
-     * @return ResponseEntity<ResultBean<VideoShare>>
+     * @return ResponseEntity<ResultBean < VideoShare>>
      * @author ViterTian
      * @date 2019-04-30
      */
@@ -36,6 +36,27 @@ public class VideoShareController {
     public ResponseEntity<ResultBean<VideoShare>> insertShareVideo(@RequestBody VideoShare videoShare) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResultBean<>(StatusEnum.SUCCESS,
                 videoShareService.insertVideoShare(videoShare)));
+    }
+
+    /**
+     * 分页查询商品分享
+     *
+     * @param page 查询页数
+     * @param rows 每页显示条数
+     * @return ResponseEntity<ResultBean < PageResult < VideoShare>>>
+     * @author ViterTian
+     * @date 2019-04-30
+     */
+    @PassToken
+    @GetMapping("/query")
+    public ResponseEntity<ResultBean<PageResult<VideoShare>>> queryVideoShare(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                              @RequestParam(value = "rows", defaultValue = "10") Integer rows) {
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, videoShareService.queryVideoShare(page, rows)));
+    }
+    @PassToken
+    @GetMapping("{id}")
+    public ResponseEntity<ResultBean<VideoShare>> queryById(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS,videoShareService.queryById(id)));
     }
 
 }

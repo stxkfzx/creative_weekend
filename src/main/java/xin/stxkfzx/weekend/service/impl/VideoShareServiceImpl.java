@@ -1,8 +1,13 @@
 package xin.stxkfzx.weekend.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import xin.stxkfzx.weekend.entity.PageResult;
 import xin.stxkfzx.weekend.entity.VideoShare;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.WeekendException;
@@ -10,8 +15,10 @@ import xin.stxkfzx.weekend.mapper.VideoShareMapper;
 import xin.stxkfzx.weekend.service.ShareCategoryService;
 import xin.stxkfzx.weekend.service.UserService;
 import xin.stxkfzx.weekend.service.VideoShareService;
+import xin.stxkfzx.weekend.util.RedisUtil;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author VicterTian
@@ -21,14 +28,16 @@ import java.util.Date;
 @Service
 public class VideoShareServiceImpl implements VideoShareService {
     private Logger logger = LoggerFactory.getLogger(VideoShareServiceImpl.class);
+    private final RedisUtil redisUtil;
     private final ShareCategoryService shareCategoryService;
     private final VideoShareMapper videoShareMapper;
     private final UserService userService;
 
-    public VideoShareServiceImpl(VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService) {
+    public VideoShareServiceImpl(VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService, RedisUtil redisUtil) {
         this.videoShareMapper = videoShareMapper;
         this.shareCategoryService = shareCategoryService;
         this.userService = userService;
+        this.redisUtil = redisUtil;
     }
 
     @Override
@@ -52,5 +61,32 @@ public class VideoShareServiceImpl implements VideoShareService {
             logger.error("新增商品分享{}失败", videoShare);
             throw new WeekendException(ExceptionEnum.SHARE_VIDEO_FAILED);
         }
+    }
+
+    @Override
+    public PageResult<VideoShare> queryVideoShare(Integer page, Integer rows) {
+        PageHelper.startPage(page, rows);
+        List<VideoShare> list = videoShareMapper.queryAll();
+        if (CollectionUtils.isEmpty(list)) {
+            throw new WeekendException(ExceptionEnum.CONTENT_NOT_FOUND);
+        }
+        PageInfo<VideoShare> pageInfo = new PageInfo<>(list);
+        return new PageResult<>(pageInfo.getTotal(), pageInfo.getPages(), list);
+    }
+
+    @Override
+    public VideoShare queryById(Integer id) {
+        // 先通过redis查询
+        VideoShare videoShare = redisUtil.get(id+"");
+        // 如果查不到再通过数据库查询
+        if (videoShare == null) {
+            logger.warn("视频{}未从redis中获取数据",id);
+            videoShare = videoShareMapper.selectByPrimaryKey(id);
+            if (videoShare == null) {
+                throw new WeekendException(ExceptionEnum.CONTENT_NOT_FOUND);
+            }
+            redisUtil.set(id+"", videoShare);
+        }
+        return videoShare;
     }
 }
