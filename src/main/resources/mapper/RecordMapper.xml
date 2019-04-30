@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xin.stxkfzx.weekend.mapper.RecordMapper">
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.entity.Record">
+    <!--@mbg.generated-->
+    <id column="tb_id" jdbcType="INTEGER" property="tbId" />
+    <result column="record_id" jdbcType="INTEGER" property="recordId" />
+    <result column="record_time" jdbcType="TIMESTAMP" property="recordTime" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    tb_id, record_id, record_time, `type`, create_time, update_time, `status`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from record
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.Record" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into record (record_id, record_time, `type`, 
+      create_time, update_time, `status`
+      )
+    values (#{recordId,jdbcType=INTEGER}, #{recordTime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.Record" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        record_id,
+      </if>
+      <if test="recordTime != null">
+        record_time,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.Record">
+    <!--@mbg.generated-->
+    update record
+    <set>
+      <if test="recordId != null">
+        record_id = #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="recordTime != null">
+        record_time = #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.entity.Record">
+    <!--@mbg.generated-->
+    update record
+    set record_id = #{recordId,jdbcType=INTEGER},
+      record_time = #{recordTime,jdbcType=TIMESTAMP},
+      `type` = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=SMALLINT}
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+</mapper>

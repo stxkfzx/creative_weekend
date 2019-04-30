@@ -3,6 +3,8 @@ package xin.stxkfzx.weekend.service;
 import xin.stxkfzx.weekend.entity.UserBase;
 
 /**
+ * 用户授权中心
+ *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/28

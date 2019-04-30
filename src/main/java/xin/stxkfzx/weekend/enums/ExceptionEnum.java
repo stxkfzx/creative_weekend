@@ -89,7 +89,19 @@ public enum ExceptionEnum {
     /**
      * 文件类型错误
      */
-    FILE_TYPE_ERROR(500,"文件类型错误")
+    FILE_TYPE_ERROR(500, "文件类型错误"),
+    /**
+     * 分享视频失败
+     */
+    SHARE_VIDEO_FAILED(500, "分享视频失败"),
+    /**
+     * 创建分类失败
+     */
+    CATEGORY_CREATION_FAILED(500, "创建分类失败"),
+    /**
+     * 分类Id不存在
+     */
+    CATEGORY_ID_NOT_EXIST(500, "分类Id不存在"),
 
     ;
 

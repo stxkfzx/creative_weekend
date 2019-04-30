@@ -4,6 +4,8 @@ import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.vo.UserVO;
 
 /**
+ * 用户模块
+ *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/12

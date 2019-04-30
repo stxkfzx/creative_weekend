@@ -29,7 +29,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .claim(JwtConstants.JWT_KEY_ID, userBase.getId())
                 .claim(JwtConstants.JWT_KEY_USER_NAME, userBase.getNickName())
-                .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
+                .setExpiration(DateTime.now().plusHours(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
@@ -47,7 +47,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .claim(JwtConstants.JWT_KEY_ID, userBase.getId())
                 .claim(JwtConstants.JWT_KEY_USER_NAME, userBase.getNickName())
-                .setExpiration(DateTime.now().plus(expireMinutes).toDate())
+                .setExpiration(DateTime.now().plusHours(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.ES256, RsaUtils.getPrivateKey(privateKey))
                 .compact();
     }
