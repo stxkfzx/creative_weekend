@@ -3,6 +3,7 @@ package xin.stxkfzx.weekend;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * 创意周末后台项目入口
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2019/4/13
  */
 @SpringBootApplication
+@EnableCaching
 @MapperScan("xin.stxkfzx.weekend.mapper")
 public class WeekendApplication {
     public static void main(String[] args) {

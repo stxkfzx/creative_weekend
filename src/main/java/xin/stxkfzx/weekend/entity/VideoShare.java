@@ -1,12 +1,13 @@
 package xin.stxkfzx.weekend.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author fmy
  * @date 2019-04-10 22:09
  */
-public class VideoShare {
+public class VideoShare implements Serializable {
     private Integer tbId;
 
     private String url;
