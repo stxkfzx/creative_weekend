@@ -32,10 +32,32 @@ public interface VideoShareService {
 
     /**
      * 通过id查询视频分享详情
+     *
      * @param id 查询id
      * @return VideoShare
      * @author ViterTian
      * @date 2019-04-30
      */
     VideoShare queryById(Integer id);
+
+    /**
+     * 通过用户id查询当前用户发布的所有视频分享
+     *
+     * @param userId 用户id
+     * @param page   查询页数
+     * @param rows   每页显示条数
+     * @return 此用户发布过的视频分享分页结果
+     * @author ViterTian
+     * @date 2019-05-01
+     */
+    PageResult<VideoShare> queryByUserId(Integer userId, Integer page, Integer rows);
+
+    /**
+     * 点赞功能，默认为false 点击为true 再次点击为false
+     * 完全基于redis实现，暂时不经过数据库
+     *
+     * @param id 视频分享id
+     * @return boolean
+     */
+    Boolean likeVideo(Integer id);
 }

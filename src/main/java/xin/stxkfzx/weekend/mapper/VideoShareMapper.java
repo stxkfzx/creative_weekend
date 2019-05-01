@@ -68,4 +68,12 @@ public interface VideoShareMapper {
      * @date 2019-04-30
      */
     List<VideoShare> queryAll();
+
+    /**
+     * 根据用户id查询此用户发表的所有视频分享
+     *
+     * @param userId 用户id
+     * @return List<VideoShare>
+     */
+    List<VideoShare> selectByUserId(Integer userId);
 }
