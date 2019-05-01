@@ -61,10 +61,10 @@ public class VideoShareServiceImpl implements VideoShareService {
         videoShare.setUpdateTime(new Date());
         int insert = videoShareMapper.insertSelective(videoShare);
         if (insert == 1) {
-            logger.info("新增视频分享{}成功", videoShare);
+            logger.info("新增视频分享{}成功.", videoShare);
             return videoShare;
         } else {
-            logger.error("新增视频分享{}失败", videoShare);
+            logger.error("新增视频分享{}失败.", videoShare);
             throw new WeekendException(ExceptionEnum.SHARE_VIDEO_FAILED);
         }
     }
