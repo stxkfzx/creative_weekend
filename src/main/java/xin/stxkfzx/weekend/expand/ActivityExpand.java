@@ -1,9 +1,7 @@
 package xin.stxkfzx.weekend.expand;
 
-import xin.stxkfzx.weekend.entity.Activity;
-import xin.stxkfzx.weekend.entity.ChatRoom;
-import xin.stxkfzx.weekend.entity.UserJoinActivity;
-import xin.stxkfzx.weekend.entity.UserJoinChatRoom;
+import com.github.pagehelper.PageInfo;
+import xin.stxkfzx.weekend.entity.*;
 
 /**
  * 线下活动拓展
@@ -17,6 +15,7 @@ public class ActivityExpand {
     private int updateCount;
     private ChatRoom chatRoom;
     private UserJoinChatRoom chatRoomRecord;
+    private PageInfo<ActivityDetail> page;
 
     public Activity getActivity() {
         return activity;
@@ -61,5 +60,14 @@ public class ActivityExpand {
 
     public UserJoinChatRoom getRecord() {
         return chatRoomRecord;
+    }
+
+    public ActivityExpand setPage(PageInfo<ActivityDetail> page) {
+        this.page = page;
+        return this;
+    }
+
+    public PageInfo<ActivityDetail> getPage() {
+        return page;
     }
 }

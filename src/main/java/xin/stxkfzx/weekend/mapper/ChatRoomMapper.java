@@ -1,4 +1,5 @@
 package xin.stxkfzx.weekend.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import org.apache.ibatis.annotations.Mapper;
 import xin.stxkfzx.weekend.entity.ChatRoom;
@@ -52,4 +53,8 @@ public interface ChatRoomMapper {
      * @return update count
      */
     int updateByPrimaryKey(ChatRoom record);
+
+    ChatRoom selectOneByActivateId(@Param("activateId")Integer activateId);
+
+
 }
