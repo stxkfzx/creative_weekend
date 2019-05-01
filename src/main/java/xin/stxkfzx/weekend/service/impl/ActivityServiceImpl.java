@@ -1,5 +1,7 @@
 package xin.stxkfzx.weekend.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import xin.stxkfzx.weekend.manager.ActivityManager;
 import xin.stxkfzx.weekend.manager.ChatManager;
 import xin.stxkfzx.weekend.mapper.ActivityBgImageMapper;
 import xin.stxkfzx.weekend.mapper.ActivityMapper;
+import xin.stxkfzx.weekend.mapper.ChatRoomMapper;
 import xin.stxkfzx.weekend.mapper.UserJoinActivityMapper;
 import xin.stxkfzx.weekend.service.ActivityService;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
@@ -37,15 +40,17 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityMapper activityMapper;
     private final UserJoinActivityMapper joinActivityMapper;
     private final ActivityBgImageMapper activityBgImageMapper;
+    private final ChatRoomMapper chatRoomMapper;
 
     private final ActivityManager activityManager;
     private final ChatManager chatManager;
 
     @Autowired
-    public ActivityServiceImpl(ActivityMapper activityMapper, UserJoinActivityMapper joinActivityMapper, ActivityBgImageMapper activityBgImageMapper, ActivityManager activityManager, ChatManager chatManager) {
+    public ActivityServiceImpl(ActivityMapper activityMapper, UserJoinActivityMapper joinActivityMapper, ActivityBgImageMapper activityBgImageMapper, ChatRoomMapper chatRoomMapper, ActivityManager activityManager, ChatManager chatManager) {
         this.activityMapper = activityMapper;
         this.joinActivityMapper = joinActivityMapper;
         this.activityBgImageMapper = activityBgImageMapper;
+        this.chatRoomMapper = chatRoomMapper;
         this.activityManager = activityManager;
         this.chatManager = chatManager;
     }
@@ -166,25 +171,27 @@ public class ActivityServiceImpl implements ActivityService {
         return new ActivityExpand().setJoinRecord(record);
     }
 
+    @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
     @Override
     public ActivityExpand getActivity(Integer activityId, StatusEnum status) {
-        CheckUtils.notNull(activityId, "value.is.null");
         Activity activity = activityMapper.selectByPrimaryKey(activityId);
         checkActivityNotDelete(activity);
-        return new ActivityExpand().setActivity(activity);
+        ChatRoom chatRoom = chatRoomMapper.selectOneByActivateId(activityId);
+        return new ActivityExpand().setActivity(activity).setChatRoom(chatRoom);
     }
 
     private void checkActivityNotDelete(Activity activity) {
+        CheckUtils.notNull(activity, ExceptionEnum.ACTIVATE_NOT_EXIST);
         CheckUtils.check(activity.getStatus() >= StatusEnum.DELETE.getCode().shortValue(),
                 ExceptionEnum.ACTIVATE_NOT_EXIST);
     }
 
     @Override
     public ActivityExpand listActivityWithPage(Activity condition, int page, int pageSize) {
-        // PageHelper.startPage(page, pageSize);
-        // activityMapper.selectByConditionWithPage(condition);
-
-        return null;
+        PageHelper.startPage(page, pageSize);
+        PageInfo<ActivityDetail> pageInfo =
+                new PageInfo<>(activityMapper.selectActivityDetailAndNormalByConditionWithPage(condition));
+        return new ActivityExpand().setPage(pageInfo);
     }
 
     @Transactional(rollbackFor = SqlException.class)

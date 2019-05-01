@@ -18,7 +18,7 @@ public interface ActivityService {
     /**
      * 创建活动
      *
-     * @param activity 创建活动参数
+     * @param activity     创建活动参数
      * @param imageUrlList 背景图片列表
      * @return 包含创建的活动、聊天室和加入聊天室记录
      * @author fmy
@@ -60,12 +60,12 @@ public interface ActivityService {
     ActivityExpand getActivity(Integer activityId, StatusEnum status);
 
     /**
-     * 根据条件获取活动列表,状态是审核及正常
+     * 根据条件获取活动列表,状态是正常
      *
-     * @param condition
-     * @param page
-     * @param pageSize
-     * @return
+     * @param condition 查询条件：范围。如果condition为空，则查询全部
+     * @param page      页数
+     * @param pageSize  每页大小
+     * @return 活动列表
      * @author fmy
      * @date 2019-04-16 19:57
      */

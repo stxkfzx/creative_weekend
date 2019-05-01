@@ -1,47 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="xin.stxkfzx.weekend.mapper.ActivityBgImageMapper">
-  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.entity.ActivityBgImage">
+<mapper namespace="xin.stxkfzx.weekend.mapper.ActivityTagMapper">
+  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.entity.ActivityTag">
     <!--@mbg.generated-->
     <id column="tb_id" jdbcType="INTEGER" property="tbId" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
     <result column="activity_id" jdbcType="INTEGER" property="tbId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    tb_id, url, `status`, create_time, update_time, activity_id
+    tb_id, content, create_time, update_time, `status`, activity_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
-    from activity_bg_image
+    from activity_tag
     where tb_id = #{tbId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
-    delete from activity_bg_image
+    delete from activity_tag
     where tb_id = #{tbId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.ActivityBgImage" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.ActivityTag" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into activity_bg_image (url, `status`, create_time, 
-      update_time, activity_id)
-    values (#{url,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{tbId,jdbcType=INTEGER})
+    insert into activity_tag (content, create_time, update_time, 
+      `status`, activity_id)
+    values (#{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=SMALLINT}, #{tbId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.ActivityBgImage" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.ActivityTag" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into activity_bg_image
+    insert into activity_tag
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="url != null">
-        url,
-      </if>
-      <if test="status != null">
-        `status`,
+      <if test="content != null">
+        content,
       </if>
       <if test="createTime != null">
         create_time,
@@ -49,16 +46,16 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="status != null">
+        `status`,
+      </if>
       <if test="tbId != null">
         activity_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="url != null">
-        #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -66,20 +63,20 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
       <if test="tbId != null">
         #{tbId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.ActivityBgImage">
+  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.ActivityTag">
     <!--@mbg.generated-->
-    update activity_bg_image
+    update activity_tag
     <set>
-      <if test="url != null">
-        url = #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=SMALLINT},
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -87,50 +84,31 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=SMALLINT},
+      </if>
       <if test="tbId != null">
         activity_id = #{tbId,jdbcType=INTEGER},
       </if>
     </set>
     where tb_id = #{tbId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.entity.ActivityBgImage">
+  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.entity.ActivityTag">
     <!--@mbg.generated-->
-    update activity_bg_image
-    set url = #{url,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=SMALLINT},
+    update activity_tag
+    set content = #{content,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=SMALLINT},
       activity_id = #{tbId,jdbcType=INTEGER}
     where tb_id = #{tbId,jdbcType=INTEGER}
   </update>
-
-<!--auto generated by MybatisCodeHelper on 2019-04-29-->
-  <insert id="insertList" keyColumn="tb_id" keyProperty="tbId" useGeneratedKeys="true">
-    INSERT INTO activity_bg_image(
-    url,
-    `status`,
-    create_time,
-    update_time,
-    activity_id
-    )VALUES
-    <foreach collection="list" item="element" index="index" separator=",">
-      (
-      #{element.url,jdbcType=VARCHAR},
-      #{element.status,jdbcType=SMALLINT},
-      #{element.createTime,jdbcType=TIMESTAMP},
-      #{element.updateTime,jdbcType=TIMESTAMP},
-      #{element.tbId,jdbcType=INTEGER}
-      )
-    </foreach>
-  </insert>
 
 <!--auto generated by MybatisCodeHelper on 2019-04-30-->
   <select id="selectByActivityId" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from activity_bg_image
+    from activity_tag
     where activity_id=#{tbId,jdbcType=INTEGER}
   </select>
-
-
 </mapper>

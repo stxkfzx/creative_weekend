@@ -1,223 +1,233 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xin.stxkfzx.weekend.mapper.ActivityMapper">
-  <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.entity.Activity">
-    <!--@mbg.generated-->
-    <id column="tb_id" jdbcType="INTEGER" property="tbId" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="range" jdbcType="SMALLINT" property="range" />
-    <result column="coordinate" jdbcType="VARCHAR" property="coordinate" />
-    <result column="max_count" jdbcType="INTEGER" property="maxCount" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="status" jdbcType="SMALLINT" property="status" />
-    <result column="money" jdbcType="INTEGER" property="money" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="proxy_id" jdbcType="INTEGER" property="proxyId" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    tb_id, title, description, `range`, coordinate, max_count, create_time, update_time,
-    `status`, money, start_time, user_id, proxy_id
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from activity
-    where tb_id = #{tbId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from activity
-    where tb_id = #{tbId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.Activity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into activity (title, description, `range`,
-      coordinate, max_count, create_time,
-      update_time, `status`, money,
-      start_time, user_id, proxy_id
-      )
-    values (#{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{range,jdbcType=SMALLINT},
-      #{coordinate,jdbcType=VARCHAR}, #{maxCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}, #{money,jdbcType=INTEGER},
-      #{startTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, #{proxyId,jdbcType=INTEGER}
-      )
-  </insert>
-  <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.Activity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into activity
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        title,
-      </if>
-      <if test="description != null">
-        description,
-      </if>
-      <if test="range != null">
-        `range`,
-      </if>
-      <if test="coordinate != null">
-        coordinate,
-      </if>
-      <if test="maxCount != null">
-        max_count,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="money != null">
-        money,
-      </if>
-      <if test="startTime != null">
-        start_time,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="proxyId != null">
-        proxy_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
-        #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="range != null">
-        #{range,jdbcType=SMALLINT},
-      </if>
-      <if test="coordinate != null">
-        #{coordinate,jdbcType=VARCHAR},
-      </if>
-      <if test="maxCount != null">
-        #{maxCount,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="money != null">
-        #{money,jdbcType=INTEGER},
-      </if>
-      <if test="startTime != null">
-        #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="proxyId != null">
-        #{proxyId,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.Activity">
-    <!--@mbg.generated-->
-    update activity
-    <set>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null">
+    <resultMap id="BaseResultMap" type="xin.stxkfzx.weekend.entity.Activity">
+        <!--@mbg.generated-->
+        <id column="tb_id" jdbcType="INTEGER" property="tbId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="range" jdbcType="SMALLINT" property="range"/>
+        <result column="coordinate" jdbcType="VARCHAR" property="coordinate"/>
+        <result column="max_count" jdbcType="INTEGER" property="maxCount"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="status" jdbcType="SMALLINT" property="status"/>
+        <result column="money" jdbcType="INTEGER" property="money"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="proxy_id" jdbcType="INTEGER" property="proxyId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        tb_id, title, description, `range`, coordinate, max_count, create_time, update_time,
+        `status`, money, start_time, user_id, proxy_id
+    </sql>
+    <sql id="Alias_Column_List">
+        ${alias}.tb_id, ${alias}.title, ${alias}.description, ${alias}.`range`, ${alias}.coordinate, ${alias}.max_count, ${alias}.create_time, ${alias}.update_time,
+        ${alias}.`status`, ${alias}.money, ${alias}.start_time, ${alias}.user_id, ${alias}.proxy_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from activity
+        where tb_id = #{tbId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from activity
+        where tb_id = #{tbId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="tb_id" keyProperty="tbId" parameterType="xin.stxkfzx.weekend.entity.Activity"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into activity (title, description, `range`,
+        coordinate, max_count, create_time,
+        update_time, `status`, money,
+        start_time, user_id, proxy_id
+        )
+        values (#{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{range,jdbcType=SMALLINT},
+        #{coordinate,jdbcType=VARCHAR}, #{maxCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}, #{money,jdbcType=INTEGER},
+        #{startTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, #{proxyId,jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="tb_id" keyProperty="tbId"
+            parameterType="xin.stxkfzx.weekend.entity.Activity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="range != null">
+                `range`,
+            </if>
+            <if test="coordinate != null">
+                coordinate,
+            </if>
+            <if test="maxCount != null">
+                max_count,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="proxyId != null">
+                proxy_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="range != null">
+                #{range,jdbcType=SMALLINT},
+            </if>
+            <if test="coordinate != null">
+                #{coordinate,jdbcType=VARCHAR},
+            </if>
+            <if test="maxCount != null">
+                #{maxCount,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="proxyId != null">
+                #{proxyId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.Activity">
+        <!--@mbg.generated-->
+        update activity
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="range != null">
+                `range` = #{range,jdbcType=SMALLINT},
+            </if>
+            <if test="coordinate != null">
+                coordinate = #{coordinate,jdbcType=VARCHAR},
+            </if>
+            <if test="maxCount != null">
+                max_count = #{maxCount,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="proxyId != null">
+                proxy_id = #{proxyId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where tb_id = #{tbId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.entity.Activity">
+        <!--@mbg.generated-->
+        update activity
+        set title = #{title,jdbcType=VARCHAR},
         description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="range != null">
         `range` = #{range,jdbcType=SMALLINT},
-      </if>
-      <if test="coordinate != null">
         coordinate = #{coordinate,jdbcType=VARCHAR},
-      </if>
-      <if test="maxCount != null">
         max_count = #{maxCount,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
         `status` = #{status,jdbcType=SMALLINT},
-      </if>
-      <if test="money != null">
         money = #{money,jdbcType=INTEGER},
-      </if>
-      <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="proxyId != null">
-        proxy_id = #{proxyId,jdbcType=INTEGER},
-      </if>
-    </set>
-    where tb_id = #{tbId,jdbcType=INTEGER},
-  </update>
-  <update id="updateByPrimaryKey" parameterType="xin.stxkfzx.weekend.entity.Activity">
-    <!--@mbg.generated-->
-    update activity
-    set title = #{title,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
-      `range` = #{range,jdbcType=SMALLINT},
-      coordinate = #{coordinate,jdbcType=VARCHAR},
-      max_count = #{maxCount,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      `status` = #{status,jdbcType=SMALLINT},
-      money = #{money,jdbcType=INTEGER},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      user_id = #{userId,jdbcType=INTEGER},
-      proxy_id = #{proxyId,jdbcType=INTEGER}
-    where tb_id = #{tbId,jdbcType=INTEGER}
-  </update>
+        proxy_id = #{proxyId,jdbcType=INTEGER}
+        where tb_id = #{tbId,jdbcType=INTEGER}
+    </update>
 
-<!--auto generated by MybatisCodeHelper on
- 2019-04-15-->
-  <select id="selectByUserIdWithPage" resultMap="BaseResultMap" >
-    select
-    <include refid="Base_Column_List"/>
-    from activity
-    where user_id=#{userId,jdbcType=INTEGER}
-  </select>
+    <!--auto generated by MybatisCodeHelper on
+     2019-04-15-->
+    <select id="selectByUserIdWithPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from activity
+        where user_id=#{userId,jdbcType=INTEGER}
+    </select>
 
-<!--auto generated by MybatisCodeHelper on 2019-04-17-->
-  <select id="selectByTbIdAndStatusGreaterThanEqual" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from activity
-    where tb_id=#{tbId,jdbcType=INTEGER} and `status` <![CDATA[>=]]> #{minStatus,jdbcType=SMALLINT}
-  </select>
+    <!--auto generated by MybatisCodeHelper on 2019-04-17-->
+    <select id="selectByTbIdAndStatusGreaterThanEqual" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from activity
+        where tb_id=#{tbId,jdbcType=INTEGER} and `status` <![CDATA[>=]]> #{minStatus,jdbcType=SMALLINT}
+    </select>
 
+    <!--auto generated by MybatisCodeHelper on 2019-04-29-->
+    <select id="selectActivityDetailAndNormalByConditionWithPage" resultMap="ActivityDetailResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from activity
+        where status = 1
+        <if test="condition!=null and condition.range != null">
+            and `range` <![CDATA[<=]]> #{condition.range,jdbcType=SMALLINT}
+        </if>
+    </select>
 
-  <!--<select id="selectByConditionWithPage" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from activity
-    <where>
-      <if test="condition == null">
-        and user_id is not null
-      </if>
-     <if test="condition.status != null">
-       and status = #{condition.status,jdbcType=SMALLINT}
-     </if>
-      <if test=""
-    </where>
-  </select>-->
+    <resultMap id="ActivityDetailResultMap" type="xin.stxkfzx.weekend.entity.ActivityDetail">
+        <association property="activity" resultMap="BaseResultMap" />
+        <collection property="imageUrlList" ofType="xin.stxkfzx.weekend.entity.ActivityBgImage" column="tb_id"
+                    select="xin.stxkfzx.weekend.mapper.ActivityBgImageMapper.selectByActivityId"/>
+        <collection property="tagList" ofType="xin.stxkfzx.weekend.entity.ActivityTag" column="tb_id"
+                    select="xin.stxkfzx.weekend.mapper.ActivityTagMapper.selectByActivityId"/>
+    </resultMap>
+
 </mapper>

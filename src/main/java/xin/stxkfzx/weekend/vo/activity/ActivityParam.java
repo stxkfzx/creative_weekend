@@ -1,45 +1,58 @@
-package xin.stxkfzx.weekend.vo;
+package xin.stxkfzx.weekend.vo.activity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 
 /**
- * 活动返回值封装
+ * 创建活动
  *
  * @author fmy
- * @date 2019-04-29 11:21
+ * @date 2019-04-18 14:16
  */
-public class ActivityOutputVO {
+public class ActivityParam {
 
-    private Integer tbId;
-
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String description;
 
+    @NotNull
     private Short range;
 
+    /**
+     * 坐标
+     */
+    @NotBlank
     private String coordinate;
 
+    @NotNull
     private Integer maxCount;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createTime;
 
     private Integer money;
 
+    private List<String> imageList;
+
+    @Future
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
-    private Integer chatRoomId;
-
-    public Integer getTbId() {
-        return tbId;
+    public List<String> getImageList() {
+        return imageList;
     }
 
-    public void setTbId(Integer tbId) {
-        this.tbId = tbId;
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
+    }
+
+    public ActivityParam() {
     }
 
     public String getTitle() {
@@ -82,14 +95,6 @@ public class ActivityOutputVO {
         this.maxCount = maxCount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public Integer getMoney() {
         return money;
     }
@@ -106,11 +111,17 @@ public class ActivityOutputVO {
         this.startTime = startTime;
     }
 
-    public Integer getChatRoomId() {
-        return chatRoomId;
-    }
-
-    public void setChatRoomId(Integer chatRoomId) {
-        this.chatRoomId = chatRoomId;
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ActivityParam.class.getSimpleName() + "[", "]")
+                .add("title='" + title + "'")
+                .add("description='" + description + "'")
+                .add("range=" + range)
+                .add("coordinate='" + coordinate + "'")
+                .add("maxCount=" + maxCount)
+                .add("money=" + money)
+                .add("imageList=" + imageList)
+                .add("startTime=" + startTime)
+                .toString();
     }
 }
