@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import xin.stxkfzx.weekend.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.util.RsaUtils;
 
 import javax.annotation.PostConstruct;
@@ -69,8 +71,7 @@ public class JwtProperties {
         } catch (Exception e) {
             logger.error("创建公钥、私钥失败：{}", e.toString());
             e.printStackTrace();
-            // TODO: 2019/4/13
-            throw new RuntimeException();
+            throw new WeekendException(ExceptionEnum.UNKNOWN_FAIL);
         }
     }
 

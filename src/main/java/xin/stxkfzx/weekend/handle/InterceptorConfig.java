@@ -1,7 +1,7 @@
 package xin.stxkfzx.weekend.handle;
 
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version V1.0
  * @date 2019/4/13
  */
-@Configuration
+@SpringBootConfiguration
 public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

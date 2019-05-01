@@ -3,10 +3,8 @@ package xin.stxkfzx.weekend.entity;
 import java.util.Date;
 
 /**
- * 
- * 
  * @author fmy
- * @date 2019-04-10 22:09 
+ * @date 2019-04-10 22:09
  */
 public class ShareCategory {
     private Integer tbId;

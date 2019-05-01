@@ -1,7 +1,5 @@
 package xin.stxkfzx.weekend.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +13,8 @@ import xin.stxkfzx.weekend.vo.UserVO;
 import javax.validation.Valid;
 
 /**
+ * 处理用户注册、校验用户信息等
+ *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/12
@@ -22,7 +22,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -79,6 +78,7 @@ public class UserController {
      * @author ViterTian
      * @date 2019-04-16
      */
+    @PassToken
     @GetMapping("/nickname")
     public ResponseEntity<Boolean> checkNickName(@RequestParam("nickname") String nickname) {
         return ResponseEntity.ok(userService.checkNickName(nickname));

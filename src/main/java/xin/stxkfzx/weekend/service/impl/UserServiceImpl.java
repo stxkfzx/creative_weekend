@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
 import xin.stxkfzx.weekend.config.SmsProperties;
 import xin.stxkfzx.weekend.entity.User;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
         this.redisTemplate = redisTemplate;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public UserVO addUser(User user) {
         logger.info("用户{}开始注册", user);

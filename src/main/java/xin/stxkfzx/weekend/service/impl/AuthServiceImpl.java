@@ -9,6 +9,7 @@ import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.entity.UserBase;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.CheckException;
+import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.mapper.UserBaseMapper;
 import xin.stxkfzx.weekend.service.AuthService;
 import xin.stxkfzx.weekend.util.CodecUtils;
@@ -40,6 +41,9 @@ public class AuthServiceImpl implements AuthService {
     public UserBase login(String username, String password) {
 
         UserBase user = userBaseMapper.selectByNickName(username);
+        if (user == null) {
+            throw new WeekendException(ExceptionEnum.INVALID_USER);
+        }
         // 拿到用户密码利用盐值加密，并与数据库保存的加密密码进行对比
         String md5Password = CodecUtils.md5Hex(password, CodecUtils.generateSalt(user.getNickName()));
         if (!user.getPassword().equals(md5Password)) {

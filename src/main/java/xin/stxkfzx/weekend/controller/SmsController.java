@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import xin.stxkfzx.weekend.annotation.PassToken;
 import xin.stxkfzx.weekend.util.SmsUtils;
 
 /**
@@ -31,6 +32,7 @@ public class SmsController {
      * @author ViterTian
      * @date 2019-04-15
      */
+    @PassToken
     @GetMapping("/code")
     public void sendCode(@RequestParam("phone") String phone) {
         smsUtils.sendCode(phone);

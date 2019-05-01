@@ -2,9 +2,11 @@ package xin.stxkfzx.weekend.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.StringJoiner;
 
 /**
@@ -13,7 +15,7 @@ import java.util.StringJoiner;
  * @author fmy
  * @date 2019-04-18 14:16
  */
-public class ActivityInputDTO {
+public class ActivityInputVO {
 
     @NotBlank
     private String title;
@@ -35,24 +37,22 @@ public class ActivityInputDTO {
 
     private Integer money;
 
+    private List<String> imageList;
+
+    @Future
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", ActivityInputDTO.class.getSimpleName() + "[", "]")
-                .add("title='" + title + "'")
-                .add("description='" + description + "'")
-                .add("range=" + range)
-                .add("coordinate='" + coordinate + "'")
-                .add("maxCount=" + maxCount)
-                .add("money=" + money)
-                .add("startTime=" + startTime)
-                .toString();
+    public List<String> getImageList() {
+        return imageList;
     }
 
-    public ActivityInputDTO() {
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
+    }
+
+    public ActivityInputVO() {
     }
 
     public String getTitle() {
@@ -111,4 +111,17 @@ public class ActivityInputDTO {
         this.startTime = startTime;
     }
 
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ActivityInputVO.class.getSimpleName() + "[", "]")
+                .add("title='" + title + "'")
+                .add("description='" + description + "'")
+                .add("range=" + range)
+                .add("coordinate='" + coordinate + "'")
+                .add("maxCount=" + maxCount)
+                .add("money=" + money)
+                .add("imageList=" + imageList)
+                .add("startTime=" + startTime)
+                .toString();
+    }
 }

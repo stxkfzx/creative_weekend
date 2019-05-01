@@ -1,19 +1,21 @@
 package xin.stxkfzx.weekend.mapper;
 
+import org.apache.ibatis.annotations.Param;
 
-import org.springframework.stereotype.Repository;
-import xin.stxkfzx.weekend.entity.VideoShare;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import xin.stxkfzx.weekend.entity.ActivityBgImage;
 
 /**
- * 
- * 
  * @author fmy
- * @date 2019-04-10 22:09 
+ * @date 2019-04-29 14:42
  */
-@Repository
-public interface VideoShareMapper {
+@Mapper
+public interface ActivityBgImageMapper {
     /**
      * delete by primary key
+     *
      * @param tbId primaryKey
      * @return deleteCount
      */
@@ -21,37 +23,52 @@ public interface VideoShareMapper {
 
     /**
      * insert record to table
+     *
      * @param record the record
      * @return insert count
      */
-    int insert(VideoShare record);
+    int insert(ActivityBgImage record);
 
     /**
      * insert record to table selective
+     *
      * @param record the record
      * @return insert count
      */
-    int insertSelective(VideoShare record);
+    int insertSelective(ActivityBgImage record);
 
     /**
      * select by primary key
+     *
      * @param tbId primary key
      * @return object by primary key
      */
-    VideoShare selectByPrimaryKey(Integer tbId);
+    ActivityBgImage selectByPrimaryKey(Integer tbId);
 
     /**
      * update record
+     *
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKeySelective(VideoShare record);
+    int updateByPrimaryKeySelective(ActivityBgImage record);
 
     /**
      * update record selective
+     *
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKey(VideoShare record);
+    int updateByPrimaryKey(ActivityBgImage record);
+
+    /**
+     * 批量插入
+     *
+     * @param list 插入列表
+     * @return 插入记录
+     * @author fmy
+     * @date 2019-04-29 15:03
+     */
+    int insertList(@Param("list") List<ActivityBgImage> list);
 
 }

@@ -4,17 +4,18 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.annotation.PassToken;
-import xin.stxkfzx.weekend.annotation.UserLoginToken;
+import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.entity.UserBase;
+import xin.stxkfzx.weekend.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.exception.UnLoginException;
 import xin.stxkfzx.weekend.service.impl.AuthServiceImpl;
+import xin.stxkfzx.weekend.util.CheckUtils;
 import xin.stxkfzx.weekend.util.JwtUtils;
-
+import xin.stxkfzx.weekend.util.UserUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +28,6 @@ import java.lang.reflect.Method;
  * @version V1.0
  * @date 2019/4/13
  */
-@Order(199)
 public class AuthenticationInterceptor implements HandlerInterceptor {
     private final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
     @Autowired
@@ -52,34 +52,24 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        // 检查有没有需要用户权限的注解
-        if (method.isAnnotationPresent(UserLoginToken.class)) {
-            UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
-            if (userLoginToken.required()) {
-                // 执行认证
-                if (token == null) {
-                    // TODO: 2019/4/13 封装
-                    throw new RuntimeException("无token，请重新登录");
-                }
-                // 获取 token 中的 auth id
-                UserBase userBase;
-                try {
-                    logger.info("获取到PublicKey()");
-                    userBase = JwtUtils.getUserBase(jwtProperties.getPublicKey(), token);
-                } catch (JWTDecodeException j) {
-                    // TODO: 2019/4/13 封装
-                    throw new RuntimeException("401");
-                }
-                UserBase user = authServiceImpl.findUserById(userBase.getId());
-                if (user == null) {
-                    // TODO: 2019/4/13 封装
-                    throw new RuntimeException("用户不存在，请重新登录");
-                }
-                return true;
-            }
+        // 执行认证
+        if (token == null) {
+            throw new UnLoginException("无token，请重新登录");
         }
+        // 获取 token 中的 auth id
+        UserBase userBase;
+        try {
+            logger.info("获取到PublicKey()");
+            userBase = JwtUtils.getUserBase(jwtProperties.getPublicKey(), token);
+        } catch (JWTDecodeException j) {
+            throw new UnLoginException("token无效，请重新登录");
+        }
+        UserBase user = authServiceImpl.findUserById(userBase.getId());
+        CheckUtils.notNull(user, ExceptionEnum.USER_NOT_EXIST);
+        UserUtils.setUserInfo(user.getId());
         return true;
     }
+
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest,
@@ -92,5 +82,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest,
                                 HttpServletResponse httpServletResponse,
                                 Object o, Exception e) {
+        UserUtils.clearUserInfo();
     }
 }

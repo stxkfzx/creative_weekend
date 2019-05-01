@@ -1,17 +1,19 @@
 package xin.stxkfzx.weekend.entity;
 
+import xin.stxkfzx.weekend.enums.StatusEnum;
+
 import java.util.Date;
 
 /**
+ * 
+ * 
  * @author fmy
- * @date 2019-04-10 22:09
+ * @date 2019-04-29 14:42 
  */
-public class VideoShare {
+public class ActivityBgImage {
     private Integer tbId;
 
     private String url;
-
-    private String title;
 
     private Short status;
 
@@ -19,9 +21,7 @@ public class VideoShare {
 
     private Date updateTime;
 
-    private Integer userId;
-
-    private Integer categoryId;
+    private Integer activityId;
 
     public Integer getTbId() {
         return tbId;
@@ -37,14 +37,6 @@ public class VideoShare {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public Short getStatus() {
@@ -71,20 +63,12 @@ public class VideoShare {
         this.updateTime = updateTime;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getActivityId() {
+        return activityId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
     }
 
     @Override
@@ -95,13 +79,15 @@ public class VideoShare {
         sb.append("Hash = ").append(hashCode());
         sb.append(", tbId=").append(tbId);
         sb.append(", url=").append(url);
-        sb.append(", title=").append(title);
         sb.append(", status=").append(status);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
-        sb.append(", userId=").append(userId);
-        sb.append(", categoryId=").append(categoryId);
+        sb.append(", activityId=").append(activityId);
         sb.append("]");
         return sb.toString();
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status.getCode().shortValue();
     }
 }

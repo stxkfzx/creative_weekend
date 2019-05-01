@@ -1,6 +1,7 @@
 package xin.stxkfzx.weekend.mapper;
 
 
+import org.springframework.stereotype.Repository;
 import xin.stxkfzx.weekend.entity.ShareCategory;
 
 /**
@@ -9,6 +10,7 @@ import xin.stxkfzx.weekend.entity.ShareCategory;
  * @author fmy
  * @date 2019-04-10 22:09 
  */
+@Repository
 public interface ShareCategoryMapper {
     /**
      * delete by primary key

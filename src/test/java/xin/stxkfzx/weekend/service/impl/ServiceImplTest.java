@@ -10,6 +10,8 @@ import xin.stxkfzx.weekend.exception.SqlException;
 import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.service.ActivityService;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 import static org.junit.Assert.assertNotNull;
@@ -32,7 +34,7 @@ public class ServiceImplTest extends BaseTest {
         activity.setStartTime(new Date());
         activity.setDescription("创建活动测试内容");
 
-        ActivityExpand expand = service.createActivity(activity);
+        ActivityExpand expand = service.createActivity(activity, null);
         assertNotNull(expand.getActivity());
 
         // 测试关联创建聊天室
@@ -41,9 +43,7 @@ public class ServiceImplTest extends BaseTest {
         // 测试关联加入聊天室
         assertNotNull(expand.getRecord());
 
-        // 测试check AOP
-        exception.expect(CheckException.class);
-        service.createActivity(null);
+        service.createActivity(activity, Arrays.asList("111", "222", "333", "444"));
     }
 
     @Test

@@ -6,22 +6,20 @@ import java.util.Date;
  * @author fmy
  * @date 2019-04-10 22:09
  */
-public class VideoShare {
+public class Record {
     private Integer tbId;
 
-    private String url;
+    private Integer recordId;
 
-    private String title;
+    private Date recordTime;
 
-    private Short status;
+    private Integer type;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private Integer userId;
-
-    private Integer categoryId;
+    private Short status;
 
     public Integer getTbId() {
         return tbId;
@@ -31,28 +29,28 @@ public class VideoShare {
         this.tbId = tbId;
     }
 
-    public String getUrl() {
-        return url;
+    public Integer getRecordId() {
+        return recordId;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setRecordId(Integer recordId) {
+        this.recordId = recordId;
     }
 
-    public String getTitle() {
-        return title;
+    public Date getRecordTime() {
+        return recordTime;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setRecordTime(Date recordTime) {
+        this.recordTime = recordTime;
     }
 
-    public Short getStatus() {
-        return status;
+    public Integer getType() {
+        return type;
     }
 
-    public void setStatus(Short status) {
-        this.status = status;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Date getCreateTime() {
@@ -71,20 +69,12 @@ public class VideoShare {
         this.updateTime = updateTime;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Short getStatus() {
+        return status;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setStatus(Short status) {
+        this.status = status;
     }
 
     @Override
@@ -94,13 +84,12 @@ public class VideoShare {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", tbId=").append(tbId);
-        sb.append(", url=").append(url);
-        sb.append(", title=").append(title);
-        sb.append(", status=").append(status);
+        sb.append(", recordId=").append(recordId);
+        sb.append(", recordTime=").append(recordTime);
+        sb.append(", type=").append(type);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
-        sb.append(", userId=").append(userId);
-        sb.append(", categoryId=").append(categoryId);
+        sb.append(", status=").append(status);
         sb.append("]");
         return sb.toString();
     }

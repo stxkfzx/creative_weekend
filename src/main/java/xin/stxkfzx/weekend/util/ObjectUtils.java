@@ -2,6 +2,8 @@ package xin.stxkfzx.weekend.util;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Field;
+
 /**
  * Object工具类
  *
@@ -38,5 +40,14 @@ public class ObjectUtils {
 
     public static Integer toInt(Object obj) {
         return toLong(obj).intValue();
+    }
+
+    public static Object disposeObject(Object obj){
+        Class<?> aClass = obj.getClass();
+        Field[] declaredFields = aClass.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            System.out.println(declaredField.toString());
+        }
+        return obj;
     }
 }

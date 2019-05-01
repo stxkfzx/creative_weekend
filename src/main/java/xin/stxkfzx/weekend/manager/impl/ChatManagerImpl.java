@@ -47,22 +47,17 @@ public class ChatManagerImpl implements ChatManager {
 
     @Override
     public UserJoinChatRoom addJoinRecord(User joiner, ChatRoom room) {
-        UserJoinChatRoom record = joinChatRoomMapper.selectOneByUserIdAndRoomId(joiner.getTbId(), room.getTbId());
-        if (record != null) {
-            record.setUpdateTime(new Date());
-            record.setStatus(StatusEnum.NORMAL);
-            joinChatRoomMapper.updateByPrimaryKey(record);
-        } else {
-            record = new UserJoinChatRoom();
-            record.setCreateTime(new Date());
-            record.setJoinTime(new Date());
-            record.setUpdateTime(new Date());
-            record.setRoomId(room.getTbId());
-            record.setStatus(StatusEnum.NORMAL);
-            record.setUserId(joiner.getTbId());
-            joinChatRoomMapper.insert(record);
-        }
+        UserJoinChatRoom record = new UserJoinChatRoom();
+        record.setCreateTime(new Date());
+        record.setJoinTime(new Date());
+        record.setUpdateTime(new Date());
+        record.setRoomId(room.getTbId());
+        record.setStatus(StatusEnum.NORMAL);
+        record.setUserId(joiner.getTbId());
+
+        joinChatRoomMapper.insert(record);
         log.debug("{} 加入聊天室", room.getUserId());
+
         return record;
     }
 }

@@ -1,19 +1,15 @@
 package xin.stxkfzx.weekend.mapper;
 
-
-import org.springframework.stereotype.Repository;
-import xin.stxkfzx.weekend.entity.VideoShare;
+import xin.stxkfzx.weekend.entity.Record;
 
 /**
- * 
- * 
  * @author fmy
- * @date 2019-04-10 22:09 
+ * @date 2019-04-10 22:09
  */
-@Repository
-public interface VideoShareMapper {
+public interface RecordMapper {
     /**
      * delete by primary key
+     *
      * @param tbId primaryKey
      * @return deleteCount
      */
@@ -21,37 +17,41 @@ public interface VideoShareMapper {
 
     /**
      * insert record to table
+     *
      * @param record the record
      * @return insert count
      */
-    int insert(VideoShare record);
+    int insert(Record record);
 
     /**
      * insert record to table selective
+     *
      * @param record the record
      * @return insert count
      */
-    int insertSelective(VideoShare record);
+    int insertSelective(Record record);
 
     /**
      * select by primary key
+     *
      * @param tbId primary key
      * @return object by primary key
      */
-    VideoShare selectByPrimaryKey(Integer tbId);
+    Record selectByPrimaryKey(Integer tbId);
 
     /**
      * update record
+     *
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKeySelective(VideoShare record);
+    int updateByPrimaryKeySelective(Record record);
 
     /**
      * update record selective
+     *
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKey(VideoShare record);
-
+    int updateByPrimaryKey(Record record);
 }

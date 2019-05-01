@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
+ * 加密相关
+ *
  * @author VicterTian
  * @version V1.0
  * @date 2019/4/15
@@ -30,7 +32,7 @@ public class CodecUtils {
     }
 
     /**
-     * 通过用户的注册时间生成盐值
+     * 简单通过用户昵称生成盐值
      *
      * @return 生成的盐值
      */

@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xin.stxkfzx.weekend.annotation.PassToken;
 import xin.stxkfzx.weekend.config.JwtProperties;
 import xin.stxkfzx.weekend.entity.UserBase;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
@@ -54,7 +55,8 @@ public class AuthController {
      * @author ViterTian
      * @date 2019-04-13
      */
-    @PostMapping("accredit")
+    @PassToken
+    @PostMapping("/accredit")
     public ResponseEntity<Void> login(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
@@ -69,7 +71,7 @@ public class AuthController {
         }
         logger.info("【授权中心】生成token为：{}", token);
         response.setHeader("Authorization", token);
-        redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(token, userBase, 30000, TimeUnit.HOURS);
         return ResponseEntity.ok().build();
     }
 
@@ -81,6 +83,7 @@ public class AuthController {
      * @author ViterTian
      * @date 2019-04-13
      */
+    @PassToken
     @GetMapping("verify")
     public ResponseEntity<UserBase> verifyUser(@RequestHeader("Authorization") String token, HttpServletResponse response) {
         try {
@@ -89,7 +92,7 @@ public class AuthController {
             String newToken = JwtUtils.generateToken(userBase, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
             // 将新的Token信息设置在Header的Authorization里,并保存在Redis中
             response.setHeader("Authorization", newToken);
-            redisTemplate.opsForValue().set(token, userBase, 30, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(token, userBase, 30000, TimeUnit.HOURS);
             return ResponseEntity.ok(userBase);
         } catch (Exception e) {
             // Token无效
