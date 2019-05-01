@@ -7,6 +7,7 @@ import java.util.Date;
  * @date 2019-04-10 22:09
  */
 public class VideoShare {
+
     private Integer tbId;
 
     private String url;

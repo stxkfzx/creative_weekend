@@ -7,9 +7,13 @@ package xin.stxkfzx.weekend.controller;/***
  */
 
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import xin.stxkfzx.weekend.entity.Raiders;
 import xin.stxkfzx.weekend.entity.RaidersContent;
+import xin.stxkfzx.weekend.entity.ResultBean;
+import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.service.RaidersService;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -27,15 +31,15 @@ public class RaidersController {
     }
 
     /**
-     *
+     * 新增攻略
      * @param raidersPar    攻略对象
      * @param raidersContent    攻略内容
-     * @return
+     * @return ResponseEntity<ResultBean<Raiders>>
      * @author krjaydog
      * @date 2019-04-30 10:13
      */
-    public Raiders addRaiders(Raiders raidersPar, RaidersContent raidersContent){
-        Raiders raiders = raidersService.addRaiders(raidersPar);
-        return raiders;
+    public ResponseEntity<ResultBean<Raiders>> addRaiders(Raiders raidersPar, RaidersContent raidersContent){
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResultBean<>(StatusEnum.SUCCESS,
+                raidersService.addRaiders(raidersPar, raidersContent)));
     }
 }

@@ -1,6 +1,7 @@
 package xin.stxkfzx.weekend.service;
 
 import xin.stxkfzx.weekend.entity.Raiders;
+import xin.stxkfzx.weekend.entity.RaidersContent;
 
 /**
  * ClassName:RaidersService
@@ -12,5 +13,6 @@ import xin.stxkfzx.weekend.entity.Raiders;
  */
 
 public interface RaidersService {
-    public Raiders addRaiders(Raiders raidersPar);
+    public Raiders addRaiders(Raiders raidersPar, RaidersContent raidersContent);
+
 }

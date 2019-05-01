@@ -37,5 +37,4 @@ public class VideoShareController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResultBean<>(StatusEnum.SUCCESS,
                 videoShareService.insertVideoShare(videoShare)));
     }
-
 }

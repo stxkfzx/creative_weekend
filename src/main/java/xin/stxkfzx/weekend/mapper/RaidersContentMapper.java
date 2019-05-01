@@ -1,6 +1,7 @@
 package xin.stxkfzx.weekend.mapper;
 
 
+import org.springframework.stereotype.Repository;
 import xin.stxkfzx.weekend.entity.RaidersContent;
 
 /**
@@ -9,6 +10,7 @@ import xin.stxkfzx.weekend.entity.RaidersContent;
  * @author fmy
  * @date 2019-04-10 22:09 
  */
+@Repository
 public interface RaidersContentMapper {
     /**
      * delete by primary key
