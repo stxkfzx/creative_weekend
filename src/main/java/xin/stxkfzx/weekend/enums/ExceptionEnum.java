@@ -102,6 +102,10 @@ public enum ExceptionEnum {
      * 分类Id不存在
      */
     CATEGORY_ID_NOT_EXIST(500, "分类Id不存在"),
+    /**
+     * 内容没查到
+     */
+    CONTENT_NOT_FOUND(404, "内容没查到"),
 
     ;
 

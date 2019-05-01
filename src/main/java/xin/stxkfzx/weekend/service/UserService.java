@@ -50,4 +50,12 @@ public interface UserService {
      * @date 2019-04-16
      */
     Boolean checkNickName(String nickname);
+
+    /**
+     * 检测用户id是否存在
+     *
+     * @param userId userId
+     * @return boolean
+     */
+    Boolean checkUserId(Integer userId);
 }
