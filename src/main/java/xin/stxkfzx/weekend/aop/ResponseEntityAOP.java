@@ -22,7 +22,7 @@ import xin.stxkfzx.weekend.enums.StatusEnum;
 public class ResponseEntityAOP {
     private static final Logger log = LoggerFactory.getLogger(ResponseEntityAOP.class);
 
-    @Pointcut("execution(public org.springframework.http.ResponseEntity xin.stxkfzx.weekend.*.controller.*.*(..))")
+    @Pointcut("execution(public org.springframework.http.ResponseEntity xin.stxkfzx.weekend.controller.*.*(..))")
     public void pointcut() {
     }
 
