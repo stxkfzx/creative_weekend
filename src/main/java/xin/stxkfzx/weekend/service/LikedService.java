@@ -1,7 +1,7 @@
 package xin.stxkfzx.weekend.service;
 
 import xin.stxkfzx.weekend.entity.Liked;
-import xin.stxkfzx.weekend.entity.PageResult;
+import xin.stxkfzx.weekend.vo.PageVO;
 
 import java.util.List;
 
@@ -30,14 +30,14 @@ public interface LikedService {
      * @param likedUserId 被点赞人的id
      * @return
      */
-    PageResult<Liked> getLikedListByLikedUserId(String likedUserId);
+    PageVO<Liked> getLikedListByLikedUserId(String likedUserId);
 
     /**
      * 根据点赞人的id查询点赞列表（即查询这个人都给谁点赞过）
      * @param likedPostId
      * @return
      */
-    PageResult<Liked> getLikedListByLikedPostId(String likedPostId);
+    PageVO<Liked> getLikedListByLikedPostId(String likedPostId);
 
     /**
      * 通过被点赞人和点赞人id查询是否存在点赞记录

@@ -3,13 +3,10 @@ package xin.stxkfzx.weekend.util;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import xin.stxkfzx.weekend.dto.LikedCountDTO;
 import xin.stxkfzx.weekend.entity.Liked;
 import xin.stxkfzx.weekend.enums.LikedStatusEnum;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +27,11 @@ import java.util.Map;
  * @version V1.0
  * @date 2019/4/29
  */
-@Service
 public class LikedServiceRedisUtils {
+    private LikedServiceRedisUtils() {
+    }
 
-    @Resource
-    private RedisTemplate<Object, Object> redisTemplate;
+    private static final RedisTemplate<String, ?> redisTemplate = (RedisTemplate<String, ?>) ApplicationContextUtil.getBean("redisTemplate");
 
     /**
      * 保存用户点赞数据的key
@@ -44,6 +41,11 @@ public class LikedServiceRedisUtils {
      * 保存用户被点赞数量的key
      */
     public static final String MAP_KEY_USER_LIKED_COUNT = "MAP_USER_LIKED_COUNT";
+    /**
+     * 保存内容被点赞数量的key
+     */
+    public static final String MAP_KEY_CONTENT_LIKED_COUNT = "MAP_KEY_CONTENT_LIKED_COUNT";
+
 
     /**
      * 拼接被点赞的模块+点赞的用户id+点赞的内容的id作为key。格式 video::userId::videoId
@@ -53,7 +55,7 @@ public class LikedServiceRedisUtils {
      * @param likeContentId 点赞内容id
      * @return String
      */
-    public static String getLikedKey(String module, String likedUserId, String likeContentId) {
+    public static <T> String getLikedKey(T module, T likedUserId, T likeContentId) {
         return module + "::" + likedUserId + "::" + likeContentId;
     }
 
@@ -66,8 +68,8 @@ public class LikedServiceRedisUtils {
      * @author ViterTian
      * @date 2019-05-02
      */
-    public void saveLiked2Redis(String module, String likedUserId, String likeContentId) {
-        String key = getLikedKey(module, likedUserId, likeContentId);
+    public static <T> void saveLiked2Redis(T module, T likedUserId, T likeContentId) {
+        String key = getLikedKey(String.valueOf(module), String.valueOf(likedUserId), String.valueOf(likeContentId));
         redisTemplate.opsForHash().put(MAP_KEY_USER_LIKED, key, LikedStatusEnum.UNLIKE.getCode());
     }
 
@@ -80,8 +82,8 @@ public class LikedServiceRedisUtils {
      * @author ViterTian
      * @date 2019-05-02
      */
-    public void unlikeFromRedis(String module, String likedUserId, String likeContentId) {
-        String key = getLikedKey(module, likedUserId, likeContentId);
+    public static <T> void unlikeFromRedis(T module, T likedUserId, T likeContentId) {
+        String key = getLikedKey(String.valueOf(module), String.valueOf(likedUserId), String.valueOf(likeContentId));
         redisTemplate.opsForHash().put(MAP_KEY_USER_LIKED, key, LikedStatusEnum.UNLIKE.getCode());
     }
 
@@ -89,39 +91,60 @@ public class LikedServiceRedisUtils {
      * 从Redis中删除一条点赞数据
      *
      * @param module        被点赞模块
-     * @param likedUserId   被点赞的人id
+     * @param likedUserId   点赞的人id
      * @param likeContentId 点赞内容id
      * @author ViterTian
      * @date 2019-05-02
      */
-    public void deleteLikedFromRedis(String module, String likedUserId, String likeContentId) {
-        String key = getLikedKey(module, likedUserId, likeContentId);
+    public static <T> void deleteLikedFromRedis(T module, T likedUserId, T likeContentId) {
+        String key = getLikedKey(String.valueOf(module), String.valueOf(likedUserId), String.valueOf(likeContentId));
         redisTemplate.opsForHash().delete(MAP_KEY_USER_LIKED, key);
     }
 
     /**
-     * 该用户的点赞数加1
+     * 该用户的被点赞数加1
      *
-     * @param module      被点赞模块
      * @param likedUserId 被点赞的人id
      * @author ViterTian
      * @date 2019-05-02
      */
-    public void incrementLikedCount(String module, String likedUserId) {
-        redisTemplate.opsForHash().increment(MAP_KEY_USER_LIKED_COUNT, likedUserId, 1);
+    public static <T> void incrementLikedCount(T likedUserId) {
+        redisTemplate.opsForHash().increment(MAP_KEY_USER_LIKED_COUNT, String.valueOf(likedUserId), 1);
     }
 
     /**
-     * 该用户的点赞数减1
+     * 该用户的被点赞数减1
      *
-     * @param module      被点赞模块
      * @param likedUserId 被点赞的人id
      * @author ViterTian
      * @date 2019-05-02
      */
-    public void decrementLikedCount(String module, String likedUserId) {
-        redisTemplate.opsForHash().increment(MAP_KEY_USER_LIKED_COUNT, likedUserId, -1);
+    public static <T> void decrementLikedCount(T likedUserId) {
+        redisTemplate.opsForHash().increment(MAP_KEY_USER_LIKED_COUNT, String.valueOf(likedUserId), -1);
     }
+
+    /**
+     * 该内容的被点赞数加1
+     *
+     * @param likeContentId 被点赞的模块id
+     * @author ViterTian
+     * @date 2019-05-02
+     */
+    public static <T> void incrementContentLikedCount(T likeContentId) {
+        redisTemplate.opsForHash().increment(MAP_KEY_CONTENT_LIKED_COUNT, String.valueOf(likeContentId), 1);
+    }
+
+    /**
+     * 该内容的被点赞数减1
+     *
+     * @param likeContentId 被点赞的模块id
+     * @author ViterTian
+     * @date 2019-05-02
+     */
+    public static <T> void decrementContentLikedCount(T likeContentId) {
+        redisTemplate.opsForHash().increment(MAP_KEY_CONTENT_LIKED_COUNT, String.valueOf(likeContentId), -1);
+    }
+
 
     /**
      * 获取Redis中存储的所有点赞数据
@@ -129,7 +152,7 @@ public class LikedServiceRedisUtils {
      * @author ViterTian
      * @date 2019-05-02
      */
-    public List<Liked> getLikedDataFromRedis() {
+    public static List<Liked> getLikedDataFromRedis() {
         Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(MAP_KEY_USER_LIKED, ScanOptions.NONE);
         List<Liked> list = new ArrayList<>();
         while (cursor.hasNext()) {
@@ -159,18 +182,31 @@ public class LikedServiceRedisUtils {
      * @author ViterTian
      * @date 2019-05-02
      */
-    public List<LikedCountDTO> getLikedCountFromRedis() {
+    public static List<LikedCountDTO> getLikedCountFromRedis() {
         Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(MAP_KEY_USER_LIKED_COUNT, ScanOptions.NONE);
         List<LikedCountDTO> list = new ArrayList<>();
         while (cursor.hasNext()) {
             Map.Entry<Object, Object> map = cursor.next();
-            //将点赞数量存储在 LikedCountDT
+            // 将点赞数量存储在 LikedCountDT
             String key = (String) map.getKey();
             LikedCountDTO dto = new LikedCountDTO(key, (Integer) map.getValue());
             list.add(dto);
-            //从Redis中删除这条记录
+            // 从Redis中删除这条记录
             redisTemplate.opsForHash().delete(MAP_KEY_USER_LIKED_COUNT, key);
         }
         return list;
+    }
+
+    /**
+     * 获取分享视频的点赞数
+     *
+     * @param id 视频id
+     * @return 点赞数量
+     * @author ViterTian
+     * @date 2019-05-02
+     */
+    public static Integer getLikeNum(Integer id) {
+        Integer integer = (Integer) redisTemplate.opsForHash().get(MAP_KEY_CONTENT_LIKED_COUNT, id.toString());
+        return integer == null ? 0 : integer;
     }
 }

@@ -47,4 +47,13 @@ public class LikedCountDTO {
         this.likedModule = likedModule;
         this.count = count;
     }
+
+    @Override
+    public String toString() {
+        return "LikedCountDTO{" +
+                "id=" + id +
+                ", likedModule='" + likedModule + '\'' +
+                ", count=" + count +
+                '}';
+    }
 }

@@ -1,11 +1,12 @@
 package xin.stxkfzx.weekend.convert;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import xin.stxkfzx.weekend.entity.*;
 import xin.stxkfzx.weekend.vo.activity.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author fmy
