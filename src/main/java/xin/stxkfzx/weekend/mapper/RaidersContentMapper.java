@@ -14,7 +14,7 @@ import xin.stxkfzx.weekend.entity.RaidersContent;
 public interface RaidersContentMapper {
     /**
      * delete by primary key
-     * @param tbtbId primaryKey
+     * @param tbId primaryKey
      * @return deleteCount
      */
     int deleteByPrimaryKey(Integer tbId);
@@ -35,7 +35,7 @@ public interface RaidersContentMapper {
 
     /**
      * select by primary key
-     * @param tbtbId primary key
+     * @param tbId primary key
      * @return object by primary key
      */
     RaidersContent selectByPrimaryKey(Integer tbId);

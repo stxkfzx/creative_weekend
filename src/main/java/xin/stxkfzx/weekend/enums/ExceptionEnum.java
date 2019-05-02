@@ -106,9 +106,11 @@ public enum ExceptionEnum {
      * 内容没查到
      */
     CONTENT_NOT_FOUND(404, "内容没查到"),
-
-    ;
-
+    /**
+     * 新增攻略失败
+     */
+    ADD_Raiders_FAILED(703, "新增攻略失败"),
+     ;
 
     private Integer code;
     private String msg;
