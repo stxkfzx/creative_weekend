@@ -1,6 +1,7 @@
 package xin.stxkfzx.weekend.handle;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             userBase = JwtUtils.getUserBase(jwtProperties.getPublicKey(), token);
         } catch (JWTDecodeException j) {
             throw new UnLoginException("token无效，请重新登录");
+        }catch (ExpiredJwtException e){
+            throw new UnLoginException("token过期，请重新登录");
         }
         UserBase user = authServiceImpl.findUserById(userBase.getId());
         CheckUtils.notNull(user, ExceptionEnum.USER_NOT_EXIST);

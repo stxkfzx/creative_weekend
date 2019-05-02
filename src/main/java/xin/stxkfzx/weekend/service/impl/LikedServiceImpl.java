@@ -2,11 +2,9 @@ package xin.stxkfzx.weekend.service.impl;
 
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
-import xin.stxkfzx.weekend.dto.LikedCountDTO;
 import xin.stxkfzx.weekend.entity.Liked;
-import xin.stxkfzx.weekend.entity.PageResult;
 import xin.stxkfzx.weekend.service.LikedService;
-import xin.stxkfzx.weekend.util.LikedServiceRedisUtils;
+import xin.stxkfzx.weekend.vo.PageVO;
 
 import java.util.List;
 
@@ -18,20 +16,14 @@ import java.util.List;
 @Service
 @EnableScheduling
 public class LikedServiceImpl implements LikedService {
-    private final LikedServiceRedisUtils redisUtils;
-
-    public LikedServiceImpl(LikedServiceRedisUtils redisUtils) {
-        this.redisUtils = redisUtils;
-    }
-
     /**
      * 保存点赞记录
      *
-     * @param userLike
+     * @param liked
      * @return
      */
     @Override
-    public Liked save(Liked userLike) {
+    public Liked save(Liked liked) {
         return null;
     }
 
@@ -52,7 +44,7 @@ public class LikedServiceImpl implements LikedService {
      * @return
      */
     @Override
-    public PageResult<Liked> getLikedListByLikedUserId(String likedUserId) {
+    public PageVO<Liked> getLikedListByLikedUserId(String likedUserId) {
         return null;
     }
 
@@ -63,7 +55,7 @@ public class LikedServiceImpl implements LikedService {
      * @return
      */
     @Override
-    public PageResult<Liked> getLikedListByLikedPostId(String likedPostId) {
+    public PageVO<Liked> getLikedListByLikedPostId(String likedPostId) {
         return null;
     }
 
@@ -84,7 +76,7 @@ public class LikedServiceImpl implements LikedService {
      */
     @Override
     public void transLikedFromRedis2DB() {
-        List<Liked> list = redisUtils.getLikedDataFromRedis();
+        /*List<Liked> list = redisUtils.getLikedDataFromRedis();
         for (Liked like : list) {
             Liked ul = getByLikedUserIdAndLikedPostId(like.getLikedContentId(), like.getLikedPostId());
             if (ul == null) {
@@ -95,7 +87,7 @@ public class LikedServiceImpl implements LikedService {
                 ul.setStatus(like.getStatus());
                 save(ul);
             }
-        }
+        }*/
 
     }
 
@@ -104,9 +96,9 @@ public class LikedServiceImpl implements LikedService {
      */
     @Override
     public void transLikedCountFromRedis2DB() {
-        List<LikedCountDTO> list = redisUtils.getLikedCountFromRedis();
+       /* List<LikedCountDTO> list = redisUtils.getLikedCountFromRedis();
         for (LikedCountDTO dto : list) {
             //更新点赞数量
-        }
+        }*/
     }
 }

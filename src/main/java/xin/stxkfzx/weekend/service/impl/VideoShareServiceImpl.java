@@ -8,7 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import xin.stxkfzx.weekend.entity.PageResult;
+import xin.stxkfzx.weekend.convert.PageConvert;
+import xin.stxkfzx.weekend.convert.VideoShare2VideoShareVO;
 import xin.stxkfzx.weekend.entity.VideoShare;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.WeekendException;
@@ -16,10 +17,16 @@ import xin.stxkfzx.weekend.mapper.VideoShareMapper;
 import xin.stxkfzx.weekend.service.ShareCategoryService;
 import xin.stxkfzx.weekend.service.UserService;
 import xin.stxkfzx.weekend.service.VideoShareService;
+import xin.stxkfzx.weekend.util.LikedServiceRedisUtils;
+import xin.stxkfzx.weekend.vo.PageVO;
+import xin.stxkfzx.weekend.vo.VideoShareVO;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static xin.stxkfzx.weekend.util.LikedServiceRedisUtils.MAP_KEY_USER_LIKED;
 
 /**
  * @author VicterTian
@@ -29,16 +36,20 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class VideoShareServiceImpl implements VideoShareService {
     private Logger logger = LoggerFactory.getLogger(VideoShareServiceImpl.class);
-    private final RedisTemplate redisTemplate;
+    @Resource
+    private RedisTemplate<Object, Object> redisTemplate;
+    private final VideoShare2VideoShareVO videoShareVO;
+    private final PageConvert pageConvert;
     private final ShareCategoryService shareCategoryService;
     private final VideoShareMapper videoShareMapper;
     private final UserService userService;
 
-    public VideoShareServiceImpl(VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService, RedisTemplate redisTemplate) {
+    public VideoShareServiceImpl(PageConvert pageConvert, VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService, VideoShare2VideoShareVO videoShareVO) {
+        this.pageConvert = pageConvert;
         this.videoShareMapper = videoShareMapper;
         this.shareCategoryService = shareCategoryService;
         this.userService = userService;
-        this.redisTemplate = redisTemplate;
+        this.videoShareVO = videoShareVO;
     }
 
     @Override
@@ -66,20 +77,21 @@ public class VideoShareServiceImpl implements VideoShareService {
     }
 
     @Override
-    public PageResult<VideoShare> queryVideoShare(Integer page, Integer rows) {
+    public PageVO queryVideoShare(Integer page, Integer rows) {
         PageHelper.startPage(page, rows);
         List<VideoShare> list = videoShareMapper.queryAll();
         if (CollectionUtils.isEmpty(list)) {
             throw new WeekendException(ExceptionEnum.CONTENT_NOT_FOUND);
         }
+        List<VideoShareVO> voList = videoShareVO.videoShareToVideoShareVO(list);
         PageInfo<VideoShare> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(pageInfo.getTotal(), pageInfo.getPages(), list);
+        return pageConvert.fromPageInfo(pageInfo, voList);
     }
 
     @Override
-    public VideoShare queryById(Integer id) {
+    public VideoShareVO queryById(Integer id) {
         // 先通过redis查询
-        VideoShare videoShare = (VideoShare) redisTemplate.opsForValue().get(id + "");
+        VideoShare videoShare = (VideoShare) redisTemplate.opsForValue().get(id.toString());
         // 如果查不到再通过数据库查询
         if (videoShare == null) {
             logger.warn("视频{}未从redis中获取数据", id);
@@ -88,13 +100,14 @@ public class VideoShareServiceImpl implements VideoShareService {
                 throw new WeekendException(ExceptionEnum.CONTENT_NOT_FOUND);
             }
             // 设置redis过期时间为6小时
-            redisTemplate.opsForValue().set(id + "", videoShare, 6, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set(id.toString(), videoShare, 6, TimeUnit.HOURS);
         }
-        return videoShare;
+        // 开始转换VO，并从redis中查询当前食品内容点赞数并放入VO
+        return videoShareVO.videoShareToVideoShareVO(videoShare);
     }
 
     @Override
-    public PageResult<VideoShare> queryByUserId(Integer userId, Integer page, Integer rows) {
+    public PageVO queryByUserId(Integer userId, Integer page, Integer rows) {
         PageHelper.startPage(page, rows);
         List<VideoShare> list = videoShareMapper.selectByUserId(userId);
         if (CollectionUtils.isEmpty(list)) {
@@ -102,12 +115,28 @@ public class VideoShareServiceImpl implements VideoShareService {
             throw new WeekendException(ExceptionEnum.CONTENT_NOT_FOUND);
         }
         PageInfo<VideoShare> pageInfo = new PageInfo<>(list);
-        return new PageResult<>(pageInfo.getTotal(), pageInfo.getPages(), list);
+        return pageConvert.fromPageInfo(pageInfo,list);
     }
 
     @Override
-    public Boolean likeVideo(Integer id) {
-//        redisTemplate.opsForValue().setBit(id,)
-        return null;
+    public Boolean likeVideo(Integer id, Integer userId) {
+        String key = LikedServiceRedisUtils.getLikedKey("video", userId, id);
+        if (redisTemplate.opsForHash().hasKey(MAP_KEY_USER_LIKED, key)) {
+            // 说明此用户已经为这条视频点过赞了，再点为取消点赞
+            LikedServiceRedisUtils.unlikeFromRedis("video", userId, id);
+            // 为当前内容的总点赞数减一
+            LikedServiceRedisUtils.decrementContentLikedCount(id);
+            // 取消点赞后将该记录删除
+            LikedServiceRedisUtils.deleteLikedFromRedis("video", userId, id);
+            logger.info("用户{}为{}视频取消点赞成功", userId, id);
+        } else {
+            // 说明此用户没有为这条数据点赞，设置为已点赞状态
+            LikedServiceRedisUtils.saveLiked2Redis("video", userId, id);
+            // 为当前内容的总点赞数加一
+            LikedServiceRedisUtils.incrementContentLikedCount(id);
+            logger.info("用户{}为{}视频点赞成功", userId, id);
+        }
+        return true;
     }
+
 }
