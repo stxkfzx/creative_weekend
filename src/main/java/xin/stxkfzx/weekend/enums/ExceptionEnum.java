@@ -129,7 +129,8 @@ public enum ExceptionEnum {
     /**
      * 更新攻略失败
      */
-    UPDATE_RAIDERS_FAILED(702, "更新攻略失败");
+    UPDATE_RAIDERS_FAILED(702, "更新攻略失败")
+    ;
 
 
     private Integer code;
