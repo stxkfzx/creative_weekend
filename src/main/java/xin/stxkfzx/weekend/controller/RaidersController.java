@@ -1,10 +1,4 @@
-package xin.stxkfzx.weekend.controller;/***
- * ClassName:RaidersController
- * Package:xin.stxkfzx.weekend.online.controller
- * Description:
- * @Date:2019/4/12 0012 17:02
- * @Author:krj@bjpowernode.com
- */
+package xin.stxkfzx.weekend.controller;
 
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;

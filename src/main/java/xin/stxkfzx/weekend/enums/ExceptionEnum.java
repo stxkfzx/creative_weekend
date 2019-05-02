@@ -125,11 +125,11 @@ public enum ExceptionEnum {
     /**
      * 新增攻略失败
      */
-    ADD_Raiders_FAILED(703, "新增攻略失败"),
+    ADD_RAIDERS_FAILED(703, "新增攻略失败"),
     /**
      * 更新攻略失败
      */
-    UPDATE_Raiders_FAILED(702, "更新攻略失败");
+    UPDATE_RAIDERS_FAILED(702, "更新攻略失败");
 
 
     private Integer code;

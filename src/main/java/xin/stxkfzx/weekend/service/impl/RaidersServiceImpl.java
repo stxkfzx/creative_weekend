@@ -1,10 +1,4 @@
-package xin.stxkfzx.weekend.service.impl;/***
- * ClassName:RadersServiceImpl
- * Package:xin.stxkfzx.weekend.service.impl
- * Description:
- * @Date:2019/4/12 0012 17:36
- * @Author:krj@bjpowernode.com
- */
+package xin.stxkfzx.weekend.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +56,7 @@ public class RaidersServiceImpl implements RaidersService {
             return raiders;
         } else {
             logger.error("新增攻略{}失败.", raiders);
-            throw new WeekendException(ExceptionEnum.ADD_Raiders_FAILED);
+            throw new WeekendException(ExceptionEnum.ADD_RAIDERS_FAILED);
         }
     }
 
@@ -75,7 +69,7 @@ public class RaidersServiceImpl implements RaidersService {
             logger.info("更新攻略{}成功.", raiders);
         }else{
             logger.error("更新攻略{}失败.", raiders);
-            throw new WeekendException(ExceptionEnum.UPDATE_Raiders_FAILED);
+            throw new WeekendException(ExceptionEnum.UPDATE_RAIDERS_FAILED);
         }
     }
 }
