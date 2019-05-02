@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,6 @@ import xin.stxkfzx.weekend.mapper.VideoShareMapper;
 import xin.stxkfzx.weekend.service.ShareCategoryService;
 import xin.stxkfzx.weekend.service.UserService;
 import xin.stxkfzx.weekend.service.VideoShareService;
-import xin.stxkfzx.weekend.util.RedisUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -32,16 +30,14 @@ import java.util.concurrent.TimeUnit;
 public class VideoShareServiceImpl implements VideoShareService {
     private Logger logger = LoggerFactory.getLogger(VideoShareServiceImpl.class);
     private final RedisTemplate redisTemplate;
-    private final RedisUtil redisUtil;
     private final ShareCategoryService shareCategoryService;
     private final VideoShareMapper videoShareMapper;
     private final UserService userService;
 
-    public VideoShareServiceImpl(VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService, RedisUtil redisUtil, RedisTemplate redisTemplate) {
+    public VideoShareServiceImpl(VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService, RedisTemplate redisTemplate) {
         this.videoShareMapper = videoShareMapper;
         this.shareCategoryService = shareCategoryService;
         this.userService = userService;
-        this.redisUtil = redisUtil;
         this.redisTemplate = redisTemplate;
     }
 

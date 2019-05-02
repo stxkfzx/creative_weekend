@@ -1,9 +1,11 @@
 package xin.stxkfzx.weekend.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import xin.stxkfzx.weekend.BaseTest;
 import xin.stxkfzx.weekend.entity.Activity;
+import xin.stxkfzx.weekend.entity.ActivityDetail;
 import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.exception.CheckException;
 import xin.stxkfzx.weekend.exception.SqlException;
@@ -14,12 +16,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 /**
  * @author fmy
  * @date 2019-04-15 11:05
  */
-public class ServiceImplTest extends BaseTest {
+public class ActivityServiceImplTest extends BaseTest {
     @Autowired
     private ActivityService service;
 
@@ -73,6 +76,14 @@ public class ServiceImplTest extends BaseTest {
 
     @Test
     public void listActivityWithPage() {
+        ActivityExpand expand = service.listActivityWithPage(null, 1, 2);
+        PageInfo<?> page =  expand.getPage();
+        assertNotNull(page);
+        assertEquals(page.getSize(), 2);
+
+        expand = service.listActivityWithPage(new Activity(), 1, 2);
+        assertNotNull(expand.getPage());
+        assertEquals(expand.getPage().getSize(), 2);
     }
 
     @Test
