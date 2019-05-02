@@ -17,6 +17,16 @@ public enum StatusEnum {
     SUCCESS(100, "success"),
 
     /**
+     * 加入状态
+     */
+    RECORD_JOIN(2, "join status"),
+
+    /**
+     * 退出状态
+     */
+    RECORD_EXIT(-2, "exit status"),
+
+    /**
      * 被删除数据状态
      */
     DELETE(-1, "delete status"),

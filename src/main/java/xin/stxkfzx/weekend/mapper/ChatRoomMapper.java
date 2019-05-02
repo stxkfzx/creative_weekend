@@ -56,5 +56,6 @@ public interface ChatRoomMapper {
 
     ChatRoom selectOneByActivateId(@Param("activateId")Integer activateId);
 
+    int updateByActivateId(@Param("updated")ChatRoom updated,@Param("activateId")Integer activateId);
 
 }

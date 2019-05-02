@@ -21,4 +21,13 @@ public interface ActivityManager {
     Activity addActivity(Activity activity);
 
 
+    /**
+     * 删除活动加入记录
+     *
+     * @param activity 活动
+     * @return 删除记录条数
+     * @author fmy
+     * @date 2019-05-02 16:13
+     */
+    int deleteJoinActivityRecord(Activity activity);
 }

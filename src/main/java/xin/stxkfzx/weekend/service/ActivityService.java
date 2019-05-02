@@ -29,9 +29,9 @@ public interface ActivityService {
     /**
      * 加入活动
      *
-     * @param user
-     * @param activity
-     * @return
+     * @param user     加入者
+     * @param activity 加入活动
+     * @return 加入活动记录
      * @author fmy
      * @date 2019-04-16 19:54
      */
@@ -40,8 +40,8 @@ public interface ActivityService {
     /**
      * 退出活动
      *
-     * @param user
-     * @param activity
+     * @param user     退出者
+     * @param activity 退出的活动
      * @return
      * @author fmy
      * @date 2019-04-16 19:55
@@ -51,8 +51,8 @@ public interface ActivityService {
     /**
      * 根据状态和Id获取指定活动
      *
-     * @param activityId
-     * @param status
+     * @param activityId 活动Id
+     * @param status     状态
      * @return 指定活动，如果没有则返回null
      * @author fmy
      * @date 2019-04-16 19:56
@@ -74,24 +74,13 @@ public interface ActivityService {
     /**
      * 删除活动
      *
-     * @param user
-     * @param activity
-     * @return
+     * @param user 删除者
+     * @param activity 删除的活动
+     * @return 删除状态
      * @author fmy
      * @date 2019-04-18 19:32
      */
     ActivityExpand deleteActivity(User user, Activity activity);
-
-    /**
-     * 删除活动记录，如果user是活动创建者，将删除整个活动记录
-     *
-     * @param user
-     * @param activity
-     * @return
-     * @author fmy
-     * @date 2019-04-19 9:27
-     */
-    ActivityExpand deleteJoinRecord(User user, Activity activity);
 
     /**
      * 获取活动加入记录

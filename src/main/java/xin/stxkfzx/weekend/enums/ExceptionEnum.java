@@ -87,6 +87,21 @@ public enum ExceptionEnum {
     ACTIVATE_CREATE_FAIL(602, "活动创建失败"),
 
     /**
+     * 已加入
+     */
+    HAD_JOIN(603, "用户已加入"),
+
+    /**
+     * 记录不存在
+     */
+    RECORD_NOT_EXIST(604, "记录不存在"),
+
+    /**
+     * 活动创建者不能加入或退出活动
+     */
+    CREATOR_CAN_NOT_JOIN_OR_EXIT_ACTIVITY(605, "活动创建者不能加入或退出活动"),
+
+    /**
      * 文件类型错误
      */
     FILE_TYPE_ERROR(500, "文件类型错误"),
@@ -105,9 +120,8 @@ public enum ExceptionEnum {
     /**
      * 内容没查到
      */
-    CONTENT_NOT_FOUND(404, "内容没查到"),
+    CONTENT_NOT_FOUND(404, "内容没查到");
 
-    ;
 
 
     private Integer code;
@@ -118,8 +132,6 @@ public enum ExceptionEnum {
         this.msg = msg;
     }
 
-    ExceptionEnum() {
-    }
 
     public Integer getCode() {
         return code;

@@ -16,6 +16,7 @@ public class ActivityExpand {
     private ChatRoom chatRoom;
     private UserJoinChatRoom chatRoomRecord;
     private PageInfo<ActivityDetail> page;
+    private boolean success;
 
     public Activity getActivity() {
         return activity;
@@ -69,5 +70,14 @@ public class ActivityExpand {
 
     public PageInfo<ActivityDetail> getPage() {
         return page;
+    }
+
+    public ActivityExpand setSuccess(boolean success) {
+        this.success = success;
+        return this;
+    }
+
+    public boolean getSuccess() {
+        return success;
     }
 }
