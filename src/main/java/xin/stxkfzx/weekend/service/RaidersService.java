@@ -13,6 +13,6 @@ import xin.stxkfzx.weekend.entity.RaidersContent;
  */
 
 public interface RaidersService {
-    public Raiders addRaiders(Raiders raidersPar, RaidersContent raidersContent);
+    public Raiders addRaiders(Raiders raiders, RaidersContent raidersContent);
 
 }

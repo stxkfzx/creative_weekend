@@ -1,5 +1,7 @@
 package xin.stxkfzx.weekend.entity;
 
+import xin.stxkfzx.weekend.enums.StatusEnum;
+
 import java.util.Date;
 
 /**
@@ -61,8 +63,8 @@ public class Raiders {
         return status;
     }
 
-    public void setStatus(Short status) {
-        this.status = status;
+    public void setStatus(StatusEnum status) {
+        this.status = status.getCode().shortValue();
     }
 
     public Integer getCategoryId() {
