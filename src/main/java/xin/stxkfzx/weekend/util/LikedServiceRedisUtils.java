@@ -42,7 +42,7 @@ public class LikedServiceRedisUtils {
      */
     public static final String MAP_KEY_USER_LIKED_COUNT = "MAP_USER_LIKED_COUNT";
     /**
-     * 保存内容被点赞数量的key
+     * 保存视频分享内容被点赞数量的key
      */
     public static final String MAP_KEY_CONTENT_LIKED_COUNT = "MAP_KEY_CONTENT_LIKED_COUNT";
 

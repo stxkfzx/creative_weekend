@@ -22,6 +22,13 @@
     from liked
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByUserIdAndCid" resultType="xin.stxkfzx.weekend.entity.Liked">
+    select
+    <include refid="Base_Column_List" />
+    from liked
+    where liked_content_id = #{id,jdbcType=INTEGER} and liked_post_id = #{userId,jdbcType=INTEGER} and status = 0
+
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
     delete from liked

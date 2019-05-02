@@ -34,7 +34,7 @@ public class VideoShareController {
      * @date 2019-04-30
      */
     @PostMapping("/insert")
-    public ResponseEntity<ResultBean<VideoShare>> insertShareVideo(@RequestBody VideoShare videoShare) {
+    public ResponseEntity<ResultBean<VideoShareVO>> insertShareVideo(@RequestBody VideoShare videoShare) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResultBean<>(StatusEnum.SUCCESS,
                 videoShareService.insertVideoShare(videoShare)));
     }
@@ -66,7 +66,7 @@ public class VideoShareController {
     @PassToken
     @GetMapping("{id}")
     public ResponseEntity<ResultBean<VideoShareVO>> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, videoShareService.queryById(id)));
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS,  videoShareService.queryById(id)));
     }
 
     /**
@@ -79,7 +79,7 @@ public class VideoShareController {
      * @author ViterTian
      * @date 2019-05-01
      */
-    @GetMapping("/myvideo")
+    @GetMapping("/my/video")
     public ResponseEntity<ResultBean<PageVO>> queryByUserId(@RequestParam("id") Integer userId, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "rows", defaultValue = "10") Integer rows) {
         return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, videoShareService.queryByUserId(userId, page, rows)));
     }

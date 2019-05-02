@@ -96,7 +96,7 @@ public class Liked {
         this.updateTime = updateTime;
     }
 
-    public Liked(String likedModule, String likedContentId, String likedPostId, Integer status) {
+    public Liked(String likedModule,  String likedPostId, String likedContentId,Integer status) {
         this.likedModule = likedModule;
         this.likedContentId = likedContentId;
         this.likedPostId = likedPostId;

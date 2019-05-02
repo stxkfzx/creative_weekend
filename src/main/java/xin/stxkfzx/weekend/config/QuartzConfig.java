@@ -27,8 +27,8 @@ public class QuartzConfig {
     @Bean
     public Trigger quartzTrigger() {
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                // TODO: 2019/5/2  改为两个小时执行一次
-                .withIntervalInSeconds(10)
+                // TODO: 2019/5/2  改为24个小时执行一次
+                .withIntervalInHours(24)
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(quartzDetail())
                 .withIdentity(LIKE_TASK_IDENTITY)

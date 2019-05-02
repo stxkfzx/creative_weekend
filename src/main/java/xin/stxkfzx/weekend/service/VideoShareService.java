@@ -18,7 +18,7 @@ public interface VideoShareService {
      * @author ViterTian
      * @date 2019-04-30
      */
-    VideoShare insertVideoShare(VideoShare videoShare);
+    VideoShareVO insertVideoShare(VideoShare videoShare);
 
     /**
      * 查询商品分享

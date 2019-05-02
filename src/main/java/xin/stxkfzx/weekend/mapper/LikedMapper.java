@@ -56,4 +56,15 @@ public interface LikedMapper {
      * @return update count
      */
     int updateByPrimaryKey(Liked record);
+
+    /**
+     * 根据内容id和用户id查询点赞记录
+     *
+     * @param id 内容id
+     * @param userId 用户id
+     * @return Liked
+     * @author ViterTian
+     * @date 2019-05-02
+     */
+    Liked selectByUserIdAndCid(Integer id, Integer userId);
 }

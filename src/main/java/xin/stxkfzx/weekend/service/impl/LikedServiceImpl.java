@@ -1,9 +1,16 @@
 package xin.stxkfzx.weekend.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import xin.stxkfzx.weekend.entity.Liked;
+import xin.stxkfzx.weekend.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.exception.WeekendException;
+import xin.stxkfzx.weekend.mapper.LikedCountMapper;
+import xin.stxkfzx.weekend.mapper.LikedMapper;
 import xin.stxkfzx.weekend.service.LikedService;
+import xin.stxkfzx.weekend.util.LikedServiceRedisUtils;
 import xin.stxkfzx.weekend.vo.PageVO;
 
 import java.util.List;
@@ -16,15 +23,31 @@ import java.util.List;
 @Service
 @EnableScheduling
 public class LikedServiceImpl implements LikedService {
+    private Logger logger = LoggerFactory.getLogger(LikedServiceImpl.class);
+    private final LikedCountMapper likedCountMapper;
+    private final LikedMapper likedMapper;
+
+    public LikedServiceImpl(LikedMapper likedMapper, LikedCountMapper likedCountMapper) {
+        this.likedMapper = likedMapper;
+        this.likedCountMapper = likedCountMapper;
+    }
+
     /**
      * 保存点赞记录
      *
-     * @param liked
-     * @return
+     * @param liked 点赞记录
+     * @return Liked 点赞记录
      */
     @Override
     public Liked save(Liked liked) {
-        return null;
+        int i = likedMapper.insertSelective(liked);
+        if (i == 1) {
+            logger.info("新增{}成功", liked);
+            return liked;
+        } else {
+            logger.error("新增{}失败", liked);
+            throw new WeekendException(ExceptionEnum.USER_SAVE_ERROR);
+        }
     }
 
     /**
@@ -76,18 +99,19 @@ public class LikedServiceImpl implements LikedService {
      */
     @Override
     public void transLikedFromRedis2DB() {
-        /*List<Liked> list = redisUtils.getLikedDataFromRedis();
+        List<Liked> list = LikedServiceRedisUtils.getLikedDataFromRedis();
         for (Liked like : list) {
-            Liked ul = getByLikedUserIdAndLikedPostId(like.getLikedContentId(), like.getLikedPostId());
-            if (ul == null) {
+            Liked liked = getByLikedUserIdAndLikedPostId(like.getLikedPostId(), like.getLikedContentId());
+            if (liked == null) {
                 //没有记录，直接存入
                 save(like);
+
             } else {
                 //有记录，需要更新
-                ul.setStatus(like.getStatus());
-                save(ul);
+                liked.setStatus(like.getStatus());
+                save(liked);
             }
-        }*/
+        }
 
     }
 

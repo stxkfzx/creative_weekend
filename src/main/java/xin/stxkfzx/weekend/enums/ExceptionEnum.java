@@ -18,6 +18,10 @@ public enum ExceptionEnum {
      * 新增用户异常
      */
     USER_SAVE_ERROR(500, "新增用户失败"),
+    /**
+     * 新增点赞记录异常
+     */
+    LIKE_SAVE_ERROR(500, "新增点赞记录异常"),
 
     /**
      * 用户实名认证异常
@@ -110,7 +114,7 @@ public enum ExceptionEnum {
      * 新增攻略失败
      */
     ADD_Raiders_FAILED(703, "新增攻略失败"),
-     ;
+    ;
 
     private Integer code;
     private String msg;

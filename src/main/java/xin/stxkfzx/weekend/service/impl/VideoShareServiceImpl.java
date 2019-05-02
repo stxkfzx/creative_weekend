@@ -4,15 +4,18 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import xin.stxkfzx.weekend.convert.PageConvert;
 import xin.stxkfzx.weekend.convert.VideoShare2VideoShareVO;
+import xin.stxkfzx.weekend.entity.Liked;
 import xin.stxkfzx.weekend.entity.VideoShare;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.WeekendException;
+import xin.stxkfzx.weekend.mapper.LikedMapper;
 import xin.stxkfzx.weekend.mapper.VideoShareMapper;
 import xin.stxkfzx.weekend.service.ShareCategoryService;
 import xin.stxkfzx.weekend.service.UserService;
@@ -38,23 +41,25 @@ public class VideoShareServiceImpl implements VideoShareService {
     private Logger logger = LoggerFactory.getLogger(VideoShareServiceImpl.class);
     @Resource
     private RedisTemplate<Object, Object> redisTemplate;
+    private final LikedMapper likedMapper;
     private final VideoShare2VideoShareVO videoShareVO;
     private final PageConvert pageConvert;
     private final ShareCategoryService shareCategoryService;
     private final VideoShareMapper videoShareMapper;
     private final UserService userService;
 
-    public VideoShareServiceImpl(PageConvert pageConvert, VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService, VideoShare2VideoShareVO videoShareVO) {
+    public VideoShareServiceImpl(PageConvert pageConvert, VideoShareMapper videoShareMapper, ShareCategoryService shareCategoryService, UserService userService, VideoShare2VideoShareVO videoShareVO, LikedMapper likedMapper) {
         this.pageConvert = pageConvert;
         this.videoShareMapper = videoShareMapper;
         this.shareCategoryService = shareCategoryService;
         this.userService = userService;
         this.videoShareVO = videoShareVO;
+        this.likedMapper = likedMapper;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public VideoShare insertVideoShare(VideoShare videoShare) {
+    public VideoShareVO insertVideoShare(VideoShare videoShare) {
         // 校验用户id和分类id及是否合理
         boolean flag = shareCategoryService.checkCategoryId(videoShare.getCategoryId()) && userService.checkUserId(videoShare.getUserId());
         if (!flag) {
@@ -69,7 +74,7 @@ public class VideoShareServiceImpl implements VideoShareService {
         int insert = videoShareMapper.insertSelective(videoShare);
         if (insert == 1) {
             logger.info("新增视频分享{}成功.", videoShare);
-            return videoShare;
+            return videoShareVO.videoShareToVideoShareVO(videoShare);
         } else {
             logger.error("新增视频分享{}失败.", videoShare);
             throw new WeekendException(ExceptionEnum.SHARE_VIDEO_FAILED);
@@ -103,7 +108,7 @@ public class VideoShareServiceImpl implements VideoShareService {
             redisTemplate.opsForValue().set(id.toString(), videoShare, 6, TimeUnit.HOURS);
         }
         // 开始转换VO，并从redis中查询当前食品内容点赞数并放入VO
-        return videoShareVO.videoShareToVideoShareVO(videoShare);
+        return this.videoShareVO.videoShareToVideoShareVO(videoShare);
     }
 
     @Override
@@ -114,13 +119,15 @@ public class VideoShareServiceImpl implements VideoShareService {
             logger.warn("当前用户：{}未发表过分享", userId);
             throw new WeekendException(ExceptionEnum.CONTENT_NOT_FOUND);
         }
+        List<VideoShareVO> videoShareVOS = videoShareVO.videoShareToVideoShareVO(list);
         PageInfo<VideoShare> pageInfo = new PageInfo<>(list);
-        return pageConvert.fromPageInfo(pageInfo,list);
+        return pageConvert.fromPageInfo(pageInfo, videoShareVOS);
     }
 
     @Override
     public Boolean likeVideo(Integer id, Integer userId) {
         String key = LikedServiceRedisUtils.getLikedKey("video", userId, id);
+        // 首先从redis中查询是否有点赞记录
         if (redisTemplate.opsForHash().hasKey(MAP_KEY_USER_LIKED, key)) {
             // 说明此用户已经为这条视频点过赞了，再点为取消点赞
             LikedServiceRedisUtils.unlikeFromRedis("video", userId, id);
@@ -129,13 +136,28 @@ public class VideoShareServiceImpl implements VideoShareService {
             // 取消点赞后将该记录删除
             LikedServiceRedisUtils.deleteLikedFromRedis("video", userId, id);
             logger.info("用户{}为{}视频取消点赞成功", userId, id);
-        } else {
-            // 说明此用户没有为这条数据点赞，设置为已点赞状态
-            LikedServiceRedisUtils.saveLiked2Redis("video", userId, id);
-            // 为当前内容的总点赞数加一
-            LikedServiceRedisUtils.incrementContentLikedCount(id);
-            logger.info("用户{}为{}视频点赞成功", userId, id);
+            return true;
         }
+
+        // 如果在redis中没有查询到有点赞记录，继续从数据库查询
+        Liked liked = likedMapper.selectByUserIdAndCid(id,userId);
+        if (liked != null && liked.getStatus() == 0) {
+            // 说明从数据库中查询到了这条记录，同样说明此用户已经为这条视频点过赞了，再点为取消点赞
+            liked.setStatus(-1);
+            likedMapper.updateByPrimaryKeySelective(liked);
+            // 为当前内容的总点赞数减一
+            LikedServiceRedisUtils.decrementContentLikedCount(id);
+            logger.info("用户{}为{}视频从数据库取消点赞成功", userId, id);
+            return true;
+        }
+
+        // 至此，说明此用户没有为这个视频内容分享点赞
+
+        // 设置为已点赞状态
+        LikedServiceRedisUtils.saveLiked2Redis("video", userId, id);
+        // 为当前内容的总点赞数加一
+        LikedServiceRedisUtils.incrementContentLikedCount(id);
+        logger.info("用户{}为{}视频点赞成功", userId, id);
         return true;
     }
 
