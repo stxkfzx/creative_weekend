@@ -43,12 +43,42 @@ public class RaidersController {
      */
     @RequestMapping("add")
     public ResponseEntity<ResultBean<Raiders>> addRaiders(@RequestBody RaidersPar raidersPar){
-        Raiders raiders = raidersPar.getRaiders();
-        RaidersContent raidersContent = raidersPar.getRaidersContent();
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResultBean<>(StatusEnum.SUCCESS,
-                raidersService.addRaiders(raiders, raidersContent)));
+                raidersService.addRaiders(getRaidersParOfRaiders(raidersPar), getRaidersParOfRaidersContent(raidersPar))));
     }
 
-    /*@RequestMapping("update")
-    public ResponseEntity<ResultBean<Raiders>> updateRaiders*/
+    /**
+     * 修改攻略
+     * @param raidersPar	 包含俩个对象，一个攻略对象，一个攻略内容对象
+     * @return 没啥
+     * @author krjaydog
+     * @date 2019-05-02 17:14
+     */
+    @RequestMapping("update")
+    public ResponseEntity updateRaiders(@RequestBody RaidersPar raidersPar){
+        raidersService.updateRaiders(getRaidersParOfRaiders(raidersPar), getRaidersParOfRaidersContent(raidersPar));
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS));
+    }
+
+    /**
+     * 获取raidersPar参数中的raiders对象
+     * @param raidersPar	 包含俩个对象，一个攻略对象，一个攻略内容对象
+     * @return raiders对象
+     * @author krjaydog
+     * @date 2019-05-02 17:14
+     */
+    private Raiders getRaidersParOfRaiders(RaidersPar raidersPar){
+        return raidersPar.getRaiders();
+    }
+
+    /**
+     * 获取raidersPar参数中的raidersContent对象
+     * @param raidersPar	 包含俩个对象，一个攻略对象，一个攻略内容对象
+     * @return raidersContent对象
+     * @author krjaydog
+     * @date 2019-05-02 17:14
+     */
+    private RaidersContent getRaidersParOfRaidersContent(RaidersPar raidersPar){
+        return raidersPar.getRaidersContent();
+    }
 }

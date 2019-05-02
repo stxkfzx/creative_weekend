@@ -15,4 +15,5 @@ import xin.stxkfzx.weekend.entity.RaidersContent;
 public interface RaidersService {
     public Raiders addRaiders(Raiders raiders, RaidersContent raidersContent);
 
+    public void updateRaiders(Raiders raiders, RaidersContent raidersContent);
 }

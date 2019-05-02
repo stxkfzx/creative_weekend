@@ -65,4 +65,17 @@ public class RaidersServiceImpl implements RaidersService {
             throw new WeekendException(ExceptionEnum.ADD_Raiders_FAILED);
         }
     }
+
+    @Override
+    public void updateRaiders(Raiders raiders, RaidersContent raidersContent) {
+        final int i = raidersMapper.updateByPrimaryKeySelective(raiders);
+        final int i1 = raidersContentMapper.updateByPrimaryKeySelective(raidersContent);
+
+        if(i == 1 && i1 ==1){
+            logger.info("更新攻略{}成功.", raiders);
+        }else{
+            logger.error("更新攻略{}失败.", raiders);
+            throw new WeekendException(ExceptionEnum.UPDATE_Raiders_FAILED);
+        }
+    }
 }
