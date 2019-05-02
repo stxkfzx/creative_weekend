@@ -1,6 +1,7 @@
 package xin.stxkfzx.weekend.entity;
 
 import java.util.Date;
+import java.util.StringJoiner;
 
 /**
  * 
@@ -18,6 +19,27 @@ public class ChatRoom {
     private Date createTime;
 
     private Date updateTime;
+    private Short status;
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ChatRoom.class.getSimpleName() + "[", "]")
+                .add("tbId=" + tbId)
+                .add("activateId=" + activateId)
+                .add("userId=" + userId)
+                .add("createTime=" + createTime)
+                .add("updateTime=" + updateTime)
+                .add("status=" + status)
+                .toString();
+    }
+
+    public Short getStatus() {
+        return status;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
 
     public Integer getTbId() {
         return tbId;
@@ -59,18 +81,4 @@ public class ChatRoom {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", tbId=").append(tbId);
-        sb.append(", activateId=").append(activateId);
-        sb.append(", userId=").append(userId);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append("]");
-        return sb.toString();
-    }
 }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
 import xin.stxkfzx.weekend.entity.*;
 import xin.stxkfzx.weekend.enums.CheckTypeEnum;
@@ -25,9 +26,7 @@ import xin.stxkfzx.weekend.exception.NoPermissionException;
 import xin.stxkfzx.weekend.exception.SqlException;
 import xin.stxkfzx.weekend.util.CheckUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author fmy
@@ -106,25 +105,30 @@ public class ActivityServiceImpl implements ActivityService {
         // 创建者不能加入
         joinAndExitActivityCondition(user, activity);
 
-        UserJoinActivity record = joinActivityMapper.selectOneByUserIdAndActivityId(user.getTbId(), activity.getTbId());
+        List<UserJoinActivity> userJoinActivityList = joinActivityMapper.selectByUserIdAndActivityIdAndStatus(user.getTbId(),
+                activity.getTbId(), StatusEnum.RECORD_EXIT.getCode().shortValue());
+        CheckUtils.check(CollectionUtils.isEmpty(userJoinActivityList), ExceptionEnum.HAD_JOIN);
 
-        if (record != null) {
-            updateJoinRecord(record);
-        } else {
-            record = insertJoinRecord(user, activity);
-        }
+        UserJoinActivity record = insertJoinRecord(user, activity);
+        log.info("join no.{} of activity", activity.getTbId());
+
+        // 加入聊天室
+        ChatRoom chatRoom = chatRoomMapper.selectOneByActivateId(activity.getTbId());
+        chatManager.addJoinRecord(user, chatRoom);
 
         return new ActivityExpand().setJoinRecord(record);
     }
 
     private void joinAndExitActivityCondition(User user, Activity activity) {
-        // 活动创建者不能加入或退出活动
-        CheckUtils.check(!user.getTbId().equals(activity.getUserId()), "field.invalid", user.getTbId());
-        // 活动是否存在
+        // 活动必须存在
         Activity findActivity = activityMapper.selectByPrimaryKey(activity.getTbId());
-        CheckUtils.notNull(findActivity, "id.error", activity.getTbId());
-        CheckUtils.check(findActivity.getStatus() != StatusEnum.DELETE.getCode().shortValue(), ExceptionEnum.ACTIVATE_NOT_EXIST);
-        CheckUtils.check(findActivity.getStatus() != StatusEnum.REVIEW.getCode().shortValue(), ExceptionEnum.ACTIVITY_IS_REVIEW);
+        checkActivityNotDelete(findActivity);
+
+        // 活动不能为审核状态
+        CheckUtils.check(StatusEnum.REVIEW.getCode().shortValue() != findActivity.getStatus(), ExceptionEnum.ACTIVITY_IS_REVIEW);
+
+        // 活动创建者不能加入或退出活动
+        CheckUtils.check(!user.getTbId().equals(findActivity.getUserId()), ExceptionEnum.CREATOR_CAN_NOT_JOIN_OR_EXIT_ACTIVITY);
     }
 
     private UserJoinActivity insertJoinRecord(User user, Activity activity) {
@@ -132,27 +136,16 @@ public class ActivityServiceImpl implements ActivityService {
         record = new UserJoinActivity();
         record.setUpdateTime(new Date());
         record.setJoinTime(new Date());
-        record.setStatus(UserJoinActivity.JOIN);
+        record.setStatus(StatusEnum.RECORD_JOIN);
         record.setCreateTime(new Date());
         record.setActivityId(activity.getTbId());
         record.setUserId(user.getTbId());
         // TODO: 2019/4/18 付款状态应该通过支付成功的回调通知获取，这里简单处理下
         record.setPaymentStatus(UserJoinActivity.PAY_SUCCESS);
-        log.debug("insert join activity:{} status", activity.getTbId());
 
         joinActivityMapper.insert(record);
         return record;
     }
-
-    private void updateJoinRecord(UserJoinActivity record) {
-        record.setUpdateTime(new Date());
-        record.setJoinTime(new Date());
-        record.setStatus(UserJoinActivity.JOIN);
-        log.debug("update join activity:{} status", record.getActivityId());
-
-        joinActivityMapper.updateByPrimaryKey(record);
-    }
-
 
     @Transactional(rollbackFor = SqlException.class)
     @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
@@ -161,14 +154,26 @@ public class ActivityServiceImpl implements ActivityService {
     public ActivityExpand exitActivity(User user, Activity activity) {
         joinAndExitActivityCondition(user, activity);
 
-        UserJoinActivity record = joinActivityMapper.selectOneByUserIdAndActivityId(user.getTbId(), activity.getTbId());
-        CheckUtils.notNull(record, "value.is.null");
+        List<UserJoinActivity> recordList = joinActivityMapper.selectByUserIdAndActivityIdAndStatus(user.getTbId(),
+                activity.getTbId(), StatusEnum.RECORD_JOIN.getCode().shortValue());
+        CheckUtils.check(!CollectionUtils.isEmpty(recordList), ExceptionEnum.RECORD_NOT_EXIST);
 
-        record.setStatus(UserJoinActivity.EXIT);
-        record.setUpdateTime(new Date());
-        joinActivityMapper.updateByPrimaryKeySelective(record);
+        // 退出活动
+        UserJoinActivity condition = new UserJoinActivity();
+        condition.setTbId(activity.getTbId());
+        condition.setUserId(user.getTbId());
+        condition.setStatus(StatusEnum.RECORD_JOIN.getCode().shortValue());
 
-        return new ActivityExpand().setJoinRecord(record);
+        UserJoinActivity updated = new UserJoinActivity();
+        updated.setUpdateTime(new Date());
+        updated.setStatus(StatusEnum.RECORD_EXIT);
+        int updateCount = joinActivityMapper.updateByActivityIdAndUserIdAndStatus(updated, condition);
+
+        // 退出聊天室
+        ChatRoom chatRoom = chatRoomMapper.selectOneByActivateId(activity.getTbId());
+        chatManager.addExitRecord(user, chatRoom);
+
+        return new ActivityExpand().setSuccess(updateCount > 0);
     }
 
     @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
@@ -176,14 +181,12 @@ public class ActivityServiceImpl implements ActivityService {
     public ActivityExpand getActivity(Integer activityId, StatusEnum status) {
         Activity activity = activityMapper.selectByPrimaryKey(activityId);
         checkActivityNotDelete(activity);
+        if (activity.getStatus() != status.getCode().shortValue()) {
+            return new ActivityExpand();
+        }
+
         ChatRoom chatRoom = chatRoomMapper.selectOneByActivateId(activityId);
         return new ActivityExpand().setActivity(activity).setChatRoom(chatRoom);
-    }
-
-    private void checkActivityNotDelete(Activity activity) {
-        CheckUtils.notNull(activity, ExceptionEnum.ACTIVATE_NOT_EXIST);
-        CheckUtils.check(activity.getStatus() >= StatusEnum.DELETE.getCode().shortValue(),
-                ExceptionEnum.ACTIVATE_NOT_EXIST);
     }
 
     @Override
@@ -200,42 +203,35 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ActivityExpand deleteActivity(User user, Activity activity) {
         Activity select = activityMapper.selectByPrimaryKey(activity.getTbId());
+        checkActivityNotDelete(select);
 
         // 删除人必须是活动创建者
-        if (!activity.getUserId().equals(user.getTbId())) {
+        if (!select.getUserId().equals(user.getTbId())) {
             throw new NoPermissionException(ExceptionEnum.NO_PERMISSION);
         }
 
+        // 删除活动
         select.setStatus(StatusEnum.DELETE.getCode().shortValue());
         select.setUpdateTime(new Date());
-        activityMapper.updateByPrimaryKeySelective(select);
+        int updateCount = activityMapper.updateByPrimaryKeySelective(select);
 
-        return new ActivityExpand().setActivity(select);
+        // 删除加入活动记录
+        activityManager.deleteJoinActivityRecord(activity);
+
+        // 删除聊天室
+        chatManager.deleteChatRoom(activity);
+
+        // 删除加入聊天室记录
+        ChatRoom chatRoom = chatRoomMapper.selectOneByActivateId(activity.getTbId());
+        chatManager.deleteJoinChatRecord(chatRoom);
+
+        return new ActivityExpand().setSuccess(updateCount > 0);
     }
 
-    @Transactional(rollbackFor = SqlException.class)
-    @ParamCheck(checkType = CheckTypeEnum.NOT_NULL)
-    @CheckUserIsExist
-    @Override
-    public ActivityExpand deleteJoinRecord(User user, Activity activity) {
-        Activity select = activityMapper.selectByPrimaryKey(activity.getTbId());
-        checkActivityNotDelete(select);
-
-        UserJoinActivity record = new UserJoinActivity();
-        record.setUpdateTime(new Date());
-        record.setStatus(StatusEnum.DELETE);
-        record.setActivityId(select.getTbId());
-
-        int updateCount;
-        if (activity.getUserId().equals(user.getTbId())) {
-            // 删除全部记录
-            updateCount = joinActivityMapper.updateByActivityId(record);
-        } else {
-            record.setUserId(user.getTbId());
-            updateCount = joinActivityMapper.updateByActivityIdAndUserId(record);
-        }
-
-        return new ActivityExpand().setUpdateCount(updateCount);
+    private void checkActivityNotDelete(Activity activity) {
+        CheckUtils.notNull(activity, ExceptionEnum.ACTIVATE_NOT_EXIST);
+        CheckUtils.check(activity.getStatus() > StatusEnum.DELETE.getCode().shortValue(),
+                ExceptionEnum.ACTIVATE_NOT_EXIST);
     }
 
     @Override

@@ -76,5 +76,4 @@ public interface ActivityMapper {
      */
     List<ActivityDetail> selectActivityDetailAndNormalByConditionWithPage(@Param("condition") Activity condition);
 
-
 }

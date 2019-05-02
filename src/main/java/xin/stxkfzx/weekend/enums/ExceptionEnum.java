@@ -18,10 +18,6 @@ public enum ExceptionEnum {
      * 新增用户异常
      */
     USER_SAVE_ERROR(500, "新增用户失败"),
-    /**
-     * 新增点赞记录异常
-     */
-    LIKE_SAVE_ERROR(500, "新增点赞记录异常"),
 
     /**
      * 用户实名认证异常
@@ -91,6 +87,21 @@ public enum ExceptionEnum {
     ACTIVATE_CREATE_FAIL(602, "活动创建失败"),
 
     /**
+     * 已加入
+     */
+    HAD_JOIN(603, "用户已加入"),
+
+    /**
+     * 记录不存在
+     */
+    RECORD_NOT_EXIST(604, "记录不存在"),
+
+    /**
+     * 活动创建者不能加入或退出活动
+     */
+    CREATOR_CAN_NOT_JOIN_OR_EXIT_ACTIVITY(605, "活动创建者不能加入或退出活动"),
+
+    /**
      * 文件类型错误
      */
     FILE_TYPE_ERROR(500, "文件类型错误"),
@@ -110,11 +121,16 @@ public enum ExceptionEnum {
      * 内容没查到
      */
     CONTENT_NOT_FOUND(404, "内容没查到"),
+
     /**
      * 新增攻略失败
      */
-    ADD_Raiders_FAILED(703, "新增攻略失败"),
-    ;
+    ADD_RAIDERS_FAILED(703, "新增攻略失败"),
+    /**
+     * 更新攻略失败
+     */
+    UPDATE_RAIDERS_FAILED(702, "更新攻略失败");
+
 
     private Integer code;
     private String msg;
@@ -124,8 +140,6 @@ public enum ExceptionEnum {
         this.msg = msg;
     }
 
-    ExceptionEnum() {
-    }
 
     public Integer getCode() {
         return code;

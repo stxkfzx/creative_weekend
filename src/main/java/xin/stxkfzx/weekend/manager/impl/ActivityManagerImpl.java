@@ -5,13 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xin.stxkfzx.weekend.entity.Activity;
-import xin.stxkfzx.weekend.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.entity.UserJoinActivity;
 import xin.stxkfzx.weekend.enums.StatusEnum;
-import xin.stxkfzx.weekend.exception.WeekendException;
-import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.manager.ActivityManager;
 import xin.stxkfzx.weekend.mapper.ActivityMapper;
-import xin.stxkfzx.weekend.util.CheckUtils;
+import xin.stxkfzx.weekend.mapper.UserJoinActivityMapper;
 
 import java.util.Date;
 
@@ -23,10 +21,12 @@ import java.util.Date;
 public class ActivityManagerImpl implements ActivityManager {
     private static final Logger log = LoggerFactory.getLogger(ActivityManagerImpl.class);
     private final ActivityMapper activityMapper;
+    private final UserJoinActivityMapper joinActivityMapper;
 
     @Autowired
-    public ActivityManagerImpl(ActivityMapper activityMapper) {
+    public ActivityManagerImpl(ActivityMapper activityMapper, UserJoinActivityMapper joinActivityMapper) {
         this.activityMapper = activityMapper;
+        this.joinActivityMapper = joinActivityMapper;
     }
 
     @Override
@@ -37,8 +37,20 @@ public class ActivityManagerImpl implements ActivityManager {
         activity.setUpdateTime(new Date());
 
         activityMapper.insert(activity);
-        log.debug("添加活动: {}", activity.getTbId());
+        log.info("添加活动: {}", activity.getTbId());
 
         return activity;
+    }
+
+    @Override
+    public int deleteJoinActivityRecord(Activity activity) {
+        UserJoinActivity updated = new UserJoinActivity();
+        updated.setActivityId(activity.getTbId());
+        updated.setStatus(StatusEnum.DELETE);
+        updated.setUpdateTime(new Date());
+
+        int count = joinActivityMapper.updateByActivityId(updated);
+        log.debug("删除用户加入活动记录：{}条", count);
+        return count;
     }
 }

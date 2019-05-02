@@ -21,10 +21,7 @@ import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.service.ActivityService;
 import xin.stxkfzx.weekend.util.UserUtils;
 import xin.stxkfzx.weekend.vo.PageVO;
-import xin.stxkfzx.weekend.vo.activity.ActivityConditionParam;
-import xin.stxkfzx.weekend.vo.activity.ActivityDetailVO;
-import xin.stxkfzx.weekend.vo.activity.ActivityParam;
-import xin.stxkfzx.weekend.vo.activity.ActivityVO;
+import xin.stxkfzx.weekend.vo.activity.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -99,7 +96,7 @@ public class ActivityController {
      * @date 2019-04-30 22:32
      */
     @GetMapping
-    public ResponseEntity<?> pageActivity(@RequestParam(name = "condition",required = false) String condition,
+    public ResponseEntity<?> pageActivity(@RequestParam(name = "condition", required = false) String condition,
                                           @RequestParam(defaultValue = "0") Integer page,
                                           @RequestParam(defaultValue = "10") Integer pageSize) {
         Activity activityCondition = convertCondition(condition);
@@ -137,9 +134,9 @@ public class ActivityController {
      */
     @PostMapping("/{activityId}/join")
     public ResponseEntity<?> join(@PathVariable @Min(1) Integer activityId) {
-        // TODO: 2019/4/24 进行测试
-        return ResponseEntity.ok(activityService.joinActivity(getUserByParameter(),
-                getActivityByParameter(activityId)).getJoinRecord());
+        ActivityExpand expand = activityService.joinActivity(getUserByParameter(),
+                getActivityByParameter(activityId));
+        return ResponseEntity.ok(activityConvert.fromJoinActivityRecord(expand.getJoinRecord()));
     }
 
     /**
@@ -152,9 +149,9 @@ public class ActivityController {
      */
     @PostMapping("/{activityId}/exit")
     public ResponseEntity<?> exit(@PathVariable @Min(1) Integer activityId) {
-        // TODO: 2019/4/24 进行测试
-        return ResponseEntity.ok(activityService.exitActivity(getUserByParameter(),
-                getActivityByParameter(activityId)).getJoinRecord() != null);
+        ActivityExpand expand = activityService.exitActivity(getUserByParameter(),
+                getActivityByParameter(activityId));
+        return ResponseEntity.ok(expand.getSuccess());
     }
 
     /**
@@ -167,12 +164,12 @@ public class ActivityController {
      */
     @DeleteMapping("/{activityId}")
     public ResponseEntity<?> delete(@PathVariable @Min(1) Integer activityId) {
-        // TODO: 2019/4/24 进行测试
-        return ResponseEntity.ok(activityService.deleteActivity(getUserByParameter(),
-                getActivityByParameter(activityId)).getActivity() != null);
+        ActivityExpand expand = activityService.deleteActivity(getUserByParameter(),
+                getActivityByParameter(activityId));
+        return ResponseEntity.ok(expand.getSuccess());
     }
 
-    private Activity getActivityByParameter(@PathVariable @Min(1) Integer activityId) {
+    private Activity getActivityByParameter(Integer activityId) {
         Activity activity = new Activity();
         activity.setTbId(activityId);
         return activity;

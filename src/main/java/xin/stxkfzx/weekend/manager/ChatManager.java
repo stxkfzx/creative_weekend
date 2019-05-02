@@ -34,4 +34,35 @@ public interface ChatManager {
      * @date 2019-04-28 19:34
      */
     UserJoinChatRoom addJoinRecord(User joiner, ChatRoom room);
+
+    /**
+     * 退出聊天室记录
+     *
+     * @param exiter 退出者
+     * @param room   聊天室
+     * @return 退出记录条数
+     * @author fmy
+     * @date 2019-05-02 11:06
+     */
+    int addExitRecord(User exiter, ChatRoom room);
+
+    /**
+     * 删除聊天室
+     *
+     * @param activity	 活动
+     * @return 删除状态
+     * @author fmy
+     * @date 2019-05-02 16:18
+     */
+    boolean deleteChatRoom(Activity activity);
+
+    /**
+     * 删除加入聊天室记录
+     *
+     * @param chatRoom	 聊天室
+     * @return 删除条数
+     * @author fmy
+     * @date 2019-05-02 16:18
+     */
+    int deleteJoinChatRecord(ChatRoom chatRoom);
 }
