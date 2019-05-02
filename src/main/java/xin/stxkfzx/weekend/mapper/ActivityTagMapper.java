@@ -1,21 +1,20 @@
 package xin.stxkfzx.weekend.mapper;
-
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import xin.stxkfzx.weekend.entity.ActivityBgImage;
+import xin.stxkfzx.weekend.entity.ActivityTag;
 
 /**
+ * 
+ * 
  * @author fmy
- * @date 2019-04-29 14:42
+ * @date 2019-04-29 19:27 
  */
 @Mapper
-public interface ActivityBgImageMapper {
+public interface ActivityTagMapper {
     /**
      * delete by primary key
-     *
      * @param tbId primaryKey
      * @return deleteCount
      */
@@ -23,57 +22,40 @@ public interface ActivityBgImageMapper {
 
     /**
      * insert record to table
-     *
      * @param record the record
      * @return insert count
      */
-    int insert(ActivityBgImage record);
+    int insert(ActivityTag record);
 
     /**
      * insert record to table selective
-     *
      * @param record the record
      * @return insert count
      */
-    int insertSelective(ActivityBgImage record);
+    int insertSelective(ActivityTag record);
 
     /**
      * select by primary key
-     *
      * @param tbId primary key
      * @return object by primary key
      */
-    ActivityBgImage selectByPrimaryKey(Integer tbId);
+    ActivityTag selectByPrimaryKey(Integer tbId);
 
     /**
      * update record
-     *
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKeySelective(ActivityBgImage record);
+    int updateByPrimaryKeySelective(ActivityTag record);
 
     /**
      * update record selective
-     *
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKey(ActivityBgImage record);
+    int updateByPrimaryKey(ActivityTag record);
 
-    /**
-     * 批量插入
-     *
-     * @param list 插入列表
-     * @return 插入记录
-     * @author fmy
-     * @date 2019-04-29 15:03
-     */
-    int insertList(@Param("list") List<ActivityBgImage> list);
-
-    List<ActivityBgImage> selectByActivityId(@Param("activityId")Integer activityId);
-
-
+    List<ActivityTag> selectByActivityId(@Param("activityId")Integer activityId);
 
 
 }

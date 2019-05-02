@@ -3,6 +3,7 @@ package xin.stxkfzx.weekend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import xin.stxkfzx.weekend.entity.Activity;
+import xin.stxkfzx.weekend.entity.ActivityDetail;
 
 import java.util.List;
 
@@ -65,6 +66,15 @@ public interface ActivityMapper {
 
     List<Activity> selectByTbIdAndStatusGreaterThanEqual(@Param("tbId") Integer tbId, @Param("minStatus") Short minStatus);
 
+    /**
+     * 根据条件查询正常状态活动详情信息
+     *
+     * @param condition 查询条件
+     * @return 状态为正常的活动详情列表
+     * @author fmy
+     * @date 2019-04-29 20:16
+     */
+    List<ActivityDetail> selectActivityDetailAndNormalByConditionWithPage(@Param("condition") Activity condition);
 
-    // List<Activity> selectByConditionWithPage(@Param("condition")Activity condition);
+
 }
