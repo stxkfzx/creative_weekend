@@ -107,7 +107,7 @@ public class VideoShareServiceImpl implements VideoShareService {
             // 设置redis过期时间为6小时
             redisTemplate.opsForValue().set(id.toString(), videoShare, 6, TimeUnit.HOURS);
         }
-        // 开始转换VO，并从redis中查询当前食品内容点赞数并放入VO
+        // 开始转换VO，并从redis中查询当前视频内容点赞数并放入VO
         return this.videoShareVO.videoShareToVideoShareVO(videoShare);
     }
 

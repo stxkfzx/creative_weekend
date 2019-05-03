@@ -1,5 +1,7 @@
 package xin.stxkfzx.weekend.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -7,6 +9,7 @@ import xin.stxkfzx.weekend.dto.LikedCountDTO;
 import xin.stxkfzx.weekend.entity.Liked;
 import xin.stxkfzx.weekend.enums.LikedStatusEnum;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,8 @@ import java.util.Map;
  * @date 2019/4/29
  */
 public class LikedServiceRedisUtils {
+    private static Logger logger = LoggerFactory.getLogger(LikedServiceRedisUtils.class);
+
     private LikedServiceRedisUtils() {
     }
 
@@ -172,7 +177,12 @@ public class LikedServiceRedisUtils {
             // 存到 list 后从 Redis 中删除
             redisTemplate.opsForHash().delete(MAP_KEY_USER_LIKED, key);
         }
-
+        // 一定要关闭scan连接！！！
+        try {
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return list;
     }
 
@@ -193,6 +203,12 @@ public class LikedServiceRedisUtils {
             list.add(dto);
             // 从Redis中删除这条记录
             redisTemplate.opsForHash().delete(MAP_KEY_USER_LIKED_COUNT, key);
+        }
+        // 一定要关闭scan连接！！！
+        try {
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return list;
     }
