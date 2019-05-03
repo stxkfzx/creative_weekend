@@ -22,8 +22,6 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    int insertById(Integer userId, User user);
-
     /**
      * 根据用户名返回用户
      *

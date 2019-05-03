@@ -34,9 +34,17 @@ public enum ExceptionEnum {
      */
     DUPLICATE_USER_NAME(500, "用户名重复"),
     /**
+     * 用户已关注
+     */
+    USER_IS_ATTENTION(500, "用户已关注"),
+    /**
      * 用户不存在
      */
     USER_NOT_EXIST(500, "用户不存在"),
+    /**
+     * 用户或要关注用户不存在
+     */
+    USER_OR_FRIEND_NOT_EXIST(500, "用户或要关注用户不存在"),
 
     /**
      * 用户认证失败
@@ -129,8 +137,7 @@ public enum ExceptionEnum {
     /**
      * 更新攻略失败
      */
-    UPDATE_RAIDERS_FAILED(702, "更新攻略失败")
-    ;
+    UPDATE_RAIDERS_FAILED(702, "更新攻略失败");
 
 
     private Integer code;

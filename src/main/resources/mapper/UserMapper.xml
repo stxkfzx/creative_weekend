@@ -120,7 +120,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.User" >
+    <update id="updateByPrimaryKeySelective" parameterType="xin.stxkfzx.weekend.entity.User" >
     update user
     <set >
       <if test="nickName != null" >

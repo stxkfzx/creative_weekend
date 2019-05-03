@@ -17,6 +17,7 @@ import java.util.List;
 public interface VideoShare2VideoShareVO {
     /**
      * 转换VideoShareVO
+     *
      * @param videoShare videoShare
      * @return VideoShareVO
      * @author ViterTian
