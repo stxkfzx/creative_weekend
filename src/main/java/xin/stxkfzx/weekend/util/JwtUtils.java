@@ -1,9 +1,11 @@
 package xin.stxkfzx.weekend.util;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import io.jsonwebtoken.*;
 import org.joda.time.DateTime;
 import xin.stxkfzx.weekend.entity.JwtConstants;
 import xin.stxkfzx.weekend.entity.UserBase;
+import xin.stxkfzx.weekend.exception.UnLoginException;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -85,13 +87,19 @@ public class JwtUtils {
      * @return UserBase
      */
     public static UserBase getUserBase(PublicKey publicKey, String token) {
-        Jws<Claims> claimsJws = parseToken(publicKey, token);
-        Claims body = claimsJws.getBody();
-        return new UserBase(
-                ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_ID)),
-                ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME)),
-                ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_USER_STAT))
-        );
+        try {
+            Jws<Claims> claimsJws = parseToken(publicKey, token);
+            Claims body = claimsJws.getBody();
+            return new UserBase(
+                    ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_ID)),
+                    ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME)),
+                    ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_USER_STAT))
+            );
+        }catch (JWTDecodeException j) {
+            throw new UnLoginException("token无效，请重新登录");
+        }catch (ExpiredJwtException e){
+            throw new UnLoginException("token过期，请重新登录");
+        }
     }
 
     /**
