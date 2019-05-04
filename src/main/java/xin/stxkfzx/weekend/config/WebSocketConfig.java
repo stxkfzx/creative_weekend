@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import xin.stxkfzx.weekend.socket.SocketHandler;
-import xin.stxkfzx.weekend.socket.SocketInterceptor;
+import xin.stxkfzx.weekend.handle.SocketHandler;
+import xin.stxkfzx.weekend.interceptor.SocketInterceptor;
 
 /**
  * web socket配置

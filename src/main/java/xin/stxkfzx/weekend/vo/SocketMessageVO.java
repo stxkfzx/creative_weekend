@@ -1,4 +1,4 @@
-package xin.stxkfzx.weekend.vo.chat;
+package xin.stxkfzx.weekend.vo;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;

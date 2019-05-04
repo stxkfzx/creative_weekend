@@ -1,4 +1,4 @@
-package xin.stxkfzx.weekend.socket;
+package xin.stxkfzx.weekend.handle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +19,7 @@ import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.mapper.ChatMessageMapper;
 import xin.stxkfzx.weekend.mapper.UserJoinChatRoomMapper;
 import xin.stxkfzx.weekend.util.JwtUtils;
-import xin.stxkfzx.weekend.vo.chat.SocketMessageVO;
+import xin.stxkfzx.weekend.vo.SocketMessageVO;
 
 import java.io.IOException;
 import java.util.Date;
@@ -62,7 +62,7 @@ public class SocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
-        log.info("socket 开始处理数据");
+        log.info("interceptor 开始处理数据");
 
         if (webSocketMessage instanceof TextMessage) {
             handleTextMessage(webSocketSession, (TextMessage) webSocketMessage);
@@ -75,7 +75,7 @@ public class SocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
-        log.error("socket 连接错误, 关闭Session会话");
+        log.error("interceptor 连接错误, 关闭Session会话");
 
         removeSession(webSocketSession);
     }
@@ -113,7 +113,7 @@ public class SocketHandler extends AbstractWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        log.info("socket 开始处理文本数据");
+        log.info("interceptor 开始处理文本数据");
         // 获取消息体
         SocketMessageVO param = mapper.readValue(message.getPayload(), SocketMessageVO.class);
 

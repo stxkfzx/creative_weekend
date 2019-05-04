@@ -3,7 +3,7 @@ package xin.stxkfzx.weekend.convert;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import xin.stxkfzx.weekend.entity.ChatMessage;
-import xin.stxkfzx.weekend.vo.chat.SocketMessageVO;
+import xin.stxkfzx.weekend.vo.SocketMessageVO;
 
 /**
  * @author fmy
