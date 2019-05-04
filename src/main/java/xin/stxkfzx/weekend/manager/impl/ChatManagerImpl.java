@@ -84,11 +84,13 @@ public class ChatManagerImpl implements ChatManager {
     }
 
     @Override
-    public boolean deleteChatRoom(Activity activity) {
+    public boolean deleteChatRoom(ChatRoom room) {
         ChatRoom updated = new ChatRoom();
         updated.setUpdateTime(new Date());
         updated.setStatus(StatusEnum.DELETE.getCode().shortValue());
-        int count = chatRoomMapper.updateByActivateId(updated, activity.getTbId());
+        updated.setTbId(room.getTbId());
+
+        int count = chatRoomMapper.updateByPrimaryKeySelective(updated);
         log.debug("删除聊天室:{}", count > 0);
         return count > 0;
     }
