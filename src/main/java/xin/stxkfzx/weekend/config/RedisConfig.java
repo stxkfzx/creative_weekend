@@ -62,8 +62,8 @@ public class RedisConfig {
     }
 
     @Bean(value = "redisTemplate")
-    public RedisTemplate<String, ?> redisTemplate() {
-        RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
         // 设置key的序列化
         StringRedisSerializer stringSerializer = new StringRedisSerializer();

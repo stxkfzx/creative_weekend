@@ -17,6 +17,16 @@ public enum StatusEnum {
     SUCCESS(100, "success"),
 
     /**
+     * 聊天消息认证状态
+     */
+    CHAT_AUTH(3, "message auth status"),
+
+    /**
+     * 聊天文本消息
+     */
+    CHAT_TEXT(4, "text message"),
+
+    /**
      * 加入状态
      */
     RECORD_JOIN(2, "join status"),

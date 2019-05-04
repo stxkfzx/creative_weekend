@@ -219,10 +219,10 @@ public class ActivityServiceImpl implements ActivityService {
         activityManager.deleteJoinActivityRecord(activity);
 
         // 删除聊天室
-        chatManager.deleteChatRoom(activity);
+        ChatRoom chatRoom = chatRoomMapper.selectOneByActivateId(activity.getTbId());
+        chatManager.deleteChatRoom(chatRoom);
 
         // 删除加入聊天室记录
-        ChatRoom chatRoom = chatRoomMapper.selectOneByActivateId(activity.getTbId());
         chatManager.deleteJoinChatRecord(chatRoom);
 
         return new ActivityExpand().setSuccess(updateCount > 0);

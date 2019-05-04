@@ -49,12 +49,12 @@ public interface ChatManager {
     /**
      * 删除聊天室
      *
-     * @param activity	 活动
+     * @param room	 聊天室
      * @return 删除状态
      * @author fmy
      * @date 2019-05-02 16:18
      */
-    boolean deleteChatRoom(Activity activity);
+    boolean deleteChatRoom(ChatRoom room);
 
     /**
      * 删除加入聊天室记录

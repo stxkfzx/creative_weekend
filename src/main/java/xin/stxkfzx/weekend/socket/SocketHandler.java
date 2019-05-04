@@ -1,16 +1,37 @@
 package xin.stxkfzx.weekend.socket;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
-import org.springframework.web.socket.handler.BinaryWebSocketHandler;
+import xin.stxkfzx.weekend.config.JwtProperties;
+import xin.stxkfzx.weekend.convert.ChatConvert;
+import xin.stxkfzx.weekend.entity.ChatMessage;
+import xin.stxkfzx.weekend.entity.ResultBean;
+import xin.stxkfzx.weekend.entity.UserBase;
+import xin.stxkfzx.weekend.entity.UserJoinChatRoom;
+import xin.stxkfzx.weekend.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.enums.StatusEnum;
+import xin.stxkfzx.weekend.mapper.ChatMessageMapper;
+import xin.stxkfzx.weekend.mapper.UserJoinChatRoomMapper;
+import xin.stxkfzx.weekend.util.JwtUtils;
+import xin.stxkfzx.weekend.vo.chat.SocketMessageVO;
 
-// import org.apache.commons.lang3.StringUtils;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 
 /**
- * socket处理
+ * 聊天室处理
  *
  * @author fmy
  * @date 2019-04-18 16:27
@@ -18,25 +39,71 @@ import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 @Component
 public class SocketHandler extends AbstractWebSocketHandler {
     private static final Logger log = LogManager.getLogger(SocketHandler.class);
+    private final ChatConvert chatConvert;
+    private final ChatMessageMapper chatMessageMapper;
+    private final UserJoinChatRoomMapper joinChatRoomMapper;
+    private final JwtProperties jwtProperties;
+    private final static Map<Integer, CopyOnWriteArraySet<WebSocketSession>> SESSION_MAP = new ConcurrentHashMap<>(36);
+
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @Autowired
+    public SocketHandler(ChatConvert chatConvert, ChatMessageMapper chatMessageMapper, UserJoinChatRoomMapper joinChatRoomMapper, JwtProperties jwtProperties) {
+        this.chatConvert = chatConvert;
+        this.chatMessageMapper = chatMessageMapper;
+        this.joinChatRoomMapper = joinChatRoomMapper;
+        this.jwtProperties = jwtProperties;
+    }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
-
+    public void afterConnectionEstablished(WebSocketSession webSocketSession) {
+        log.info("建立socket连接");
     }
 
     @Override
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
+        log.info("socket 开始处理数据");
 
+        if (webSocketMessage instanceof TextMessage) {
+            handleTextMessage(webSocketSession, (TextMessage) webSocketMessage);
+        } else if (webSocketMessage instanceof BinaryMessage) {
+            handleBinaryMessage(webSocketSession, (BinaryMessage) webSocketMessage);
+        } else {
+            throw new IllegalArgumentException(webSocketMessage + " type is unknown");
+        }
     }
 
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
+        log.error("socket 连接错误, 关闭Session会话");
 
+        removeSession(webSocketSession);
+    }
+
+    private void removeSession(WebSocketSession webSocketSession) throws IOException {
+        if (webSocketSession.isOpen()) {
+            webSocketSession.close();
+        }
+
+        Map<String, Object> attributes = webSocketSession.getAttributes();
+        Integer chatId = (Integer) attributes.get("chatId");
+        Integer userId = (Integer) attributes.get("userId");
+
+        CopyOnWriteArraySet<WebSocketSession> webSocketSessions = SESSION_MAP.get(chatId);
+        Optional.ofNullable(webSocketSessions).ifPresent(set -> {
+            set.removeIf(session -> userId.equals(session.getAttributes().get("userId")));
+            log.debug("从聊天室{}中删除用户{}， 当前聊天室在线人数：{}", chatId, userId, set.size());
+        });
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-
+        log.info("socket连接 结束");
+        if (!CloseStatus.NORMAL.equals(closeStatus)) {
+            log.warn("socket异常关闭: {}", closeStatus.getReason());
+            sendMessage2Personal(webSocketSession, closeStatus.getReason());
+        }
+        removeSession(webSocketSession);
     }
 
     @Override
@@ -46,171 +113,120 @@ public class SocketHandler extends AbstractWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        super.handleTextMessage(session, message);
+        log.info("socket 开始处理文本数据");
+        // 获取消息体
+        SocketMessageVO param = mapper.readValue(message.getPayload(), SocketMessageVO.class);
+
+        if (auth(session, param)) {
+            return;
+        }
+
+        // 构建消息
+        ChatMessage chatMessage = getChatMessage(session, param);
+        // 全聊天室推送消息
+        sendMessage2AllNumbers(chatMessage);
+
+        // 存入数据库中
+        chatMessageMapper.insert(chatMessage);
+    }
+
+    private void sendMessage2AllNumbers(ChatMessage chatMessage) throws Exception {
+        SocketMessageVO vo = chatConvert.fromChatMessage(chatMessage);
+
+        Integer id = chatMessage.getUserId();
+        Integer chatRoomId = chatMessage.getChatRoomId();
+
+        CopyOnWriteArraySet<WebSocketSession> webSocketSessions = SESSION_MAP.get(chatRoomId);
+        for (WebSocketSession item :
+                webSocketSessions) {
+            Object userId = item.getAttributes().get("userId");
+            vo.setMyMessage(id.equals(userId));
+            // 发送给每一个人
+            sendMessage2Personal(item, vo);
+            log.debug("给用户:{} 发送消息：[{}], 发送者:{}", userId, vo.getContent(), id);
+        }
+    }
+
+    private void sendMessage2Personal(WebSocketSession session, Object message) throws Exception {
+        session.sendMessage(new TextMessage(mapper.writeValueAsString(new ResultBean<>(StatusEnum.SUCCESS, message))));
+    }
+
+    private void sendMessage2Personal(WebSocketSession session, String errMsg) throws Exception {
+        session.sendMessage(new TextMessage(mapper.writeValueAsString(new ResultBean<>(ExceptionEnum.WEB_SOCKET_FAIL.getCode(), errMsg))));
+    }
+
+    private ChatMessage getChatMessage(WebSocketSession session, SocketMessageVO param) {
+        ChatMessage chatMessage = chatConvert.toSocketMessageVO(param);
+        chatMessage.setUpdateTime(new Date());
+        chatMessage.setCreateTime(new Date());
+        Map<String, Object> attributes = session.getAttributes();
+        chatMessage.setUserId((Integer) attributes.get("userId"));
+        return chatMessage;
+
+    }
+
+    private boolean auth(WebSocketSession session, SocketMessageVO param) throws Exception {
+        if (!StatusEnum.CHAT_AUTH.getCode().equals(param.getType())) {
+            return false;
+        }
+        log.debug("验证用户身份");
+
+        // 从Token中获取用户Id
+        UserBase userBase;
+        try {
+            userBase = JwtUtils.getUserBase(jwtProperties.getPublicKey(), param.getContent());
+        } catch (Exception e) {
+            log.warn("验证用户信息错误，token:[{}], 错误信息：[{}]", param.getContent(), e.getLocalizedMessage());
+            afterConnectionClosed(session, CloseStatus.BAD_DATA.withReason("验证用户信息错误"));
+            return true;
+        }
+
+        // 判断用户是否在当前聊天室中
+        List<UserJoinChatRoom> recordList = joinChatRoomMapper.selectByUserIdAndRoomIdAndStatus(userBase.getId(), param.getChatRoomId(), StatusEnum.RECORD_JOIN.getCode().shortValue());
+        if (CollectionUtils.isEmpty(recordList)) {
+            log.warn("用户:[{}]没有权限加入聊天室:[{}]中", userBase.getId(), param.getChatRoomId());
+            afterConnectionClosed(session, CloseStatus.BAD_DATA.withReason("没有权限加入聊天室中"));
+            return true;
+        }
+
+        Map<String, Object> attributes = session.getAttributes();
+        attributes.put("userId", userBase.getId());
+
+        putSession2List(session);
+
+        return true;
+    }
+
+    @SuppressWarnings("all")
+    private void putSession2List(WebSocketSession session) throws Exception {
+        Map<String, Object> attributes = session.getAttributes();
+        Integer chatId = (Integer) attributes.get("chatId");
+        Integer userId = (Integer) attributes.get("userId");
+
+        CopyOnWriteArraySet<WebSocketSession> webSocketSessions = SESSION_MAP.get(chatId);
+        if (webSocketSessions == null) {
+            synchronized (this) {
+                if (webSocketSessions == null) {
+                    webSocketSessions = new CopyOnWriteArraySet<>();
+                    SESSION_MAP.put(chatId, webSocketSessions);
+                }
+            }
+        }
+
+        // 检测用户是否已经在聊天室中
+        boolean exist = webSocketSessions.parallelStream().anyMatch(item -> userId.equals(item.getAttributes().get("userId")));
+        if (exist) {
+            log.debug("用户：{} 已经在聊天室：{}中", userId, chatId);
+            return;
+        }
+
+        webSocketSessions.add(session);
+        log.debug("聊天室：{} 中添加在线用户：{}", chatId, attributes.get("userId"));
     }
 
     @Override
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
-        super.handleBinaryMessage(session, message);
+        // TODO: 2019/5/3 处理二进制消息
+        throw new Exception("暂不支持二进制消息处理");
     }
-
-    /*
-    private final PostService postService;
-    private static final PostSocketInfoBO socketInfo;
-    private final UserService userService;
-    private static final ObjectMapper mapper = new ObjectMapper();
-
-    static {
-        socketInfo = new PostSocketInfoBO();
-    }
-
-    @Autowired
-    public SocketHandler(PostService postService, UserService userService) {
-        this.postService = postService;
-        this.userService = userService;
-    }
-
-    @Override
-    public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
-        log.info("建立socket连接");
-        Integer currentUserId = getUserId(webSocketSession);
-        log.debug("currentUserId: {}", currentUserId);
-        String postId = getPostId(webSocketSession);
-        log.debug("postId: {}", postId);
-
-        if (postId != null) {
-            socketInfo.addUserInfo(new PostSocketUserInfo(currentUserId, webSocketSession, postId));
-            log.debug("postId: {}, userId: {} 加入socket中", postId, currentUserId);
-        }
-    }
-
-    @Override
-    public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
-        log.info("socket 开始处理数据");
-        // 读取消息
-        Object payload = webSocketMessage.getPayload();
-        RequestSocketMessage socketMessage = mapper.readValue(payload.toString(), RequestSocketMessage.class);
-        String message = socketMessage.getMessage();
-        if (StringUtils.isEmpty(message)) {
-            return;
-        }
-        userChat(webSocketSession, message);
-
-        log.info("socket 处理数据结束");
-    }
-
-
-    private void userChat(WebSocketSession webSocketSession, String message) throws IOException {
-        Integer userId = getUserId(webSocketSession);
-        String postId = getPostId(webSocketSession);
-        JsonResponse jsonResponse = new JsonResponse();
-
-        // 构建帖子消息,存到数据库中
-        PostInformation information = new PostInformation();
-        information.setUserId(userId);
-        information.setInfoContent(message);
-        information.setPostId(Integer.valueOf(postId));
-
-        ResponseSocketMessage responseSocketMessage = new ResponseSocketMessage();
-        try {
-            log.debug("信息存到数据库中");
-            PostDTO postDTO = postService.addPostInformation(information);
-            responseSocketMessage.setInfoId(postDTO.getInfoId());
-        } catch (PostServiceException e) {
-            log.error(e.getMessage());
-            jsonResponse.setMessage("系统内部错误");
-            jsonResponse.setSuccess(false);
-            String errJson = mapper.writeValueAsString(jsonResponse);
-            webSocketSession.sendMessage(new TextMessage(errJson));
-        }
-
-        responseSocketMessage.setMessage(message);
-        responseSocketMessage.setPostId(Integer.valueOf(postId));
-        responseSocketMessage.setUserInfo(getUserVo(Long.valueOf(userId)));
-        jsonResponse.setSuccess(true);
-        jsonResponse.setMessage("成功");
-        jsonResponse.setData(responseSocketMessage);
-
-        // 给房间其他人广播消息
-        String json = mapper.writeValueAsString(jsonResponse);
-        log.debug("给房间中其他人发送的消息: {}", json);
-        sendToPostRoom(postId, json, userId);
-
-        //给自己广播
-        responseSocketMessage.setMyMessage(true);
-        json = mapper.writeValueAsString(jsonResponse);
-        webSocketSession.sendMessage(new TextMessage(json));
-        log.debug("给自己发送的消息: {}", json);
-    }
-
-    @Override
-    public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
-        log.error("socket 连接错误, 关闭Session会话");
-
-        if (webSocketSession.isOpen()) {
-            webSocketSession.close();
-        }
-
-        socketInfo.removeUserInfo(getPostId(webSocketSession), getUserId(webSocketSession));
-    }
-
-    @Override
-    public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-        log.info("socket连接 结束");
-
-        socketInfo.removeUserInfo(getPostId(webSocketSession), getUserId(webSocketSession));
-    }
-
-    @Override
-    public boolean supportsPartialMessages() {
-        return false;
-    }
-
-    private String getPostId(WebSocketSession webSocketSession) {
-        return (String) webSocketSession.getAttributes().get("postId");
-    }
-
-    private Integer getUserId(WebSocketSession webSocketSession) {
-        Long currentUserId = (Long) webSocketSession.getAttributes().get("currentUserId");
-        return currentUserId.intValue();
-    }
-
-    private UserVO getUserVo(Long userId) {
-        UserInformation userDetail = userService.getUserDetail(userId);
-        User user = userService.getUser(userId);
-        UserVO userVO = new UserVO();
-        userVO.setUserName(user.getUserName());
-        userVO.setUserId(userId);
-        userVO.setHeadPortraitAddr(userDetail.getHeadPortraitAddr());
-
-        return userVO;
-    }
-
-
-    private boolean sendToPostRoom(String postId, String msg, Integer sendUserId) {
-        boolean flag = true;
-
-        if (postId == null) {
-            return false;
-        }
-
-        Vector<PostSocketUserInfo> postUserList = socketInfo.getPostUserList(postId);
-        TextMessage webSocketMessage = new TextMessage(msg);
-
-        for (PostSocketUserInfo item : postUserList) {
-            if (Objects.equals(item.getUserId(), sendUserId)) {
-                log.debug("item.getUserId() = {}, sendUserId = {}", item.getUserId(), sendUserId);
-                continue;
-            }
-
-            try {
-                item.getWebSocketSession().sendMessage(webSocketMessage);
-            } catch (IOException e) {
-                flag = false;
-                log.error("sendToPostRoom 发生错误: {}", e.getMessage());
-            }
-        }
-
-        return flag;
-    }*/
 }
