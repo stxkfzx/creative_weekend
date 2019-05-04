@@ -137,7 +137,13 @@ public enum ExceptionEnum {
     /**
      * 更新攻略失败
      */
-    UPDATE_RAIDERS_FAILED(702, "更新攻略失败");
+    UPDATE_RAIDERS_FAILED(702, "更新攻略失败"),
+
+    /**
+     * web socket 操作失败
+     */
+    WEB_SOCKET_FAIL(800, "聊天操作失败")
+    ;
 
 
     private Integer code;
