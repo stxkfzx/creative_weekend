@@ -193,7 +193,7 @@ public class LikedServiceRedisUtils {
      * @date 2019-05-02
      */
     public static List<LikedCountDTO> getLikedCountFromRedis() {
-        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(MAP_KEY_USER_LIKED_COUNT, ScanOptions.NONE);
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(MAP_KEY_CONTENT_LIKED_COUNT, ScanOptions.NONE);
         List<LikedCountDTO> list = new ArrayList<>();
         while (cursor.hasNext()) {
             Map.Entry<Object, Object> map = cursor.next();
@@ -210,6 +210,7 @@ public class LikedServiceRedisUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(list);
         return list;
     }
 

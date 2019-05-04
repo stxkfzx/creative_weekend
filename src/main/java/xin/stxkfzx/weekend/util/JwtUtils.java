@@ -3,6 +3,8 @@ package xin.stxkfzx.weekend.util;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import io.jsonwebtoken.*;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import xin.stxkfzx.weekend.entity.JwtConstants;
 import xin.stxkfzx.weekend.entity.UserBase;
 import xin.stxkfzx.weekend.exception.UnLoginException;
@@ -19,6 +21,8 @@ import java.security.PublicKey;
  */
 @SuppressWarnings("all")
 public class JwtUtils {
+    private static Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+
     /**
      * 生成Token
      *
@@ -95,10 +99,15 @@ public class JwtUtils {
                     ObjectUtils.toString(body.get(JwtConstants.JWT_KEY_USER_NAME)),
                     ObjectUtils.toInt(body.get(JwtConstants.JWT_KEY_USER_STAT))
             );
-        }catch (JWTDecodeException j) {
+        } catch (JWTDecodeException j) {
+            logger.error("token无效:{}", j.getMessage());
             throw new UnLoginException("token无效，请重新登录");
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
+            logger.error("token过期:{}", e.getMessage());
             throw new UnLoginException("token过期，请重新登录");
+        } catch (Exception e) {
+            logger.error("token解析失败:{}", e.getMessage());
+            throw new UnLoginException("token解析失败");
         }
     }
 

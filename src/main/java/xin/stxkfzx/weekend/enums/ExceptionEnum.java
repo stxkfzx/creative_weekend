@@ -45,7 +45,10 @@ public enum ExceptionEnum {
      * 用户或要关注用户不存在
      */
     USER_OR_FRIEND_NOT_EXIST(500, "用户或要关注用户不存在"),
-
+    /**
+     * 用户或要点赞内容不存在
+     */
+    USER_OR_CONTENT_NOT_EXIST(500, "用户或要点赞内容不存在"),
     /**
      * 用户认证失败
      */

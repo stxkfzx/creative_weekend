@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
+import xin.stxkfzx.weekend.dto.LikedCountDTO;
 import xin.stxkfzx.weekend.entity.Liked;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.exception.WeekendException;
@@ -120,9 +121,12 @@ public class LikedServiceImpl implements LikedService {
      */
     @Override
     public void transLikedCountFromRedis2DB() {
-       /* List<LikedCountDTO> list = redisUtils.getLikedCountFromRedis();
-        for (LikedCountDTO dto : list) {
+       /*List<LikedCountDTO> list = LikedServiceRedisUtils.getLikedCountFromRedis();
+        for (LikedCountDTO likedCountDTO : list) {
             //更新点赞数量
+            if (likedCountMapper.selectByPrimaryKey(likedCountDTO.getId()) != null) {
+                likedCountMapper.updateByPrimaryKeySelective(likedCountDTO)
+            }
         }*/
     }
 }

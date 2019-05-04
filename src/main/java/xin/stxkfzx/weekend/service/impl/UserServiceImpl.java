@@ -3,6 +3,7 @@ package xin.stxkfzx.weekend.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ import xin.stxkfzx.weekend.vo.UserVO;
 import java.lang.reflect.Field;
 import java.util.Date;
 
+import static xin.stxkfzx.weekend.util.LikedServiceRedisUtils.MAP_KEY_USER_LIKED_COUNT;
+
 /**
  * @author VicterTian
  * @version V1.0
@@ -28,11 +31,11 @@ import java.util.Date;
 @Service
 public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final StringRedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
     private final UserMapper userMapper;
     private final SmsProperties smsProperties;
 
-    public UserServiceImpl(UserMapper userMapper, SmsProperties smsProperties, StringRedisTemplate redisTemplate) {
+    public UserServiceImpl(UserMapper userMapper, SmsProperties smsProperties, RedisTemplate redisTemplate) {
         this.userMapper = userMapper;
         this.smsProperties = smsProperties;
         this.redisTemplate = redisTemplate;
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService {
         logger.info("用户{}开始注册", user);
         String key = smsProperties.getKeyPrefix() + user.getPhoneNum();
         // 从redis中取出验证码
-        String cacheCode = redisTemplate.opsForValue().get(key);
+        String cacheCode = (String) redisTemplate.opsForValue().get(key);
         // TODO: 2019/4/16 节约成本，先注释了
         /*if (cacheCode == null) {
             throw new WeekendException(ExceptionEnum.INVALID_VERIFY_CODE);
@@ -123,5 +126,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean checkUserId(Integer userId) {
         return userMapper.selectByPrimaryKey(userId) != null;
+    }
+
+    @Override
+    public Integer getUserLiked(Integer userId) {
+        if (checkUserId(userId)) {
+            Integer num = (Integer) redisTemplate.opsForHash().get(MAP_KEY_USER_LIKED_COUNT, String.valueOf(userId));
+            return num == null ? 0 : num;
+        }
+        throw new WeekendException(ExceptionEnum.USER_NOT_EXIST);
     }
 }

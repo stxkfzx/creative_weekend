@@ -125,6 +125,12 @@ public class VideoShareServiceImpl implements VideoShareService {
 
     @Override
     public Boolean likeVideo(Integer id, Integer userId) {
+        // 查询是否有本条内容及此用户
+        VideoShare videoShare = videoShareMapper.selectByPrimaryKey(id);
+        // 校验属性
+        if (videoShare == null || !userService.checkUserId(userId)) {
+            throw new WeekendException(ExceptionEnum.USER_OR_CONTENT_NOT_EXIST);
+        }
         String key = LikedServiceRedisUtils.getLikedKey("video", userId, id);
         // 首先从redis中查询是否有点赞记录
         if (redisTemplate.opsForHash().hasKey(MAP_KEY_USER_LIKED, key)) {
@@ -134,18 +140,22 @@ public class VideoShareServiceImpl implements VideoShareService {
             LikedServiceRedisUtils.decrementContentLikedCount(id);
             // 取消点赞后将该记录删除
             LikedServiceRedisUtils.deleteLikedFromRedis("video", userId, id);
+            // 该用户的被点赞数减一
+            LikedServiceRedisUtils.decrementLikedCount(videoShare.getUserId());
             logger.info("用户{}为{}视频取消点赞成功", userId, id);
             return true;
         }
 
         // 如果在redis中没有查询到有点赞记录，继续从数据库查询
-        Liked liked = likedMapper.selectByUserIdAndCid(id,userId);
+        Liked liked = likedMapper.selectByUserIdAndCid(id, userId);
         if (liked != null && liked.getStatus() == 0) {
             // 说明从数据库中查询到了这条记录，同样说明此用户已经为这条视频点过赞了，再点为取消点赞
             liked.setStatus(-1);
             likedMapper.updateByPrimaryKeySelective(liked);
             // 为当前内容的总点赞数减一
             LikedServiceRedisUtils.decrementContentLikedCount(id);
+            // 该用户的被点赞数减一
+            LikedServiceRedisUtils.decrementLikedCount(videoShare.getUserId());
             logger.info("用户{}为{}视频从数据库取消点赞成功", userId, id);
             return true;
         }
@@ -156,6 +166,8 @@ public class VideoShareServiceImpl implements VideoShareService {
         LikedServiceRedisUtils.saveLiked2Redis("video", userId, id);
         // 为当前内容的总点赞数加一
         LikedServiceRedisUtils.incrementContentLikedCount(id);
+        // 该用户的被点赞数加一
+        LikedServiceRedisUtils.incrementLikedCount(videoShare.getUserId());
         logger.info("用户{}为{}视频点赞成功", userId, id);
         return true;
     }

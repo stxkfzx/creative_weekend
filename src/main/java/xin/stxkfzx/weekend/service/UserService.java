@@ -53,9 +53,21 @@ public interface UserService {
 
     /**
      * 检测用户id是否存在
+     * <p>
+     * true-存在  false-不存在
      *
      * @param userId userId
      * @return boolean
      */
     Boolean checkUserId(Integer userId);
+
+    /**
+     * 查询用户收到点赞数量
+     *
+     * @param userId 用户id
+     * @return 用户收到点赞数量
+     * @author ViterTian
+     * @date 2019-05-04
+     */
+    Integer getUserLiked(Integer userId);
 }

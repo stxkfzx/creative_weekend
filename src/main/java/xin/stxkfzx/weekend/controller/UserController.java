@@ -83,4 +83,17 @@ public class UserController {
     public ResponseEntity<Boolean> checkNickName(@RequestParam("nickname") String nickname) {
         return ResponseEntity.ok(userService.checkNickName(nickname));
     }
+
+    /**
+     * 查询用户收到点赞数
+     *
+     * @param uid 用户id
+     * @return 用户收到点赞数
+     * @author ViterTian
+     * @date 2019-05-04
+     */
+    @GetMapping("/like")
+    public ResponseEntity<ResultBean<Integer>> getMyLikedNum(@RequestParam("uid") Integer uid) {
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, userService.getUserLiked(uid)));
+    }
 }
