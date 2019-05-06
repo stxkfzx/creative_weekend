@@ -88,5 +88,5 @@ public interface FriendMapper {
      * @author ViterTian
      * @date 2019-05-03
      */
-    boolean queryExist(Integer uid, Integer fid);
+    Friend queryExist(Integer uid, Integer fid);
 }

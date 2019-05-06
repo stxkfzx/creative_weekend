@@ -11,6 +11,7 @@ import java.util.List;
 public class PageVO<T> {
 
     private Long total;
+    private Integer pages;
     private List<T> list;
     private Integer pageNum;
     private Integer pageSize;
@@ -21,6 +22,14 @@ public class PageVO<T> {
     private Boolean lastPage;
     @JsonProperty("isFirstPage")
     private Boolean firstPage;
+
+    public Integer getPages() {
+        return pages;
+    }
+
+    public void setPages(Integer pages) {
+        this.pages = pages;
+    }
 
     public Long getTotal() {
         return total;
@@ -92,5 +101,21 @@ public class PageVO<T> {
 
     public void setLastPage(Boolean lastPage) {
         this.lastPage = lastPage;
+    }
+
+    @Override
+    public String toString() {
+        return "PageVO{" +
+                "total=" + total +
+                ", pages=" + pages +
+                ", list=" + list +
+                ", pageNum=" + pageNum +
+                ", pageSize=" + pageSize +
+                ", size=" + size +
+                ", prePage=" + prePage +
+                ", nextPage=" + nextPage +
+                ", lastPage=" + lastPage +
+                ", firstPage=" + firstPage +
+                '}';
     }
 }

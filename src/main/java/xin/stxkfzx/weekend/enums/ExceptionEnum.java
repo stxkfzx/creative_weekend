@@ -132,6 +132,10 @@ public enum ExceptionEnum {
      * 内容没查到
      */
     CONTENT_NOT_FOUND(404, "内容没查到"),
+    /**
+     * 用户没查到
+     */
+    USER_NOT_FOUND(404, "用户没查到"),
 
     /**
      * 新增攻略失败

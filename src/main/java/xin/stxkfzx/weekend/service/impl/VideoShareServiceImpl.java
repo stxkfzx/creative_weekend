@@ -172,4 +172,16 @@ public class VideoShareServiceImpl implements VideoShareService {
         return true;
     }
 
+    @Override
+    public PageVO queryByCid(Integer cid, Integer page, Integer rows) {
+        if(!shareCategoryService.checkCategoryId(cid)){
+            throw new WeekendException(ExceptionEnum.CATEGORY_ID_NOT_EXIST);
+        }
+        PageHelper.startPage(page,rows);
+        List<VideoShare> list = videoShareMapper.queryByCid(cid);
+        List<VideoShareVO> videoShareVOS = videoShareVO.videoShareToVideoShareVO(list);
+        PageInfo<VideoShare> pageInfo = new PageInfo<>(list);
+        return pageConvert.fromPageInfo(pageInfo, videoShareVOS);
+    }
+
 }

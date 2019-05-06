@@ -144,4 +144,11 @@
         where user_id = #{userId, jdbcType=INTEGER} and `status`!=-1
         order by tb_id desc
     </select>
+    <select id="queryByCid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from video_share
+        where category_id = #{cid, jdbcType=INTEGER} and `status`!=-1
+        order by tb_id desc
+    </select>
 </mapper>

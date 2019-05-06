@@ -61,4 +61,16 @@ public interface VideoShareService {
      * @return boolean
      */
     Boolean likeVideo(Integer id, Integer userId);
+
+    /**
+     * 根据分类查询商品分享
+     *
+     * @param cid  分类id
+     * @param page 查询页数
+     * @param rows 每页查询页数
+     * @return 分页查询结果
+     * @author ViterTian
+     * @date 2019-05-06
+     */
+    PageVO queryByCid(Integer cid, Integer page, Integer rows);
 }

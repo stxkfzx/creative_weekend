@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import xin.stxkfzx.weekend.annotation.CheckUserIsExist;
 import xin.stxkfzx.weekend.config.SmsProperties;
 import xin.stxkfzx.weekend.entity.User;
@@ -15,11 +16,13 @@ import xin.stxkfzx.weekend.exception.CheckException;
 import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.mapper.UserMapper;
 import xin.stxkfzx.weekend.service.UserService;
+import xin.stxkfzx.weekend.util.CheckUtils;
 import xin.stxkfzx.weekend.util.CodecUtils;
 import xin.stxkfzx.weekend.vo.UserVO;
 
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.List;
 
 import static xin.stxkfzx.weekend.util.LikedServiceRedisUtils.MAP_KEY_USER_LIKED_COUNT;
 
@@ -135,5 +138,21 @@ public class UserServiceImpl implements UserService {
             return num == null ? 0 : num;
         }
         throw new WeekendException(ExceptionEnum.USER_NOT_EXIST);
+    }
+
+    @Override
+    public User queryUserById(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        CheckUtils.notNull(user);
+        return user;
+    }
+
+    @Override
+    public List<User> queryUserListByIds(List<Integer> userIds) {
+        List<User> list = userMapper.queryUserListByIds(userIds);
+        if (CollectionUtils.isEmpty(list)){
+            throw new WeekendException(ExceptionEnum.CONTENT_NOT_FOUND);
+        }
+        return list;
     }
 }

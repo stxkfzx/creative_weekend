@@ -2,6 +2,7 @@ package xin.stxkfzx.weekend.mapper;
 
 
 import org.springframework.stereotype.Repository;
+import xin.stxkfzx.weekend.entity.ShareCategory;
 import xin.stxkfzx.weekend.entity.VideoShare;
 
 import java.util.List;
@@ -76,4 +77,14 @@ public interface VideoShareMapper {
      * @return List<VideoShare>
      */
     List<VideoShare> selectByUserId(Integer userId);
+
+    /**
+     * 根据分类id查询视频分享
+     *
+     * @param cid 分类id
+     * @return List<VideoShare>
+     * @author ViterTian
+     * @date 2019-05-06
+     */
+    List<VideoShare> queryByCid(Integer cid);
 }

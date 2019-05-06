@@ -33,7 +33,7 @@
     from friend
     where uid = #{uid,jdbcType=INTEGER}
   </select>
-  <select id="queryExist" resultType="java.lang.Boolean">
+  <select id="queryExist" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from friend

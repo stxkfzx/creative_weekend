@@ -3,6 +3,8 @@ package xin.stxkfzx.weekend.service;
 import xin.stxkfzx.weekend.entity.User;
 import xin.stxkfzx.weekend.vo.UserVO;
 
+import java.util.List;
+
 /**
  * 用户模块
  *
@@ -70,4 +72,24 @@ public interface UserService {
      * @date 2019-05-04
      */
     Integer getUserLiked(Integer userId);
+
+    /**
+     * 根据id查询用户
+     *
+     * @param userId 用户id
+     * @return User对象
+     * @author ViterTian
+     * @date 2019-05-05
+     */
+    User queryUserById(Integer userId);
+
+    /**
+     * 根据id查询用户
+     *
+     * @param userIds 用户id
+     * @return User对象
+     * @author ViterTian
+     * @date 2019-05-05
+     */
+    List<User> queryUserListByIds(List<Integer> userIds);
 }

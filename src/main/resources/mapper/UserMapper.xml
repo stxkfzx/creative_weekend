@@ -181,6 +181,15 @@
     from user
     where nick_name = #{nickname,jdbcType=VARCHAR}
   </select>
+    <select id="queryUserListByIds" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from user
+      where tb_id in
+      <foreach collection="list" item="userIds" open="(" close=")" separator=",">
+        #{userIds}
+      </foreach>
+    </select>
 
 
 </mapper>

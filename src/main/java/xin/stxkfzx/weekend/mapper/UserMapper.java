@@ -3,6 +3,8 @@ package xin.stxkfzx.weekend.mapper;
 import org.springframework.stereotype.Repository;
 import xin.stxkfzx.weekend.entity.User;
 
+import java.util.List;
+
 /**
  * @author VicterTian
  * @version V1.0
@@ -31,4 +33,6 @@ public interface UserMapper {
      * @date 2019-04-13
      */
     User selectByNickName(String username);
+
+    List<User> queryUserListByIds(List<Integer> userIds);
 }
