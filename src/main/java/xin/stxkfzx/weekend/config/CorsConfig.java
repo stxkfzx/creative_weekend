@@ -25,6 +25,7 @@ public class CorsConfig {
         // 3 设置访问源请求方法
         corsConfiguration.addAllowedMethod("*");
 
+        corsConfiguration.addExposedHeader("Authorization");
         return corsConfiguration;
     }
 
