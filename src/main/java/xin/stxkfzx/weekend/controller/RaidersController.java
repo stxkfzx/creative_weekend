@@ -12,6 +12,11 @@ import xin.stxkfzx.weekend.entity.RaidersPar;
 import xin.stxkfzx.weekend.entity.ResultBean;
 import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.service.RaidersService;
+
+import javax.validation.constraints.Min;
+
+import java.util.List;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -53,6 +58,12 @@ public class RaidersController {
         raidersService.updateRaiders(getRaidersParOfRaiders(raidersPar), getRaidersParOfRaidersContent(raidersPar));
         return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS));
     }
+
+    /*@RequestMapping("select")
+    public ResponseEntity<ResultBean<List<RaidersPar>>> selectRaiders(@Min(0) Integer categoryId){
+
+    }*/
+
 
     /**
      * 获取raidersPar参数中的raiders对象
