@@ -14,18 +14,18 @@ import xin.stxkfzx.weekend.convert.PageConvert;
 import xin.stxkfzx.weekend.entity.Activity;
 import xin.stxkfzx.weekend.entity.ActivityDetail;
 import xin.stxkfzx.weekend.entity.User;
-import xin.stxkfzx.weekend.enums.ExceptionEnum;
 import xin.stxkfzx.weekend.enums.StatusEnum;
-import xin.stxkfzx.weekend.exception.CheckException;
 import xin.stxkfzx.weekend.expand.ActivityExpand;
 import xin.stxkfzx.weekend.service.ActivityService;
 import xin.stxkfzx.weekend.util.UserUtils;
 import xin.stxkfzx.weekend.vo.PageVO;
-import xin.stxkfzx.weekend.vo.activity.*;
+import xin.stxkfzx.weekend.vo.activity.ActivityConditionParam;
+import xin.stxkfzx.weekend.vo.activity.ActivityDetailVO;
+import xin.stxkfzx.weekend.vo.activity.ActivityParam;
+import xin.stxkfzx.weekend.vo.activity.ActivityVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -89,19 +89,15 @@ public class ActivityController {
      * 获取活动列表
      *
      * @param condition 条件
-     * @param page      分页位置
-     * @param pageSize  分页大小
      * @return 活动列表
      * @author fmy
      * @date 2019-04-30 22:32
      */
-    @GetMapping
-    public ResponseEntity<?> pageActivity(@RequestParam(name = "condition", required = false) String condition,
-                                          @RequestParam(defaultValue = "0") Integer page,
-                                          @RequestParam(defaultValue = "10") Integer pageSize) {
+    @PostMapping("/list")
+    public ResponseEntity<?> pageActivity(@RequestBody ActivityConditionParam condition) {
         Activity activityCondition = convertCondition(condition);
 
-        ActivityExpand expand = activityService.listActivityWithPage(activityCondition, page, pageSize);
+        ActivityExpand expand = activityService.listActivityWithPage(activityCondition, condition.getPage(), condition.getPageSize());
 
         PageInfo<ActivityDetail> detailPageInfo = expand.getPage();
         List<ActivityDetail> list = detailPageInfo.getList();
@@ -111,17 +107,9 @@ public class ActivityController {
         return ResponseEntity.ok(vo);
     }
 
-    private Activity convertCondition(String condition) {
-        if (condition != null && !"".equals(condition.trim())) {
-            try {
-                ActivityConditionParam vo = mapper.readValue(condition, ActivityConditionParam.class);
-                log.info("查询活动列表条件： {}", vo);
-                return activityConvert.toActivityConditionParam(vo);
-            } catch (IOException e) {
-                throw new CheckException(ExceptionEnum.CHECK_FAIL);
-            }
-        }
-        return null;
+    private Activity convertCondition(ActivityConditionParam condition) {
+        log.info("查询活动列表条件： {}", condition);
+        return activityConvert.toActivityConditionParam(condition);
     }
 
     /**

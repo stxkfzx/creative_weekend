@@ -11,6 +11,35 @@ import java.util.StringJoiner;
 public class ActivityConditionParam {
     private Short range;
     private Boolean myActivity = false;
+    private Integer page = 0;
+    private Integer pageSize = 10;
+
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ActivityConditionParam.class.getSimpleName() + "[", "]")
+                .add("range=" + range)
+                .add("myActivity=" + myActivity)
+                .add("page=" + page)
+                .add("pageSize=" + pageSize)
+                .toString();
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public Boolean getMyActivity() {
         return myActivity;
@@ -28,11 +57,4 @@ public class ActivityConditionParam {
         this.range = range;
     }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", ActivityConditionParam.class.getSimpleName() + "[", "]")
-                .add("range=" + range)
-                .add("myActivity=" + myActivity)
-                .toString();
-    }
 }
