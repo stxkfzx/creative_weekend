@@ -62,7 +62,7 @@ public interface ActivityService {
     /**
      * 根据条件获取活动列表,状态是正常
      *
-     * @param condition 查询条件：范围。如果condition为空，则查询全部
+     * @param condition 查询条件：范围、用户ID。如果condition为空，则查询全部
      * @param page      页数
      * @param pageSize  每页大小
      * @return 活动列表

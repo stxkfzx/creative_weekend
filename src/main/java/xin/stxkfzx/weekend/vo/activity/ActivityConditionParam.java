@@ -10,6 +10,15 @@ import java.util.StringJoiner;
  */
 public class ActivityConditionParam {
     private Short range;
+    private Boolean myActivity = false;
+
+    public Boolean getMyActivity() {
+        return myActivity;
+    }
+
+    public void setMyActivity(Boolean myActivity) {
+        this.myActivity = myActivity;
+    }
 
     public Short getRange() {
         return range;
@@ -23,6 +32,7 @@ public class ActivityConditionParam {
     public String toString() {
         return new StringJoiner(", ", ActivityConditionParam.class.getSimpleName() + "[", "]")
                 .add("range=" + range)
+                .add("myActivity=" + myActivity)
                 .toString();
     }
 }

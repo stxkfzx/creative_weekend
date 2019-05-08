@@ -220,6 +220,9 @@
         <if test="condition!=null and condition.range != null">
             and `range` <![CDATA[<=]]> #{condition.range,jdbcType=SMALLINT}
         </if>
+        <if test="condition!= null and condition.userId != null">
+            and user_id = #{condition.userId,jdbcType=INTEGER}
+        </if>
     </select>
 
     <resultMap id="ActivityDetailResultMap" type="xin.stxkfzx.weekend.entity.ActivityDetail">
