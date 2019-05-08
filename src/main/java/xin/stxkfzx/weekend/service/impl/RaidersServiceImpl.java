@@ -1,9 +1,13 @@
 package xin.stxkfzx.weekend.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import xin.stxkfzx.weekend.convert.PageConvert;
 import xin.stxkfzx.weekend.entity.Raiders;
 import xin.stxkfzx.weekend.entity.RaidersContent;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
@@ -14,8 +18,12 @@ import xin.stxkfzx.weekend.mapper.RaidersMapper;
 import xin.stxkfzx.weekend.service.RaidersService;
 import xin.stxkfzx.weekend.service.ShareCategoryService;
 import xin.stxkfzx.weekend.service.UserService;
+import xin.stxkfzx.weekend.vo.PageVO;
+import xin.stxkfzx.weekend.vo.RaidersVO;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * ClassName:RadersServiceImpl
@@ -33,6 +41,8 @@ public class RaidersServiceImpl implements RaidersService {
     UserService userService;
     @Autowired
     RaidersContentMapper raidersContentMapper;
+    @Autowired
+    PageConvert pageConvert;
 
     @Override
     public Raiders addRaiders(Raiders raiders, RaidersContent raidersContent) {
@@ -65,11 +75,27 @@ public class RaidersServiceImpl implements RaidersService {
         final int i = raidersMapper.updateByPrimaryKeySelective(raiders);
         final int i1 = raidersContentMapper.updateByPrimaryKeySelective(raidersContent);
 
-        if(i == 1 && i1 ==1){
+        if (i == 1 && i1 == 1) {
             logger.info("更新攻略{}成功.", raiders);
-        }else{
+        } else {
             logger.error("更新攻略{}失败.", raiders);
             throw new WeekendException(ExceptionEnum.UPDATE_RAIDERS_FAILED);
         }
+    }
+
+    @Override
+    public PageVO<Raiders> queryByCid(Integer cid, Integer page, Integer rows) {
+        PageHelper.startPage(page, rows);
+        List<Raiders> raiders = raidersMapper.selectByCid(cid);
+        List<RaidersVO> list = new LinkedList<>();
+        for (Raiders raider : raiders) {
+            RaidersContent raidersContent = raidersContentMapper.selectByPrimaryKey(raider.getTbId());
+            RaidersVO raidersVO = new RaidersVO();
+            BeanUtils.copyProperties(raider, raidersVO);
+            BeanUtils.copyProperties(raidersContent, raidersVO);
+            list.add(raidersVO);
+        }
+        PageInfo<RaidersVO> pageInfo = new PageInfo<>();
+        return pageConvert.fromPageInfo(pageInfo, list);
     }
 }

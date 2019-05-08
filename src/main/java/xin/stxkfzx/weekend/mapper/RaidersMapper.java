@@ -4,16 +4,17 @@ package xin.stxkfzx.weekend.mapper;
 import org.springframework.stereotype.Repository;
 import xin.stxkfzx.weekend.entity.Raiders;
 
+import java.util.List;
+
 /**
- * 
- * 
  * @author fmy
- * @date 2019-04-10 22:09 
+ * @date 2019-04-10 22:09
  */
 @Repository
 public interface RaidersMapper {
     /**
      * delete by primary key
+     *
      * @param tbtbId primaryKey
      * @return deleteCount
      */
@@ -21,6 +22,7 @@ public interface RaidersMapper {
 
     /**
      * insert record to table
+     *
      * @param record the record
      * @return insert count
      */
@@ -28,6 +30,7 @@ public interface RaidersMapper {
 
     /**
      * insert record to table selective
+     *
      * @param record the record
      * @return insert count
      */
@@ -35,6 +38,7 @@ public interface RaidersMapper {
 
     /**
      * select by primary key
+     *
      * @param tbtbId primary key
      * @return object by primary key
      */
@@ -42,6 +46,7 @@ public interface RaidersMapper {
 
     /**
      * update record
+     *
      * @param record the updated record
      * @return update count
      */
@@ -49,8 +54,18 @@ public interface RaidersMapper {
 
     /**
      * update record selective
+     *
      * @param record the updated record
      * @return update count
      */
     int updateByPrimaryKey(Raiders record);
+
+    /**
+     * 通过cid查询对应的攻略集合
+     * @param cid 分类id
+     * @return List<Raiders>
+     * @author ViterTian
+     * @date 2019-05-07
+     */
+    List<Raiders> selectByCid(Integer cid);
 }
