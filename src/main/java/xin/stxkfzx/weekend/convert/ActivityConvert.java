@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.springframework.util.CollectionUtils;
 import xin.stxkfzx.weekend.entity.*;
+import xin.stxkfzx.weekend.util.UserUtils;
 import xin.stxkfzx.weekend.vo.activity.*;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public interface ActivityConvert {
     Activity toActivityParam(ActivityParam param);
 
 
+    @Mapping(target = "userId", expression = "java(condition.getMyActivity()? xin.stxkfzx.weekend.util.UserUtils.getUserId() : null)")
     Activity toActivityConditionParam(ActivityConditionParam condition);
 
 
