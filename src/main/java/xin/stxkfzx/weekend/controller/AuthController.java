@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xin.stxkfzx.weekend.annotation.PassToken;
 import xin.stxkfzx.weekend.config.JwtProperties;
+import xin.stxkfzx.weekend.entity.ResultBean;
 import xin.stxkfzx.weekend.entity.UserBase;
 import xin.stxkfzx.weekend.enums.ExceptionEnum;
+import xin.stxkfzx.weekend.enums.StatusEnum;
 import xin.stxkfzx.weekend.exception.WeekendException;
 import xin.stxkfzx.weekend.service.impl.AuthServiceImpl;
 import xin.stxkfzx.weekend.util.JwtUtils;
@@ -57,7 +59,7 @@ public class AuthController {
      */
     @PassToken
     @PostMapping("/accredit")
-    public ResponseEntity<Void> login(
+    public ResponseEntity<ResultBean<UserBase>> login(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             HttpServletResponse response
@@ -72,7 +74,7 @@ public class AuthController {
         logger.info("【授权中心】生成token为：{}", token);
         response.setHeader("Authorization", token);
         redisTemplate.opsForValue().set(token, userBase, 30000, TimeUnit.HOURS);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, userBase));
     }
 
     /**

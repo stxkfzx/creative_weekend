@@ -50,8 +50,7 @@ public class VideoShareController {
      */
     @PassToken
     @GetMapping("/query")
-    public ResponseEntity<ResultBean<PageVO>> queryVideoShare(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                                          @RequestParam(value = "rows", defaultValue = "10") Integer rows) {
+    public ResponseEntity<ResultBean<PageVO>> queryVideoShare(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "rows", defaultValue = "10") Integer rows) {
         return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, videoShareService.queryVideoShare(page, rows)));
     }
 
@@ -66,7 +65,7 @@ public class VideoShareController {
     @PassToken
     @GetMapping("{id}")
     public ResponseEntity<ResultBean<VideoShareVO>> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS,  videoShareService.queryById(id)));
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, videoShareService.queryById(id)));
     }
 
     /**
@@ -86,7 +85,8 @@ public class VideoShareController {
 
     /**
      * 点赞或取消点赞
-     * @param id videoId
+     *
+     * @param id     videoId
      * @param userId userId
      * @return Boolean
      * @author ViterTian
@@ -96,17 +96,19 @@ public class VideoShareController {
     public ResponseEntity<ResultBean<Boolean>> likeVideo(@RequestParam("id") Integer id, @RequestParam("uid") Integer userId) {
         return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, videoShareService.likeVideo(id, userId)));
     }
+
     /**
      * 通过分类id查询商品分享
-     * @param cid	分类id
-     * @param page	查询页数
-     * @param rows	 每页显示条数
+     *
+     * @param cid  分类id
+     * @param page 查询页数
+     * @param rows 每页显示条数
      * @return PageVO
      * @author ViterTian
      * @date 2019-05-06
      */
     @GetMapping("/query/by/cid")
-    public ResponseEntity<ResultBean<PageVO>> queryByCid(@RequestParam(value = "cid",defaultValue = "1")Integer cid,@RequestParam(value = "page",defaultValue = "1")Integer page,@RequestParam(value = "rows",defaultValue = "10")Integer rows){
-        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS,videoShareService.queryByCid(cid,page,rows)));
+    public ResponseEntity<ResultBean<PageVO>> queryByCid(@RequestParam(value = "cid", defaultValue = "1") Integer cid, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "rows", defaultValue = "10") Integer rows) {
+        return ResponseEntity.ok(new ResultBean<>(StatusEnum.SUCCESS, videoShareService.queryByCid(cid, page, rows)));
     }
 }

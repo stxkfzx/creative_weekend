@@ -3,7 +3,6 @@ package xin.stxkfzx.weekend.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
-import xin.stxkfzx.weekend.convert.Friend2FriendVO;
 import xin.stxkfzx.weekend.convert.PageConvert;
 import xin.stxkfzx.weekend.convert.User2UserVO;
 import xin.stxkfzx.weekend.entity.Friend;
@@ -29,14 +28,12 @@ import java.util.List;
 public class FriendServiceImpl implements FriendService {
     private final User2UserVO user2UserVO;
     private final PageConvert pageConvert;
-    private final Friend2FriendVO friend2FriendVO;
     private final FriendMapper friendMapper;
     private final UserService userService;
 
-    public FriendServiceImpl(User2UserVO user2UserVO, PageConvert pageConvert, Friend2FriendVO friend2FriendVO, FriendMapper friendMapper, UserService userService) {
+    public FriendServiceImpl(User2UserVO user2UserVO, PageConvert pageConvert, FriendMapper friendMapper, UserService userService) {
         this.user2UserVO = user2UserVO;
         this.pageConvert = pageConvert;
-        this.friend2FriendVO = friend2FriendVO;
         this.friendMapper = friendMapper;
         this.userService = userService;
     }

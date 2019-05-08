@@ -1,16 +1,13 @@
-package xin.stxkfzx.weekend.entity;
-
-import xin.stxkfzx.weekend.enums.StatusEnum;
+package xin.stxkfzx.weekend.vo;
 
 import java.util.Date;
 
 /**
- *
- *
- * @author fmy
- * @date 2019-04-10 22:09
+ * @author VicterTian
+ * @version V1.0
+ * @date 2019/5/7
  */
-public class Raiders {
+public class RaidersVO {
     private Integer tbId;
 
     private String title;
@@ -19,13 +16,13 @@ public class Raiders {
 
     private Date updateTime;
 
-    private Short status;
-
     private Integer categoryId;
 
     private Integer contentId;
 
     private Integer userId;
+
+    private String content;
 
     public Integer getTbId() {
         return tbId;
@@ -59,14 +56,6 @@ public class Raiders {
         this.updateTime = updateTime;
     }
 
-    public Short getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status.getCode().shortValue();
-    }
-
     public Integer getCategoryId() {
         return categoryId;
     }
@@ -91,21 +80,25 @@ public class Raiders {
         this.userId = userId;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", tbId=").append(tbId);
-        sb.append(", title=").append(title);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", status=").append(status);
-        sb.append(", categoryId=").append(categoryId);
-        sb.append(", contentId=").append(contentId);
-        sb.append(", userId=").append(userId);
-        sb.append("]");
-        return sb.toString();
+        return "RaidersVO{" +
+                "tbId=" + tbId +
+                ", title='" + title + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", categoryId=" + categoryId +
+                ", contentId=" + contentId +
+                ", userId=" + userId +
+                ", content='" + content + '\'' +
+                '}';
     }
 }
