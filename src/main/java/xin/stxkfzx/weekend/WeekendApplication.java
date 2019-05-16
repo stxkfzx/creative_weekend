@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @MapperScan("xin.stxkfzx.weekend.mapper")
 @EnableScheduling
 public class WeekendApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(WeekendApplication.class, args);
     }
