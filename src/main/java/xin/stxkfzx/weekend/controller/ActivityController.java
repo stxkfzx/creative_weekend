@@ -77,6 +77,7 @@ public class ActivityController {
     @PostMapping
     public ResponseEntity<?> createActivity(@RequestBody @Valid ActivityParam vo) {
         Activity activity = activityConvert.toActivityParam(vo);
+        activity.setUserId(UserUtils.getUserId());
 
         ActivityExpand expand = activityService.createActivity(activity, vo.getImageList());
 
